@@ -44,8 +44,8 @@
             
             wordList.splice(currentIndex, 1);
         } else {
-        	document.querySelector('#word').style.color = "red";
-        	document.querySelector('#result').innerHTML = "오답";
+            document.querySelector('#word').style.color = "red";
+            document.querySelector('#result').innerHTML = "오답";
         }
         
         if (wordList.length == 0) {
@@ -57,20 +57,20 @@
     }
     
     function answersUpdate() {
-    	let dataa = JSON.stringify(answerList);
-    	
-    	alert("asd");
+        let dataa = JSON.stringify(answerList);
+        
+        alert("asd");
         $.ajax({
-        	type:"POST"
-        	, contentType: "application/json"
-        	, url: "/english/answers"
-        	, data: dataa
-        	, dataType : 'json'
-        	, cache: false
-        	, success: function(data) {
-        		alert(data);
-        		alert("시험 끝");
-        	}
+            type:"POST"
+            , contentType: "application/json"
+            , url: "/english/answers"
+            , data: dataa
+            , dataType : 'json'
+            , cache: false
+            , success: function(data) {
+                alert(data);
+                alert("시험 끝");
+            }
         });
     }
 </script>
