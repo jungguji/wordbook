@@ -44,8 +44,8 @@ public class WordController {
     
     @RequestMapping(value="/english/answers", method=RequestMethod.POST, produces = "application/json")
     @ResponseBody
-    public boolean updateNextDate(@RequestBody String[] answerIds) throws ParseException, JsonProcessingException {
-        boolean result = service.updatePassWord(answerIds);
+    public boolean updateNextDateAndInsert(@RequestBody String[] answerIds) throws ParseException, JsonProcessingException {
+        boolean result = service.updateNextDateAndInsert(answerIds);
         
         return result;
     }

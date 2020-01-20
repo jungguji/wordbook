@@ -8,5 +8,5 @@ public interface WordService {
     
     List<Word> getToDayWordList(Word word);
 
-    boolean updatePassWord(String[] answerIds);
+    boolean updateNextDateAndInsert(String[] answerIds);
 }

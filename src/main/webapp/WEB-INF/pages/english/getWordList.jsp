@@ -17,9 +17,10 @@
 <script src="/webjars/jquery/2.1.3/dist/jquery.min.js"></script>
 <script type="text/javascript">
     var wordList = ${wordList};
-    var answerList = [];
+    const answerList = [];
+    
     function printWord() {
-        let currentIndex = Math.floor(Math.random() * wordList.length);
+        const currentIndex = Math.floor(Math.random() * wordList.length);
         
         document.querySelector('#word').innerHTML = wordList[currentIndex].word;
         document.querySelector('#word').style.color = "black";
@@ -40,12 +41,14 @@
             document.querySelector('#word').style.color = "green";
             document.querySelector('#result').innerHTML = "정답";
             
-            answerList.push(wordList[currentIndex].id);
+            answerList.push(wordList[currentIndex].id+"_" + 1);
             
             wordList.splice(currentIndex, 1);
         } else {
             document.querySelector('#word').style.color = "red";
             document.querySelector('#result').innerHTML = "오답";
+            
+            answerList.push(wordList[currentIndex].id+"_" + 0);
         }
         
         if (wordList.length == 0) {
@@ -59,7 +62,6 @@
     function answersUpdate() {
         let dataa = JSON.stringify(answerList);
         
-        alert("asd");
         $.ajax({
             type:"POST"
             , contentType: "application/json"

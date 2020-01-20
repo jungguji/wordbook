@@ -17,7 +17,7 @@ public class WordServiceImpl implements WordService{
         return wordDAO.getToDayWordList(word);
     }
 
-    public boolean updatePassWord(String[] answerIds) {
-        return wordDAO.updatePassWord(answerIds);
+    public boolean updateNextDateAndInsert(String[] answerIds) {
+        return wordDAO.updateNextDateAndInsert(answerIds);
     }
 }

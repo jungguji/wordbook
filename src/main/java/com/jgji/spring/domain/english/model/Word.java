@@ -58,6 +58,8 @@ public class Word {
         this.level = level;
     }
     
-    
+    public String toString() {
+        return "id = " + this.id + " word = " + this.word + " next_date = " + this.nextDate;
+    }
     
 }

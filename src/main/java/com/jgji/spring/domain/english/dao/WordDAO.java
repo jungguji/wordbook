@@ -1,6 +1,7 @@
 package com.jgji.spring.domain.english.dao;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -31,11 +32,33 @@ public class WordDAO {
     }
     
     @Transactional
-    public boolean updatePassWord(String[] answerIds) {
-        List<Word> list = getNextDateUpdateWordList(answerIds);
+    public boolean updateNextDateAndInsert(String[] answers) {
+        List<String> passWordList = new ArrayList<String>();
+        List<String> failWordList = new ArrayList<String>();
         
+        for (int i = 0; i < answers.length; i++) {
+            if (answers[i].endsWith("_1")) {
+                passWordList.add(answers[i].split("_")[0]);
+            } else {
+                String id = answers[i].split("_")[0];
+                
+                if (!failWordList.contains(id)) {
+                    failWordList.add(id);
+                }
+            }
+        }
+        
+        updatePassWord(passWordList);
+        insertFailWord(failWordList);
+        
+        return true;
+    }
+    
+    private void updatePassWord(List<String> passWordList) {
+        List<Word> list = getWordList(passWordList);
+        
+        LocalDate nextDate = LocalDate.now();
         for (Word word : list) {
-            LocalDate nextDate = LocalDate.now();
             int currentLevel = word.getLevel();
             
             word.setNextDate(nextDate.plusDays(addDate(currentLevel)));
@@ -44,24 +67,25 @@ public class WordDAO {
             em.merge(word);
         }
         em.flush();
-        
-        return true;
     }
     
-    @SuppressWarnings("unchecked")
-    private List<Word> getNextDateUpdateWordList(String[] answerIds) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("SELECT                   ");
-        sb.append("    *                    ");
-        sb.append("FROM                     ");
-        sb.append("    Word W               ");
-        sb.append("WHERE                    ");
+    private List<Word> getWordList(List<String> wordIdList) {
+        if (wordIdList.isEmpty()) {
+            return new ArrayList<Word>();
+        }
         
-        for (int i = 0; i < answerIds.length; i++) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("SELECT        ");
+        sb.append("    *         ");
+        sb.append("FROM          ");
+        sb.append("    Word W    ");
+        sb.append("WHERE         ");
+        
+        for (int i = 0; i < wordIdList.size(); i++) {
             if (i != 0) {
                 sb.append(" OR ");
             }
-            sb.append("id = '").append(answerIds[i]).append("'");
+            sb.append("id = '").append(wordIdList.get(i)).append("'");
         }
         
         return em.createNativeQuery(sb.toString(), Word.class).getResultList();
@@ -93,5 +117,23 @@ public class WordDAO {
         }
         
         return addDate;
+    }
+    
+    private void insertFailWord(List<String> failWordList) {
+        final int PLUS_DAY = 1;
+        List<Word> list = getWordList(failWordList);
+        
+        LocalDate nextDate = LocalDate.now().plusDays(PLUS_DAY);
+        System.out.println(nextDate);
+        for (Word word : list) {
+            Word insertNewWord = new Word();
+            insertNewWord.setWord(word.getWord());
+            insertNewWord.setMeaning(word.getMeaning());
+            insertNewWord.setNextDate(nextDate);
+            
+            em.persist(insertNewWord);
+        }
+        
+        em.flush();
     }
 }
