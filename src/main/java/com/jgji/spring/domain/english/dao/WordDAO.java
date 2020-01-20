@@ -32,22 +32,7 @@ public class WordDAO {
     }
     
     @Transactional
-    public boolean updateNextDateAndInsert(String[] answers) {
-        List<String> passWordList = new ArrayList<String>();
-        List<String> failWordList = new ArrayList<String>();
-        
-        for (int i = 0; i < answers.length; i++) {
-            if (answers[i].endsWith("_1")) {
-                passWordList.add(answers[i].split("_")[0]);
-            } else {
-                String id = answers[i].split("_")[0];
-                
-                if (!failWordList.contains(id)) {
-                    failWordList.add(id);
-                }
-            }
-        }
-        
+    public boolean updateNextDateAndInsert(List<String> passWordList, List<String> failWordList) {
         updatePassWord(passWordList);
         insertFailWord(failWordList);
         
@@ -124,7 +109,7 @@ public class WordDAO {
         List<Word> list = getWordList(failWordList);
         
         LocalDate nextDate = LocalDate.now().plusDays(PLUS_DAY);
-        System.out.println(nextDate);
+        
         for (Word word : list) {
             Word insertNewWord = new Word();
             insertNewWord.setWord(word.getWord());
