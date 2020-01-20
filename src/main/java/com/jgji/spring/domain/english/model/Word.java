@@ -8,8 +8,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.CreationTimestamp;
-
 @Entity
 @Table(name = "word")
 public class Word {
@@ -18,8 +16,6 @@ public class Word {
     private int id;
     private String word;
     private String meaning;
-    
-    @CreationTimestamp
     private LocalDate nextDate;
     private int level;
     
