@@ -32,7 +32,9 @@
                 <button onclick="button(this)" class="btn btn-lg btn-default" value="확인"> 확인 </button>
                 
                 <br />
-                <h1 class="cover-heading" id="result"> </h1> <br />
+                    <h1 class="cover-heading" id="result"> </h1> 
+                <p class="lead" id="different"> </p>
+                
             </div>
           </div>
 
@@ -85,16 +87,21 @@
     }
     
     function printWord() {
-        answerTagNotDisabled();
-        
-        const currentIndex = Math.floor(Math.random() * wordList.length);
+    	const currentIndex = Math.floor(Math.random() * wordList.length);
+    	clear(currentIndex);
+    	
         const wordTag = document.querySelector('#word');
         
         wordTag.innerHTML = wordList[currentIndex].word;
         wordTag.style.color = "#fff"
-        
-        document.querySelector('#result').innerHTML = "";
+    }
+    
+    const clear = (currentIndex) => {
         document.querySelector('#currentIndex').value = currentIndex;
+        document.querySelector('#result').innerHTML = "";
+        document.querySelector("#different").innerHTML = "";
+        
+        answerTagNotDisabled();
     }
     
     function check() {
@@ -103,13 +110,15 @@
         const answerTag = document.querySelector('#answer')
         const wordTag = document.querySelector('#word');
         const resultTag = document.querySelector('#result');
-        
         const currentIndex = document.querySelector('#currentIndex').value;
-        if (wordList[currentIndex].meaning.includes(answerTag.value)) {
+        
+        const meanArray = stringToArray(wordList[currentIndex].meaning);
+        if (meanArray.includes(answerTag.value)) {
             wordTag.style.color = "green";
             resultTag.innerHTML = "정답";
             
             answerList.push(wordList[currentIndex].id+"_" + 1);
+            document.querySelector("#different").innerHTML = "(" + wordList[currentIndex].meaning + ")";
             
             wordList.splice(currentIndex, 1);
         } else {
@@ -137,6 +146,19 @@
         answerTag.value = "";
         answerTag.focus();
     }
+    
+    const stringToArray = (str) => {
+    	const array = str.split(",");
+        return arrayElementTrim(array);
+    }
+    
+    const arrayElementTrim = (array) => {
+    	for (i = 0; i < array.length; i++) {
+            array[i] = array[i].trim();
+        }
+    	
+    	return array;
+    } 
     
     const empty = (value) => { 
         if (value === null) return true 
