@@ -29,8 +29,7 @@
                 <input type="hidden" id="currentIndex" value="" />
                 <input type="text" class="form-control" id="answer" placeholder="뜻을 입력하세요"/> <br />
                 
-                <a href="javascript:check()" class="btn btn-lg btn-default" id="check"> 확인 </a>
-                <a href="javascript:printWord()" class="btn btn-lg btn-default" id="continue" style="display:none"> 계속 </a>
+                <button onclick="button(this)" class="btn btn-lg btn-default" value="확인"> 확인 </button>
                 
                 <br />
                 <h1 class="cover-heading" id="result"> </h1> <br />
@@ -56,43 +55,66 @@
     var wordList = ${wordList};
     const answerList = [];
     
-    function printWord() {
-    	document.querySelector("#answer").removeAttribute("disabled");
-        const currentIndex = Math.floor(Math.random() * wordList.length);
+    document.querySelector("#answer").addEventListener("keydown", key => {
+        if (key.keyCode == 13) {
+            button(document.querySelector("button"));
+        }
+    });
+
+    const button = (element) => {
+        const answerTag = document.querySelector("#answer");
         
-        document.querySelector('#word').innerHTML = wordList[currentIndex].word;
-        document.querySelector('#word').style.color = "#fff"
-        document.querySelector('#result').innerHTML = "";
-        document.querySelector('#answer').value = "";
-        document.querySelector('#currentIndex').value = currentIndex;
-        document.querySelector('#answer').focus();
-        
-        document.querySelector('#continue').style.display = "none";
-        document.querySelector('#check').style.display = "block";
-    }
-    
-    function check() {
-        const currentIndex = document.querySelector('#currentIndex').value;
-        const answer = document.querySelector('#answer').value
-        
-        if(empty(answer)) {
+        if(empty(answerTag.value)) {
             alert("값을 입력해주세요.");
-            document.querySelector('#answer').focus();
+            answerTag.focus();
             return;
         }
         
-        document.querySelector("#answer").setAttribute("disabled","disabled");
+        if (element.value === "확인") {
+            check();
+            element.value = "계속하기";
+            element.innerHTML = "계속하기";
+            
+            answerTag.focus();
+        } else {
+            printWord();
+            
+            element.value = "확인";
+            element.innerHTML = "확인";
+        }
+    }
+    
+    function printWord() {
+        answerTagNotDisabled();
         
-        if (wordList[currentIndex].meaning.includes(answer)) {
-            document.querySelector('#word').style.color = "green";
-            document.querySelector('#result').innerHTML = "정답";
+        const currentIndex = Math.floor(Math.random() * wordList.length);
+        const wordTag = document.querySelector('#word');
+        
+        wordTag.innerHTML = wordList[currentIndex].word;
+        wordTag.style.color = "#fff"
+        
+        document.querySelector('#result').innerHTML = "";
+        document.querySelector('#currentIndex').value = currentIndex;
+    }
+    
+    function check() {
+        answerTagDisabled();
+        
+        const answerTag = document.querySelector('#answer')
+        const wordTag = document.querySelector('#word');
+        const resultTag = document.querySelector('#result');
+        
+        const currentIndex = document.querySelector('#currentIndex').value;
+        if (wordList[currentIndex].meaning.includes(answerTag.value)) {
+            wordTag.style.color = "green";
+            resultTag.innerHTML = "정답";
             
             answerList.push(wordList[currentIndex].id+"_" + 1);
             
             wordList.splice(currentIndex, 1);
         } else {
-            document.querySelector('#word').style.color = "red";
-            document.querySelector('#result').innerHTML = "오답";
+            wordTag.style.color = "red";
+            resultTag.innerHTML = "오답";
             
             answerList.push(wordList[currentIndex].id+"_" + 0);
         }
@@ -100,9 +122,20 @@
         if (wordList.length == 0) {
             answersUpdate();
         }
+    }
+    
+    const answerTagDisabled = () => {
+        const answerTag = document.querySelector('#answer');
+        answerTag.setAttribute("readonly","readonly");
+        answerTag.style.color = "#495057";
+    }
+    
+    const answerTagNotDisabled = () => {
+        const answerTag = document.querySelector("#answer");
         
-        document.querySelector('#check').style.display = "none";
-        document.querySelector('#continue').style.display = "block";
+        answerTag.removeAttribute("readonly");
+        answerTag.value = "";
+        answerTag.focus();
     }
     
     const empty = (value) => { 
