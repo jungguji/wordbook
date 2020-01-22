@@ -28,9 +28,8 @@ public class WordController {
         return "hello, world";
     }
     
-    @RequestMapping("/english/wordlist")
+    @RequestMapping("/word/test")
     public String getToDayWordList(Word word, Model model) throws ParseException, JsonProcessingException {
-        
         word.setNextDate(LocalDate.now());
         
         ObjectMapper objMapper = new ObjectMapper();
@@ -39,7 +38,7 @@ public class WordController {
         
         String jsonText = objMapper.writeValueAsString(service.getToDayWordList(word));
         model.addAttribute("wordList", jsonText);
-        return "/english/getWordList";
+        return "thymeleaf/index";
     }
     
     @RequestMapping(value="/english/answers", method=RequestMethod.POST, produces = "application/json")
