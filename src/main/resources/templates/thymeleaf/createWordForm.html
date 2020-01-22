@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" 
+    xmlns:th="http://www.thymeleaf.org" 
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+    layout:decorator="layout/default">
+    
+    <th:block layout:fragment="content">
+        <div class="form-group">
+            <p class="lead">
+                테스트 할 단어를 추가 하는 페이지 입니다. <br />
+                텍스트 파일에 아래 양식으로 저장하여 드래그 앤 드롭하면 텍스트 파일 안의 단어들이 테스트 단어 리스트에 추가 됩니다.
+            </p>
+
+        <form action="" method="post" enctype="multipart/form-data" id="js-upload-form">
+            <div class="upload-drop-zone" id="drop-zone">Just drag and drop files here</div>
+        </form>
+
+        <h3 class="cover-heading"> 양식 </h3>
+            <p class="lead">
+                단어명/단어뜻,단어뜻,단어뜻....<br />
+                단어명/단어뜻,단어뜻,단어뜻....<br />
+                단어명/단어뜻,단어뜻,단어뜻....<br />
+                
+                <img th:src="@{/images/wordUploadEx.png}"/>
+            </p>
+        </div>
+        
+        <script th:inline="javascript">
+        + function($) {
+            'use strict';
+
+            // UPLOAD CLASS DEFINITION
+            // ======================
+
+            var dropZone = document.getElementById('drop-zone');
+            var uploadForm = document.getElementById('js-upload-form');
+
+            var startUpload = function(files) {
+                var data = new FormData();
+                data.append("file", files[0],"word");
+                
+                $.ajax({
+                    type:"POST"
+                    , contentType: "multipart/form-data"
+                    , url: "/word/upload"
+                    , data: data
+                    , cache: false
+                    , processData: false
+                    , contentType: false
+                    , success: function(data) {
+                        alert(data);
+                        alert("업로드 끝");
+                    }
+                });
+            }
+
+            uploadForm.addEventListener('submit', function(e) {
+                var uploadFiles = document.getElementById('js-upload-files').files;
+                e.preventDefault()
+
+                startUpload(uploadFiles)
+            })
+
+            dropZone.ondrop = function(e) {
+                e.preventDefault();
+                this.className = 'upload-drop-zone';
+
+                startUpload(e.dataTransfer.files)
+            }
+
+            dropZone.ondragover = function() {
+                this.className = 'upload-drop-zone drop';
+                return false;
+            }
+
+            dropZone.ondragleave = function() {
+                this.className = 'upload-drop-zone';
+                return false;
+            }
+
+        }(jQuery);
+        </script>
+        <style th:inline="text">
+           /* layout.css Style */
+            .upload-drop-zone {
+              height: 200px;
+              border-width: 2px;
+              margin-bottom: 20px;
+            }
+            
+            /* skin.css Style*/
+            .upload-drop-zone {
+              color: #ccc;
+              border-style: dashed;
+              border-color: #ccc;
+              line-height: 200px;
+              text-align: center
+            }
+            .upload-drop-zone.drop {
+              color: #222;
+              border-color: #222;
+            }
+        </style>
+    </th:block>
+</html>
