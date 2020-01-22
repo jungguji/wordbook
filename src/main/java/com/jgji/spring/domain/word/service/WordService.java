@@ -1,8 +1,8 @@
-package com.jgji.spring.domain.english.service;
+package com.jgji.spring.domain.word.service;
 
 import java.util.List;
 
-import com.jgji.spring.domain.english.model.Word;
+import com.jgji.spring.domain.word.model.Word;
 
 public interface WordService {
     

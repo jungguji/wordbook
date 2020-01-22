@@ -1,4 +1,4 @@
-package com.jgji.spring.domain.english.model;
+package com.jgji.spring.domain.word.model;
 
 import java.time.LocalDate;
 

@@ -1,4 +1,4 @@
-package com.jgji.spring.domain.english.dao;
+package com.jgji.spring.domain.word.dao;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -10,7 +10,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Repository;
 
-import com.jgji.spring.domain.english.model.Word;
+import com.jgji.spring.domain.word.model.Word;
 
 @Repository
 public class WordDAO {
