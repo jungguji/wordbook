@@ -75,31 +75,9 @@ public class WordController {
     @RequestMapping(value="/word/upload", method=RequestMethod.POST, headers = "content-type=multipart/form-data")
     @ResponseBody
     public String setWordAdd(@RequestParam(value="file") MultipartFile[] files) throws ParseException, IOException {
-        System.out.println("TETsetsetset");
-        InputStreamReader isr = null;
-        BufferedReader br = null;
-        try {
-            
+        MultipartFile file = files[0];
+        String words = service.insertWord(file);
         
-            for (MultipartFile file : files) {
-                isr = new InputStreamReader(file.getInputStream());
-                br = new BufferedReader(isr);
-                
-            }
-        
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (br != null) {
-                br.close();
-            }
-            
-            if (isr != null) {
-                isr.close();
-            }
-            
-        }
-        
-        return "OK";
+        return words;
     }
 }

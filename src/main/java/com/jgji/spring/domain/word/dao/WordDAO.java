@@ -121,4 +121,15 @@ public class WordDAO {
         
         em.flush();
     }
+    
+    @Transactional
+    public void insertWord(String[] wordAndMeaning) {
+        Word entity = new Word();
+        entity.setWord(wordAndMeaning[0]);
+        entity.setMeaning(wordAndMeaning[1]);
+        entity.setNextDate(LocalDate.now());
+        
+        em.persist(entity);
+        em.flush();
+    }
 }
