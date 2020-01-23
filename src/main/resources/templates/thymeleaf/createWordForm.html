@@ -26,6 +26,11 @@
         </div>
         
         <script th:inline="javascript">
+        window.onload = () => {
+            clearliTagClass();
+            addClassliTag(1);
+        }
+        
         + function($) {
             'use strict';
 
