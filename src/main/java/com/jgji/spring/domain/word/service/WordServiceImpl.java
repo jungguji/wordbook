@@ -45,15 +45,18 @@ public class WordServiceImpl implements WordService{
         StringBuffer result = new StringBuffer();
         InputStreamReader isr = null;
         BufferedReader br = null;
+
+        String encode = getFileEndcodeUTF8OREUCKR(file);
         
         try {
-            isr = new InputStreamReader(file.getInputStream());
+            isr = new InputStreamReader(file.getInputStream(), encode);
             br = new BufferedReader(isr);
 
             int i = 0;
             String content;
             while ((content = br.readLine()) != null) {
                 String[] word = content.split("/");
+                
                 wordDAO.insertWord(word);
                 
                 if (i != 0) {
@@ -66,6 +69,37 @@ public class WordServiceImpl implements WordService{
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
+            closeBufferReaderAndInputStreamReader(br, isr);
+        }
+        
+        return result.toString();
+    }
+    
+    private String getFileEndcodeUTF8OREUCKR(MultipartFile file) throws IOException {
+        String encode = "UTF-8";
+        
+        InputStreamReader isr = null;
+        BufferedReader br = null;
+
+        try {
+            isr = new InputStreamReader(file.getInputStream(), encode);
+            br = new BufferedReader(isr);
+            
+            if (!br.readLine().matches(".*[ㄱ-힣]+.*")) {
+                encode = "EUC-KR";
+            }
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            closeBufferReaderAndInputStreamReader(br, isr);
+        }
+        
+        return encode;
+    }
+    
+    private void closeBufferReaderAndInputStreamReader(BufferedReader br, InputStreamReader isr) {
+        try {
             if (br != null) {
                 br.close();
             }
@@ -73,9 +107,9 @@ public class WordServiceImpl implements WordService{
             if (isr != null) {
                 isr.close();
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        
-        
-        return result.toString();
     }
+
 }
