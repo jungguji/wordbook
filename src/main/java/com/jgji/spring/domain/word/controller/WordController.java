@@ -1,8 +1,6 @@
-package com.jgji.spring.domain.word;
+package com.jgji.spring.domain.word.controller;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.time.LocalDate;
 
@@ -33,6 +31,11 @@ public class WordController {
         return "/english/test";
     }
     
+    @RequestMapping("/")
+    public String home(Word word, Model model) {
+        return "thymeleaf/index";
+    }
+    
     @RequestMapping("/word/test")
     public String getToDayWordList(Word word, Model model) throws ParseException, JsonProcessingException {
         word.setNextDate(LocalDate.now());
@@ -43,20 +46,7 @@ public class WordController {
         
         String jsonText = objMapper.writeValueAsString(service.getToDayWordList(word));
         model.addAttribute("wordList", jsonText);
-        return "thymeleaf/index";
-    }
-    
-    @RequestMapping("/word/testttt")
-    public String getToDayWordListaaa(Word word, Model model) throws ParseException, JsonProcessingException {
-        word.setNextDate(LocalDate.now());
-        
-        ObjectMapper objMapper = new ObjectMapper();
-        objMapper.registerModule(new JavaTimeModule());
-        objMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-        
-        String jsonText = objMapper.writeValueAsString(service.getToDayWordList(word));
-        model.addAttribute("wordList", jsonText);
-        return "/english/getWordList";
+        return "thymeleaf/viewWordTest";
     }
     
     @RequestMapping(value="/english/answers", method=RequestMethod.POST, produces = "application/json")
