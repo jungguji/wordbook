@@ -5,10 +5,10 @@
     layout:decorator="layout/default">
     
     <th:block layout:fragment="content">
-        <div class="progress">
-          <div class="progress-bar bg-success" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0"></div>
+        <div class="progress" style="height: 2rem">
+          <div class="progress-bar bg-success" role="progressbar" style="width: 0%; height:100px" aria-valuenow="0" aria-valuemin="0"></div>
         </div>
-        <div class="form-group">
+        <div class="form-group" style="margin-top: 50px">
             <h1 class="cover-heading" id="word"> </h1>
             <p class="lead">위 단어에 해당하는 뜻을 한글로 적어주세요.</p>
             
@@ -57,7 +57,7 @@
                 }
                 
                 if (element.value === "확인") {
-                    check();
+                    check(answerTag);
                     element.value = "계속하기";
                     element.innerHTML = "계속하기";
                     
@@ -86,33 +86,24 @@
                 document.querySelector("#different").innerHTML = "";
                 
                 answerTagNotDisabled();
-            }
+            };
             
-            function check() {
-                answerTagDisabled();
+            function check(answerTag) {
+                answerTagDisabled(answerTag);
                 
-                const answerTag = document.querySelector('#answer')
-                const wordTag = document.querySelector('#word');
-                const resultTag = document.querySelector('#result');
                 const currentIndex = document.querySelector('#currentIndex').value;
-                
                 const meanArray = stringToArray(wordList[currentIndex].meaning);
+                
                 if (meanArray.includes(answerTag.value)) {
-                    wordTag.style.color = "green";
-                    resultTag.innerHTML = "정답";
-                    
-                    answerList.push(wordList[currentIndex].id+"_" + 1);
-                    document.querySelector("#different").innerHTML = "(" + wordList[currentIndex].meaning + ")";
-                    
+                    setWordAndResultTag("green", "정답");
+                    setAnswerList(currentIndex, 1);
+                    getDiffrentMeaning(currentIndex);
                     progressSetting();
-                    
                     wordList.splice(currentIndex, 1);
                 } else {
-                    wordTag.style.color = "red";
-                    resultTag.innerHTML = "오답";
-                    
-                    answerList.push(wordList[currentIndex].id+"_" + 0);
-                    document.querySelector("#different").innerHTML = "(" + wordList[currentIndex].meaning + ")";
+                    setWordAndResultTag("red", "오답");
+                    setAnswerList(currentIndex, 0);
+                    getDiffrentMeaning(currentIndex);
                 }
                 
                 if (wordList.length == 0) {
@@ -120,22 +111,37 @@
                 }
             }
             
+            const setWordAndResultTag = (wordInput, resultInput) => {
+            	const wordTag = document.querySelector('#word');
+                const resultTag = document.querySelector('#result');
+                
+            	wordTag.style.color = wordInput;
+            	resultTag.innerHTML = resultInput;
+            };
+            
+            const setAnswerList = (currentIndex, value) => {
+            	answerList.push(wordList[currentIndex].id+"_" + value);
+            };
+            
+            const getDiffrentMeaning = (currentIndex) => {
+            	document.querySelector("#different").innerHTML = "(" + wordList[currentIndex].meaning + ")";
+            }
+            
             const progressSetting = () => {
             	let progressCurrent = progressCurrentValue();
             	
-                document.querySelector(".progress-bar").setAttribute("aria-valuenow", progressCurrentValue + 1);
-                document.querySelector(".progress-bar").style.width(progressCurrentValue * progressPercent);
-            }
+                document.querySelector(".progress-bar").setAttribute("aria-valuenow", ++progressCurrent);
+                document.querySelector(".progress-bar").style.width = (progressCurrent * progressPercent) + "%";
+            };
             
             const progressCurrentValue = () => {
             	return parseInt(document.querySelector(".progress-bar").getAttribute("aria-valuenow"));
-            }
+            };
             
-            const answerTagDisabled = () => {
-                const answerTag = document.querySelector('#answer');
+            const answerTagDisabled = (answerTag) => {
                 answerTag.setAttribute("readonly","readonly");
                 answerTag.style.color = "#495057";
-            }
+            };
             
             const answerTagNotDisabled = () => {
                 const answerTag = document.querySelector("#answer");
@@ -143,12 +149,12 @@
                 answerTag.removeAttribute("readonly");
                 answerTag.value = "";
                 answerTag.focus();
-            }
+            };
             
             const stringToArray = (str) => {
                 const array = str.split(",");
                 return arrayElementTrim(array);
-            }
+            };
             
             const arrayElementTrim = (array) => {
                 for (i = 0; i < array.length; i++) {
@@ -156,7 +162,7 @@
                 }
                 
                 return array;
-            } 
+            };
             
             const empty = (value) => { 
                 if (value === null) return true 
@@ -165,7 +171,7 @@
                 if (Array.isArray(value) && value.length < 1) return true 
                 if (typeof value === 'object' && value.constructor.name === 'Object' && Object.keys(value).length < 1 && Object.getOwnPropertyNames(value) < 1) return true 
                 if (typeof value === 'object' && value.constructor.name === 'String' && Object.keys(value).length < 1) return true // new String() return false }
-            }
+            };
         
             function answersUpdate() {
                 let dataa = JSON.stringify(answerList);
