@@ -5,6 +5,9 @@
     layout:decorator="layout/default">
     
     <th:block layout:fragment="content">
+        <div class="progress">
+          <div class="progress-bar bg-success" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0"></div>
+        </div>
         <div class="form-group">
             <h1 class="cover-heading" id="word"> </h1>
             <p class="lead">위 단어에 해당하는 뜻을 한글로 적어주세요.</p>
@@ -23,12 +26,19 @@
             /* <![CDATA[ */   
             var wordList =  [(${wordList})];
             const answerList = [];
+            const progressPercent = (1 / wordList.length) * 100;
             
             window.onload = () => {
-            	printWord();
+            	init();
+            }
+            
+            const init = () => {
+            	document.querySelector(".progress-bar").setAttribute("aria-valuemax", wordList.length);
             	
             	clearliTagClass();
-            	addClassliTag(1);
+                addClassliTag(1);
+                
+                printWord();
             }
             
             document.querySelector("#answer").addEventListener("keydown", key => {
@@ -94,6 +104,8 @@
                     answerList.push(wordList[currentIndex].id+"_" + 1);
                     document.querySelector("#different").innerHTML = "(" + wordList[currentIndex].meaning + ")";
                     
+                    progressSetting();
+                    
                     wordList.splice(currentIndex, 1);
                 } else {
                     wordTag.style.color = "red";
@@ -106,6 +118,17 @@
                 if (wordList.length == 0) {
                     answersUpdate();
                 }
+            }
+            
+            const progressSetting = () => {
+            	let progressCurrent = progressCurrentValue();
+            	
+                document.querySelector(".progress-bar").setAttribute("aria-valuenow", progressCurrentValue + 1);
+                document.querySelector(".progress-bar").style.width(progressCurrentValue * progressPercent);
+            }
+            
+            const progressCurrentValue = () => {
+            	return parseInt(document.querySelector(".progress-bar").getAttribute("aria-valuenow"));
             }
             
             const answerTagDisabled = () => {
