@@ -48,6 +48,19 @@ public class WordController {
         model.addAttribute("wordList", jsonText);
         return "thymeleaf/viewWordTest";
     }
+
+    @RequestMapping("/word/test/random")
+    public String getrandomWordList(Word word, Model model) throws ParseException, JsonProcessingException {
+        ObjectMapper objMapper = new ObjectMapper();
+        objMapper.registerModule(new JavaTimeModule());
+        objMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+        
+        String jsonText = objMapper.writeValueAsString(service.getRandomWordList(word));
+        System.out.println(jsonText);
+        model.addAttribute("wordList", jsonText);
+        
+        return "thymeleaf/viewWordTest";
+    }
     
     @RequestMapping(value="/english/answers", method=RequestMethod.POST, produces = "application/json")
     @ResponseBody

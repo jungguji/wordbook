@@ -19,17 +19,31 @@ public class WordDAO {
     
     public List<Word> getToDayWordList(Word word) {
         StringBuilder sb = new StringBuilder();
-        sb.append("SELECT                   ");
-        sb.append("    W                    ");
-        sb.append("FROM                     ");
-        sb.append("    Word W               ");
-        sb.append("WHERE                    ");
-        sb.append("    NEXT_DATE <= :date   ");
+        sb.append("    SELECT                   ");
+        sb.append("        W                    ");
+        sb.append("    FROM                     ");
+        sb.append("        Word W               ");
+        sb.append("    WHERE                    ");
+        sb.append("        NEXT_DATE <= :date   ");
         
         return em.createQuery(sb.toString(), Word.class)
         .setParameter("date", word.getNextDate())
         .getResultList();
     }
+    
+    public List<Word> getRandomWordList(Word word) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("    SELECT             ");
+        sb.append("        W              ");
+        sb.append("    FROM               ");
+        sb.append("        Word W         ");
+        sb.append("    ORDER BY RAND()    ");
+        
+        return em.createQuery(sb.toString(), Word.class)
+        .setMaxResults(15)
+        .getResultList();
+    }
+    
     
     @Transactional
     public boolean updateNextDateAndInsert(List<String> passWordList, List<String> failWordList) {
@@ -60,11 +74,11 @@ public class WordDAO {
         }
         
         StringBuilder sb = new StringBuilder();
-        sb.append("SELECT        ");
-        sb.append("    *         ");
-        sb.append("FROM          ");
-        sb.append("    Word W    ");
-        sb.append("WHERE         ");
+        sb.append("    SELECT        ");
+        sb.append("        *         ");
+        sb.append("    FROM          ");
+        sb.append("        Word W    ");
+        sb.append("    WHERE         ");
         
         for (int i = 0; i < wordIdList.size(); i++) {
             if (i != 0) {

@@ -21,6 +21,10 @@ public class WordServiceImpl implements WordService{
     public List<Word> getToDayWordList(Word word) {
         return wordDAO.getToDayWordList(word);
     }
+    
+    public List<Word> getRandomWordList(Word word) {
+        return wordDAO.getRandomWordList(word);
+    }
 
     public boolean updateNextDateAndInsert(String[] answerIds) {
         List<String> passWordList = new ArrayList<String>();
