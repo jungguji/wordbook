@@ -40,32 +40,45 @@ public class WordController {
     public String getToDayWordList(Word word, Model model) throws ParseException, JsonProcessingException {
         word.setNextDate(LocalDate.now());
         
-        ObjectMapper objMapper = new ObjectMapper();
-        objMapper.registerModule(new JavaTimeModule());
-        objMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+        ObjectMapper objMapper = getObjectMapperConfig();
         
         String jsonText = objMapper.writeValueAsString(service.getToDayWordList(word));
         model.addAttribute("wordList", jsonText);
+        
         return "thymeleaf/viewWordTest";
     }
 
     @RequestMapping("/word/test/random")
     public String getrandomWordList(Word word, Model model) throws ParseException, JsonProcessingException {
-        ObjectMapper objMapper = new ObjectMapper();
-        objMapper.registerModule(new JavaTimeModule());
-        objMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+        ObjectMapper objMapper = getObjectMapperConfig();
         
         String jsonText = objMapper.writeValueAsString(service.getRandomWordList(word));
-        System.out.println(jsonText);
+        
         model.addAttribute("wordList", jsonText);
         
         return "thymeleaf/viewWordTest";
     }
     
-    @RequestMapping(value="/english/answers", method=RequestMethod.POST, produces = "application/json")
+    private ObjectMapper getObjectMapperConfig() {
+        ObjectMapper objMapper = new ObjectMapper();
+        objMapper.registerModule(new JavaTimeModule());
+        objMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+        
+        return objMapper;
+    }
+    
+    @RequestMapping(value="/word/answers", method=RequestMethod.POST, produces = "application/json")
     @ResponseBody
     public boolean updateNextDateAndInsert(@RequestBody String[] answerIds) throws ParseException, JsonProcessingException {
         boolean result = service.updateNextDateAndInsert(answerIds);
+        
+        return result;
+    }
+    
+    @RequestMapping(value="/word/answers/random", method=RequestMethod.POST, produces = "application/json")
+    @ResponseBody
+    public boolean insertRandomFailWord(@RequestBody String[] answerIds) throws ParseException, JsonProcessingException {
+        boolean result = service.insertRandomFailWord(answerIds);
         
         return result;
     }

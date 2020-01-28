@@ -29,13 +29,13 @@
             const progressPercent = (1 / wordList.length) * 100;
             
             window.onload = () => {
-            	init();
+                init();
             }
             
             const init = () => {
-            	document.querySelector(".progress-bar").setAttribute("aria-valuemax", wordList.length);
-            	
-            	clearliTagClass();
+                document.querySelector(".progress-bar").setAttribute("aria-valuemax", wordList.length);
+                
+                clearliTagClass();
                 addClassliTag(1);
                 
                 printWord();
@@ -107,35 +107,41 @@
                 }
                 
                 if (wordList.length == 0) {
-                    answersUpdate();
+                    let href = window.location.href;
+                    
+                    if (href.endsWith("random")) {
+                        answersUpdateForRandom();
+                    } else {
+                        answersUpdate();
+                    }
                 }
             }
             
             const setWordAndResultTag = (wordInput, resultInput) => {
-            	const wordTag = document.querySelector('#word');
+                const wordTag = document.querySelector('#word');
                 const resultTag = document.querySelector('#result');
                 
-            	wordTag.style.color = wordInput;
-            	resultTag.innerHTML = resultInput;
+                wordTag.style.color = wordInput;
+                resultTag.innerHTML = resultInput;
             };
             
             const setAnswerList = (currentIndex, value) => {
-            	answerList.push(wordList[currentIndex].id+"_" + value);
+                answerList.push(wordList[currentIndex].id+"_" + value);
             };
             
             const getDiffrentMeaning = (currentIndex) => {
-            	document.querySelector("#different").innerHTML = "(" + wordList[currentIndex].meaning + ")";
+                document.querySelector("#different").innerHTML = "(" + wordList[currentIndex].meaning + ")";
             }
             
             const progressSetting = () => {
-            	let progressCurrent = progressCurrentValue();
-            	
+                let progressCurrent = progressCurrentValue();
+                
                 document.querySelector(".progress-bar").setAttribute("aria-valuenow", ++progressCurrent);
                 document.querySelector(".progress-bar").style.width = (progressCurrent * progressPercent) + "%";
             };
             
             const progressCurrentValue = () => {
-            	return parseInt(document.querySelector(".progress-bar").getAttribute("aria-valuenow"));
+                return parseInt(document.querySelector(".progress-bar").getAttribute("aria-valuenow"));
             };
             
             const answerTagDisabled = (answerTag) => {
@@ -179,7 +185,24 @@
                 $.ajax({
                     type:"POST"
                     , contentType: "application/json"
-                    , url: "/english/answers"
+                    , url: "/word/answers"
+                    , data: dataa
+                    , dataType : 'json'
+                    , cache: false
+                    , success: function(data) {
+                        alert(data);
+                        alert("시험 끝");
+                    }
+                });
+            }
+            
+            function answersUpdateForRandom() {
+                let dataa = JSON.stringify(answerList);
+                
+                $.ajax({
+                    type:"POST"
+                    , contentType: "application/json"
+                    , url: "/word/answers/random"
                     , data: dataa
                     , dataType : 'json'
                     , cache: false

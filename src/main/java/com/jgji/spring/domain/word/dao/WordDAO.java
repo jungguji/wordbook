@@ -40,7 +40,7 @@ public class WordDAO {
         sb.append("    ORDER BY RAND()    ");
         
         return em.createQuery(sb.toString(), Word.class)
-        .setMaxResults(15)
+        .setMaxResults(2)
         .getResultList();
     }
     
@@ -48,6 +48,13 @@ public class WordDAO {
     @Transactional
     public boolean updateNextDateAndInsert(List<String> passWordList, List<String> failWordList) {
         updatePassWord(passWordList);
+        insertFailWord(failWordList);
+        
+        return true;
+    }
+    
+    @Transactional
+    public boolean insertRandomFailWord(List<String> passWordList, List<String> failWordList) {
         insertFailWord(failWordList);
         
         return true;
@@ -65,6 +72,24 @@ public class WordDAO {
             
             em.merge(word);
         }
+        em.flush();
+    }
+    
+    private void insertFailWord(List<String> failWordList) {
+        final int PLUS_DAY = 1;
+        List<Word> list = getWordList(failWordList);
+        
+        LocalDate nextDate = LocalDate.now().plusDays(PLUS_DAY);
+        
+        for (Word word : list) {
+            Word insertNewWord = new Word();
+            insertNewWord.setWord(word.getWord());
+            insertNewWord.setMeaning(word.getMeaning());
+            insertNewWord.setNextDate(nextDate);
+            
+            em.persist(insertNewWord);
+        }
+        
         em.flush();
     }
     
@@ -116,24 +141,6 @@ public class WordDAO {
         }
         
         return addDate;
-    }
-    
-    private void insertFailWord(List<String> failWordList) {
-        final int PLUS_DAY = 1;
-        List<Word> list = getWordList(failWordList);
-        
-        LocalDate nextDate = LocalDate.now().plusDays(PLUS_DAY);
-        
-        for (Word word : list) {
-            Word insertNewWord = new Word();
-            insertNewWord.setWord(word.getWord());
-            insertNewWord.setMeaning(word.getMeaning());
-            insertNewWord.setNextDate(nextDate);
-            
-            em.persist(insertNewWord);
-        }
-        
-        em.flush();
     }
     
     @Transactional

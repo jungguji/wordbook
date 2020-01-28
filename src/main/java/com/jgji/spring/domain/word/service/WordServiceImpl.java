@@ -45,6 +45,25 @@ public class WordServiceImpl implements WordService{
         return wordDAO.updateNextDateAndInsert(passWordList, failWordList);
     }
     
+    public boolean insertRandomFailWord(String[] answerIds) {
+        List<String> passWordList = new ArrayList<String>();
+        List<String> failWordList = new ArrayList<String>();
+        
+        for (int i = 0; i < answerIds.length; i++) {
+            if (answerIds[i].endsWith("_1")) {
+                passWordList.add(answerIds[i].split("_")[0]);
+            } else {
+                String id = answerIds[i].split("_")[0];
+                
+                if (!failWordList.contains(id)) {
+                    failWordList.add(id);
+                }
+            }
+        }
+        
+        return wordDAO.insertRandomFailWord(passWordList, failWordList);
+    }
+    
     public String insertWord(MultipartFile file) throws IOException {
         StringBuffer result = new StringBuffer();
         InputStreamReader isr = null;

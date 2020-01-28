@@ -15,5 +15,7 @@ public interface WordService {
 
     boolean updateNextDateAndInsert(String[] answerIds);
     
+    boolean insertRandomFailWord(String[] answerIds);
+    
     String insertWord(MultipartFile file) throws IOException;
 }
