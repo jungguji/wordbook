@@ -29,6 +29,16 @@
             const progressPercent = (1 / wordList.length) * 100;
             
             window.onload = () => {
+            	if (empty(wordList)) {
+            		
+            		if (confirm("오늘 시험 볼 단어가 없습니다. \n 여태 시험 본 단어들 중 랜덤으로 시험보시겠습니까?")) {
+            			alert("최대 15개의 단어가 선택됩니다.");
+            			window.location.href = /*[[@{/word/test/random}]]*/
+            		} else {
+            			window.location.href = /*[[@{/}]]*/
+            		}
+            	}
+            	
                 init();
             }
             
@@ -95,15 +105,12 @@
                 const meanArray = stringToArray(wordList[currentIndex].meaning);
                 
                 if (meanArray.includes(answerTag.value)) {
-                    setWordAndResultTag("green", "정답");
-                    setAnswerList(currentIndex, 1);
-                    getDiffrentMeaning(currentIndex);
+                	setCheckResult("green", "정답", 1);
+                    
                     progressSetting();
                     wordList.splice(currentIndex, 1);
                 } else {
-                    setWordAndResultTag("red", "오답");
-                    setAnswerList(currentIndex, 0);
-                    getDiffrentMeaning(currentIndex);
+                	setCheckResult("red", "오답", 0);
                 }
                 
                 if (wordList.length == 0) {
@@ -115,6 +122,12 @@
                         answersUpdate();
                     }
                 }
+            }
+            
+            const setCheckResult = (tagColor, result, trueOrFalse) => {
+                setWordAndResultTag(tagColor, result);
+                setAnswerList(currentIndex, trueOrFalse);
+                setDiffrentMeaning(currentIndex);
             }
             
             const setWordAndResultTag = (wordInput, resultInput) => {
@@ -129,7 +142,7 @@
                 answerList.push(wordList[currentIndex].id+"_" + value);
             };
             
-            const getDiffrentMeaning = (currentIndex) => {
+            const setDiffrentMeaning = (currentIndex) => {
                 document.querySelector("#different").innerHTML = "(" + wordList[currentIndex].meaning + ")";
             }
             
