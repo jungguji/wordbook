@@ -40,7 +40,7 @@ public class WordDAO {
         sb.append("    ORDER BY RAND()    ");
         
         return em.createQuery(sb.toString(), Word.class)
-        .setMaxResults(2)
+        .setMaxResults(15)
         .getResultList();
     }
     
