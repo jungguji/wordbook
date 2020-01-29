@@ -105,12 +105,12 @@
                 const meanArray = stringToArray(wordList[currentIndex].meaning);
                 
                 if (meanArray.includes(answerTag.value)) {
-                	setCheckResult("green", "정답", 1);
+                	setCheckResult("green", "정답", currentIndex, 1);
                     
                     progressSetting();
                     wordList.splice(currentIndex, 1);
                 } else {
-                	setCheckResult("red", "오답", 0);
+                	setCheckResult("red", "오답", currentIndex, 0);
                 }
                 
                 if (wordList.length == 0) {
@@ -124,7 +124,7 @@
                 }
             }
             
-            const setCheckResult = (tagColor, result, trueOrFalse) => {
+            const setCheckResult = (tagColor, result, currentIndex, trueOrFalse) => {
                 setWordAndResultTag(tagColor, result);
                 setAnswerList(currentIndex, trueOrFalse);
                 setDiffrentMeaning(currentIndex);
