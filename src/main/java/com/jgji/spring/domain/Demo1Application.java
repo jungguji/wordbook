@@ -1,4 +1,4 @@
-package com.jgji.spring.domain.word;
+package com.jgji.spring.domain;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
