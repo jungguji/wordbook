@@ -7,9 +7,9 @@ import java.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,17 +26,17 @@ public class WordController {
     @Autowired
     private WordService service;
     
-    @RequestMapping("/test")
+    @GetMapping("/test")
     public String hello(Word word, Model model) {
         return "/english/test";
     }
     
-    @RequestMapping("/")
+    @GetMapping("/")
     public String home(Word word, Model model) {
         return "thymeleaf/index";
     }
     
-    @RequestMapping("/word/test")
+    @GetMapping("/word/test")
     public String getToDayWordList(Word word, Model model) throws ParseException, JsonProcessingException {
         word.setNextDate(LocalDate.now());
         
@@ -48,7 +48,7 @@ public class WordController {
         return "thymeleaf/viewWordTest";
     }
 
-    @RequestMapping("/word/test/random")
+    @GetMapping("/word/test/random")
     public String getrandomWordList(Word word, Model model) throws ParseException, JsonProcessingException {
         ObjectMapper objMapper = getObjectMapperConfig();
         
@@ -83,7 +83,7 @@ public class WordController {
         return result;
     }
     
-    @RequestMapping(value="/word/add")
+    @GetMapping(value="/word/add")
     public String getWordAdd(Word word, Model model) throws ParseException, JsonProcessingException {
         return "thymeleaf/createWordForm";
     }

@@ -10,6 +10,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Repository;
 
+import com.jgji.spring.domain.user.model.User;
 import com.jgji.spring.domain.word.model.Word;
 
 @Repository
@@ -17,51 +18,62 @@ public class WordDAO {
     @PersistenceContext
     private EntityManager em;
     
-    public List<Word> getToDayWordList(Word word) {
+    public List<Word> getToDayWordList(Word word, String userId) {
+        System.out.println("userId >> " + userId);
         StringBuilder sb = new StringBuilder();
-        sb.append("    SELECT                   ");
-        sb.append("        W                    ");
-        sb.append("    FROM                     ");
-        sb.append("        Word W               ");
-        sb.append("    WHERE                    ");
-        sb.append("        NEXT_DATE <= :date   ");
+        sb.append("    SELECT                      ");
+        sb.append("        w                       ");
+        sb.append("    FROM                        ");
+        sb.append("        Word w                  ");
+        sb.append("    JOIN                        ");
+        sb.append("        w.user u                ");
+        sb.append("    WHERE                       ");
+        sb.append("        u.id = :userId          ");
+        sb.append("    AND                         ");
+        sb.append("        w.nextDate <= :date     ");
         
         return em.createQuery(sb.toString(), Word.class)
-        .setParameter("date", word.getNextDate())
-        .getResultList();
+            .setParameter("userId", userId)
+            .setParameter("date", word.getNextDate())
+            .getResultList();
     }
     
-    public List<Word> getRandomWordList(Word word) {
+    public List<Word> getRandomWordList(Word word, String userId) {
         StringBuilder sb = new StringBuilder();
-        sb.append("    SELECT             ");
-        sb.append("        W              ");
-        sb.append("    FROM               ");
-        sb.append("        Word W         ");
-        sb.append("    ORDER BY RAND()    ");
+        sb.append("    SELECT                ");
+        sb.append("        w                 ");
+        sb.append("    FROM                  ");
+        sb.append("        Word w            ");
+        sb.append("    JOIN                  ");
+        sb.append("        w.user u          ");
+        sb.append("    WHERE                 ");
+        sb.append("        u.id = :userId    ");
+        sb.append("    ORDER BY RAND()       ");
         
         return em.createQuery(sb.toString(), Word.class)
+                .setParameter("userId", userId)
         .setMaxResults(15)
         .getResultList();
     }
     
     
     @Transactional
-    public boolean updateNextDateAndInsert(List<String> passWordList, List<String> failWordList) {
-        updatePassWord(passWordList);
-        insertFailWord(failWordList);
+    public boolean updateNextDateAndInsert(List<String> passWordList, List<String> failWordList, User user) {
+        updatePassWord(passWordList, user.getId());
+        insertFailWord(failWordList, user);
         
         return true;
     }
     
     @Transactional
-    public boolean insertRandomFailWord(List<String> passWordList, List<String> failWordList) {
-        insertFailWord(failWordList);
+    public boolean insertRandomFailWord(List<String> passWordList, List<String> failWordList, User user) {
+        insertFailWord(failWordList, user);
         
         return true;
     }
     
-    private void updatePassWord(List<String> passWordList) {
-        List<Word> list = getWordList(passWordList);
+    private void updatePassWord(List<String> passWordList, String userId) {
+        List<Word> list = getWordList(passWordList, userId);
         
         LocalDate nextDate = LocalDate.now();
         for (Word word : list) {
@@ -75,9 +87,9 @@ public class WordDAO {
         em.flush();
     }
     
-    private void insertFailWord(List<String> failWordList) {
+    private void insertFailWord(List<String> failWordList, User user) {
         final int PLUS_DAY = 1;
-        List<Word> list = getWordList(failWordList);
+        List<Word> list = getWordList(failWordList, user.getId());
         
         LocalDate nextDate = LocalDate.now().plusDays(PLUS_DAY);
         
@@ -86,6 +98,7 @@ public class WordDAO {
             insertNewWord.setWord(word.getWord());
             insertNewWord.setMeaning(word.getMeaning());
             insertNewWord.setNextDate(nextDate);
+            insertNewWord.setUser(user);
             
             em.persist(insertNewWord);
         }
@@ -93,26 +106,31 @@ public class WordDAO {
         em.flush();
     }
     
-    private List<Word> getWordList(List<String> wordIdList) {
+    private List<Word> getWordList(List<String> wordIdList, String userId) {
         if (wordIdList.isEmpty()) {
             return new ArrayList<Word>();
         }
         
         StringBuilder sb = new StringBuilder();
-        sb.append("    SELECT        ");
-        sb.append("        *         ");
-        sb.append("    FROM          ");
-        sb.append("        Word W    ");
-        sb.append("    WHERE         ");
+        sb.append("    SELECT                ");
+        sb.append("        w                 ");
+        sb.append("    FROM                  ");
+        sb.append("        WORD w            ");
+        sb.append("    JOIN                  ");
+        sb.append("        w.USER u          ");
+        sb.append("    WHERE                 ");
+        sb.append("        u.ID = :userId    ");
         
         for (int i = 0; i < wordIdList.size(); i++) {
             if (i != 0) {
                 sb.append(" OR ");
             }
-            sb.append("id = '").append(wordIdList.get(i)).append("'");
+            sb.append("w.id = '").append(wordIdList.get(i)).append("'");
         }
         
-        return em.createNativeQuery(sb.toString(), Word.class).getResultList();
+        return em.createNativeQuery(sb.toString(), Word.class)
+                .setParameter(1, userId)
+                .getResultList();
     }
     
     private int addDate(int level) {
@@ -144,13 +162,14 @@ public class WordDAO {
     }
     
     @Transactional
-    public void insertWord(String[] wordAndMeaning) {
-        Word entity = new Word();
-        entity.setWord(wordAndMeaning[0]);
-        entity.setMeaning(wordAndMeaning[1]);
-        entity.setNextDate(LocalDate.now());
+    public void insertWord(String[] wordAndMeaning, User user) {
+        Word insertNewWord = new Word();
+        insertNewWord.setWord(wordAndMeaning[0]);
+        insertNewWord.setMeaning(wordAndMeaning[1]);
+        insertNewWord.setNextDate(LocalDate.now());
+        insertNewWord.setUser(user);
         
-        em.persist(entity);
+        em.persist(insertNewWord);
         em.flush();
     }
 }
