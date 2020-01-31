@@ -14,7 +14,7 @@
         <form action="" method="post" enctype="multipart/form-data" id="js-upload-form">
             <div class="upload-drop-zone" id="drop-zone">Just drag and drop files here</div>
         </form>
-
+        
         <h3 class="cover-heading"> 양식 </h3>
             <p class="lead">
                 단어명/단어뜻,단어뜻,단어뜻....<br />
@@ -41,6 +41,13 @@
             var uploadForm = document.getElementById('js-upload-form');
 
             var startUpload = function(files) {
+            	var token = $("meta[name='_csrf']").attr("content");
+            	var header = $("meta[name='_csrf_header']").attr("content");
+            	
+            	$(document).ajaxSend(function(e, xhr, options) {
+                    xhr.setRequestHeader(header, token);
+                });
+            	
                 var data = new FormData();
                 data.append("file", files[0],"word");
                 
@@ -55,6 +62,8 @@
                     , success: function(data) {
                     	let msg = "추가 완료 : " + data;
                         alert(msg);
+                        
+                        document.location.href = "/";
                     }
                 });
             }
