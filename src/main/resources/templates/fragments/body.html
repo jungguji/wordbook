@@ -3,14 +3,10 @@
     xmlns:th="http://www.thymeleaf.org"
     xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <body th:fragment="bodyFragment">
-    <div class="site-wrapper">
-        <div class="site-wrapper-inner">
-            <div class="cover-container">
-                <div class="inner cover">
-                    <div layout:fragment="content"></div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <div class="container">
+      <div class="page-header">
+        <div layout:fragment="content"></div>
+      </div>
+  </div>
 </body>
 </html>

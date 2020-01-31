@@ -5,6 +5,8 @@
     layout:decorator="layout/default">
     
     <th:block layout:fragment="content">
+        <h1>사이트 소개</h1>
+        <br />
         <p class="lead">
             공부한 단어를 저장하고 시험 보세요. <br />
             에빙 하우스가 제시한 망각곡선에 따라 시험을 보게 되어 있습니다. <br /> 
@@ -23,7 +25,7 @@
                     <img th:src="@{/images/forgetting_curve.png}" th:attr="alt='에빙 하우스의 망각곡선',height=300, width=300" />
                 </a>
             </div>
-            <div>
+            <div style="pedding: 60px">
                 시험 주기 <br />
                 <img th:src="@{/images/calendar.png}" th:attr="alt='시험주기',height=300, width=300"/>
             </div>

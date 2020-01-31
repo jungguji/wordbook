@@ -1,19 +1,41 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<header th:fragment="headerFragment">
-    <div class="site-wrapper">
-        <div class="site-wrapper-inner">
-            <div class="inner">
-                <h3 class="masthead-brand"><a href="/">Word Test</a></h3>
-                <nav>
-                    <ul class="nav masthead-nav">
-                        <li class="active"><a href="/">HOME</a></li>
-                        <li><a href="/word/test">TEST</a></li>
-                        <li><a href="/word/add">ADD</a></li>
-                    </ul>
-                </nav>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+<nav th:fragment="headerFragment" class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">Navbar</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/word/test">Test</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/word/add">Add</a>
+      </li>
+      <li class="nav-item">
+          <div class="dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
+              Dropdown
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="#">Action</a>
+              <a class="dropdown-item" href="#">Another action</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="#">Something else here</a>
             </div>
         </div>
-    </div>
-</header>
+      </li>
+    </ul>
+      <a th:href="@{/login}" sec:authorize="!isAuthenticated()" class="btn btn-outline-success my-2 my-sm-0" type="submit">Sign In</a>
+      <a th:href="@{/logout}" sec:authorize="isAuthenticated()" class="btn btn-outline-success my-2 my-sm-0" type="submit">Sign Out</a>
+  </div>
+</nav>
+   
 </html>
