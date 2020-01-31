@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
->
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+      <meta charset="UTF-8" />
 <nav th:fragment="headerFragment" class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="#">Navbar</a>
+  <a class="navbar-brand" href="#">단어 시험</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -33,8 +33,11 @@
         </div>
       </li>
     </ul>
-      <a th:href="@{/login}" sec:authorize="!isAuthenticated()" class="btn btn-outline-success my-2 my-sm-0" type="submit">Sign In</a>
-      <a th:href="@{/logout}" sec:authorize="isAuthenticated()" class="btn btn-outline-success my-2 my-sm-0" type="submit">Sign Out</a>
+    
+    
+      <a th:href="@{/login}" sec:authorize="!isAuthenticated()"  class="btn btn-outline-success my-2 my-sm-0" type="submit" style="margin: 1rem">Sign In</a>
+      <a th:href="@{/user/create}" sec:authorize="!isAuthenticated()" class="btn btn-outline-success my-2 my-sm-0" >Sign Up</a>
+      <a th:href="@{/logout}" sec:authorize="isAuthenticated()" class="btn btn-outline-success my-2 my-sm-0" >Sign Out</a>
   </div>
 </nav>
    
