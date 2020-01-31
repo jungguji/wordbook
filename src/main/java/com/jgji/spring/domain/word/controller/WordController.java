@@ -7,9 +7,9 @@ import java.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -67,7 +67,7 @@ public class WordController {
         return objMapper;
     }
     
-    @RequestMapping(value="/word/answers", method=RequestMethod.POST, produces = "application/json")
+    @PostMapping(path="/word/answers", produces = "application/json")
     @ResponseBody
     public boolean updateNextDateAndInsert(@RequestBody String[] answerIds) throws ParseException, JsonProcessingException {
         boolean result = service.updateNextDateAndInsert(answerIds);
@@ -75,7 +75,7 @@ public class WordController {
         return result;
     }
     
-    @RequestMapping(value="/word/answers/random", method=RequestMethod.POST, produces = "application/json")
+    @PostMapping(path="/word/answers/random", produces = "application/json")
     @ResponseBody
     public boolean insertRandomFailWord(@RequestBody String[] answerIds) throws ParseException, JsonProcessingException {
         boolean result = service.insertRandomFailWord(answerIds);
@@ -88,7 +88,7 @@ public class WordController {
         return "thymeleaf/createWordForm";
     }
     
-    @RequestMapping(value="/word/upload", method=RequestMethod.POST, headers = "content-type=multipart/form-data")
+    @PostMapping(path="/word/upload", headers = "content-type=multipart/form-data")
     @ResponseBody
     public String setWordAdd(@RequestParam(value="file") MultipartFile[] files) throws ParseException, IOException {
         MultipartFile file = files[0];
