@@ -7,6 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 
 @Entity
@@ -24,6 +25,7 @@ public class User {
     
     @Column(name = "password")
     @NotEmpty
+    @Size(min=6, max=15, message="6자이상 15자 이하로 입력하여야 합니다." )
     private String password;
 
     public String getId() {
