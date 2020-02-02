@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,6 +19,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.jgji.spring.domain.word.model.Row;
 import com.jgji.spring.domain.word.model.Word;
 import com.jgji.spring.domain.word.service.WordService;
 
@@ -25,11 +27,6 @@ import com.jgji.spring.domain.word.service.WordService;
 public class WordController {
     @Autowired
     private WordService service;
-    
-    @GetMapping("/test")
-    public String hello(Word word, Model model) {
-        return "/english/test";
-    }
     
     @GetMapping("/")
     public String home(Word word, Model model) {
@@ -96,4 +93,12 @@ public class WordController {
         
         return words;
     }
+    
+    @PostMapping(value="/word/add", params= {"addRow"})
+    public String addRow(final Word word, final BindingResult bindingResult) {
+        word.getWords().add(new Row());
+        word.getMeanings().add(new Row());
+        return "thymeleaf/createWordForm";
+    }
+    
 }

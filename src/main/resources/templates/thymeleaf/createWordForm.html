@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" 
+    xmlns:th="http://www.thymeleaf.org" 
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+    layout:decorator="layout/default">
+    
+    <th:block layout:fragment="content">
+        <h2> Sign Up </h2>
+        <p class="lead">
+            테스트 할 단어를 추가 하는 페이지 입니다. <br />
+            뜻이 여러 가지 일 경우 "," 로 구분하여 입력하여야 합니다.
+        </p>
+        <form th:action="@{/word/add}" th:object="${word}" class="form-horizontal" id="add-owner-form" method="post">
+          <div>
+            <label th:text="#{word.rows}">Rows</label>
+            <button class="btn btn-lg btn-primary" type="submit" name="addRow" th:text="#{word.row.add}">Add row</button>
+            <table>
+              <thead>
+                <tr>
+                  <th th:text="#{word.rows.head.rownum}">Row</th>
+                  <th th:text="#{word.rows.head.variety}">Variety</th>
+                  <th >뜻</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr th:each="row,rowStat : *{words}">
+                  <td th:text="${rowStat.count}">1</td>
+                  <td>
+                    <input class="form-control" th:field="*{words[__${rowStat.index}__].variety}">
+                  </td>
+                  <td>
+                    <input class="form-control" th:field="*{meanings[__${rowStat.index}__].variety}">
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="submit">
+            <button type="submit" name="save" th:text="#{seedstarter.create}">Add Word</button>    
+          </div>
+        </form>
+    </th:block>
+</html>

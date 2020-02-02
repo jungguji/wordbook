@@ -1,6 +1,8 @@
 package com.jgji.spring.domain.word.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.jgji.spring.domain.user.model.User;
 
@@ -26,6 +29,12 @@ public class Word {
     @ManyToOne
     @JoinColumn(name = "users_id")
     private User user;
+    
+    @Transient
+    private List<Row> words = new ArrayList<Row>();
+    
+    @Transient
+    private List<Row> meanings = new ArrayList<Row>();
     
     public int getId() {
         return id;
@@ -67,6 +76,13 @@ public class Word {
     }
     public void setUser(User user) {
         this.user = user;
+    }
+    
+    public List<Row> getWords() {
+        return words;
+    }
+    public List<Row> getMeanings() {
+        return meanings;
     }
     
     public String toString() {
