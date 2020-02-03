@@ -29,16 +29,16 @@
             const progressPercent = (1 / wordList.length) * 100;
             
             window.onload = () => {
-            	if (empty(wordList)) {
-            		
-            		if (confirm("오늘 시험 볼 단어가 없습니다. \n 여태 시험 본 단어들 중 랜덤으로 시험보시겠습니까?")) {
-            			alert("최대 15개의 단어가 선택됩니다.");
-            			window.location.href = /*[[@{/word/test/random}]]*/
-            		} else {
-            			window.location.href = /*[[@{/}]]*/
-            		}
-            	}
-            	
+                if (empty(wordList)) {
+                    
+                    if (confirm("오늘 시험 볼 단어가 없습니다. \n 여태 시험 본 단어들 중 랜덤으로 시험보시겠습니까?")) {
+                        alert("최대 15개의 단어가 선택됩니다.");
+                        window.location.href = /*[[@{/word/test/random}]]*/
+                    } else {
+                        window.location.href = /*[[@{/}]]*/
+                    }
+                }
+                
                 init();
             }
             
@@ -105,12 +105,12 @@
                 const meanArray = stringToArray(wordList[currentIndex].meaning);
                 
                 if (meanArray.includes(answerTag.value)) {
-                	setCheckResult("green", "정답", currentIndex, 1);
+                    setCheckResult("green", "정답", currentIndex, 1);
                     
                     progressSetting();
                     wordList.splice(currentIndex, 1);
                 } else {
-                	setCheckResult("red", "오답", currentIndex, 0);
+                    setCheckResult("red", "오답", currentIndex, 0);
                 }
                 
                 if (wordList.length == 0) {
@@ -205,6 +205,8 @@
                     , success: function(data) {
                         alert(data);
                         alert("시험 끝");
+                        
+                        document.location.href = "/";
                     }
                 });
             }
@@ -222,6 +224,8 @@
                     , success: function(data) {
                         alert(data);
                         alert("시험 끝");
+                        
+                        document.location.href = "/";
                     }
                 });
             }
