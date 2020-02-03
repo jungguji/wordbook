@@ -87,6 +87,11 @@ public class WordController {
         return "thymeleaf/createWordForm";
     }
     
+    @GetMapping(value="/word/add/file")
+    public String getWordAddByFileUpload(Word word, Model model) throws ParseException, JsonProcessingException {
+        return "thymeleaf/createWordFileUploadForm";
+    }
+    
     @PostMapping(path="/word/add/upload", headers = "content-type=multipart/form-data")
     @ResponseBody
     public String createWordByFileUpload(@RequestParam(value="file") MultipartFile[] files) throws ParseException, IOException {
@@ -100,11 +105,15 @@ public class WordController {
     public String addRow(final Word word, final BindingResult bindingResult) {
         word.getWords().add(new Row());
         word.getMeanings().add(new Row());
+        
         return "thymeleaf/createWordForm";
     }
     
     @PostMapping(value="/word/add", params= {"save"})
     public String createWord(@Valid Word word, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "thymeleaf/createWordForm";
+        }
         service.insertWord(word);
         return "thymeleaf/index";
     }

@@ -11,7 +11,6 @@
             뜻이 여러 가지 일 경우 "," 로 구분하여 입력하여야 합니다.
         </p>
         <form th:action="@{/word/add}" th:object="${word}" class="form-horizontal" id="add-owner-form" method="post">
-          <div>
             <label th:text="#{word.rows}">Rows</label>
             <button class="btn btn-lg btn-primary" type="submit" name="addRow" th:text="#{word.row.add}">Add row</button>
             <table>
@@ -27,14 +26,15 @@
                   <td th:text="${rowStat.count}">1</td>
                   <td>
                     <input class="form-control" th:field="*{words[__${rowStat.index}__].text}">
+                    <span th:if="${#fields.hasErrors('word')}" th:errors="*{word}"></span>
                   </td>
                   <td>
                     <input class="form-control" th:field="*{meanings[__${rowStat.index}__].text}">
+                    <span th:if="${#fields.hasErrors('meaning')}" th:errors="*{meaning}"></span>
                   </td>
                 </tr>
               </tbody>
             </table>
-          </div>
           <div class="submit">
             <button type="submit" name="save" th:text="#{word.create}">Add Word</button>    
           </div>
