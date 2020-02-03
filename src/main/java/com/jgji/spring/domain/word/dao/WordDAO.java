@@ -115,11 +115,12 @@ public class WordDAO {
         sb.append("    SELECT                ");
         sb.append("        w                 ");
         sb.append("    FROM                  ");
-        sb.append("        WORD w            ");
+        sb.append("        Word w            ");
         sb.append("    JOIN                  ");
-        sb.append("        w.USER u          ");
+        sb.append("        w.user u          ");
         sb.append("    WHERE                 ");
-        sb.append("        u.ID = :userId    ");
+        sb.append("        u.id = :userId    ");
+        sb.append("    AND                   ");
         
         for (int i = 0; i < wordIdList.size(); i++) {
             if (i != 0) {
@@ -128,8 +129,8 @@ public class WordDAO {
             sb.append("w.id = '").append(wordIdList.get(i)).append("'");
         }
         
-        return em.createNativeQuery(sb.toString(), Word.class)
-                .setParameter(1, userId)
+        return em.createQuery(sb.toString(), Word.class)
+                .setParameter("userId", userId)
                 .getResultList();
     }
     
@@ -162,14 +163,8 @@ public class WordDAO {
     }
     
     @Transactional
-    public void insertWord(String[] wordAndMeaning, User user) {
-        Word insertNewWord = new Word();
-        insertNewWord.setWord(wordAndMeaning[0]);
-        insertNewWord.setMeaning(wordAndMeaning[1]);
-        insertNewWord.setNextDate(LocalDate.now());
-        insertNewWord.setUser(user);
-        
-        em.persist(insertNewWord);
+    public void insertWord(Word word) {
+        em.persist(word);
         em.flush();
     }
 }

@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.time.LocalDate;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -85,9 +87,9 @@ public class WordController {
         return "thymeleaf/createWordForm";
     }
     
-    @PostMapping(path="/word/upload", headers = "content-type=multipart/form-data")
+    @PostMapping(path="/word/add/upload", headers = "content-type=multipart/form-data")
     @ResponseBody
-    public String setWordAdd(@RequestParam(value="file") MultipartFile[] files) throws ParseException, IOException {
+    public String createWordByFileUpload(@RequestParam(value="file") MultipartFile[] files) throws ParseException, IOException {
         MultipartFile file = files[0];
         String words = service.insertWord(file);
         
@@ -99,6 +101,12 @@ public class WordController {
         word.getWords().add(new Row());
         word.getMeanings().add(new Row());
         return "thymeleaf/createWordForm";
+    }
+    
+    @PostMapping(value="/word/add", params= {"save"})
+    public String createWord(@Valid Word word, BindingResult bindingResult) {
+        service.insertWord(word);
+        return "thymeleaf/index";
     }
     
 }

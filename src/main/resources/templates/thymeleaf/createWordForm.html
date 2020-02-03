@@ -26,18 +26,20 @@
                 <tr th:each="row,rowStat : *{words}">
                   <td th:text="${rowStat.count}">1</td>
                   <td>
-                    <input class="form-control" th:field="*{words[__${rowStat.index}__].variety}">
+                    <input class="form-control" th:field="*{words[__${rowStat.index}__].text}">
                   </td>
                   <td>
-                    <input class="form-control" th:field="*{meanings[__${rowStat.index}__].variety}">
+                    <input class="form-control" th:field="*{meanings[__${rowStat.index}__].text}">
                   </td>
                 </tr>
               </tbody>
             </table>
           </div>
           <div class="submit">
-            <button type="submit" name="save" th:text="#{seedstarter.create}">Add Word</button>    
+            <button type="submit" name="save" th:text="#{word.create}">Add Word</button>    
           </div>
         </form>
+        <script th:inline="javascript">
+        </script>
     </th:block>
 </html>

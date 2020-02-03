@@ -2,19 +2,19 @@ package com.jgji.spring.domain.word.model;
 
 public class Row {
 
-    private Variety variety = null;
+    private String text = null;
     private Integer cell = null;
     
     public Row() {
         super();
     }
 
-    public Variety getVariety() {
-        return variety;
+    public String getText() {
+        return text;
     }
 
-    public void setVariety(Variety variety) {
-        this.variety = variety;
+    public void setText(String text) {
+        this.text = text;
     }
 
     public Integer getCell() {

@@ -3,6 +3,7 @@ package com.jgji.spring.domain.word.service;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -101,15 +102,17 @@ public class WordServiceImpl implements WordService{
             int i = 0;
             String content;
             while ((content = br.readLine()) != null) {
-                String[] word = content.split("/");
+                String[] wordAndMeaning = content.split("/");
                 
-                wordDAO.insertWord(word, user);
+                Word insertNewWord = setWordAttribute(wordAndMeaning[0], wordAndMeaning[1], user);
+                
+                wordDAO.insertWord(insertNewWord);
                 
                 if (i != 0) {
                     result.append(", ");
                 }
                 
-                result.append(word[0]);
+                result.append(wordAndMeaning[0]);
                 ++i;
             }
         } catch (IOException e) {
@@ -119,6 +122,20 @@ public class WordServiceImpl implements WordService{
         }
         
         return result.toString();
+    }
+    
+    public String insertWord(Word word) {
+        User user = userService.getUserByUserName(userService.getCurrentUserName());
+        
+        word.setUser(user);
+        int wordCount = word.getWords().size();
+        for (int i = 0; i < wordCount; i++) {
+            Word insertNewWord = setWordAttribute(word.getWords().get(i).getText(), word.getMeanings().get(i).getText(), user);
+            
+            wordDAO.insertWord(insertNewWord);
+        }
+        
+        return "good";
     }
     
     private String getFileEndcodeUTF8OREUCKR(MultipartFile file) throws IOException {
@@ -144,6 +161,16 @@ public class WordServiceImpl implements WordService{
         return encode;
     }
     
+    private Word setWordAttribute(String word, String meaning, User user) {
+        Word insertNewWord = new Word();
+        insertNewWord.setWord(word);
+        insertNewWord.setMeaning(meaning);
+        insertNewWord.setNextDate(LocalDate.now());
+        insertNewWord.setUser(user);
+        
+        return insertNewWord;
+    }
+    
     private void closeBufferReaderAndInputStreamReader(BufferedReader br, InputStreamReader isr) {
         try {
             if (br != null) {
@@ -157,5 +184,4 @@ public class WordServiceImpl implements WordService{
             e.printStackTrace();
         }
     }
-
 }

@@ -18,4 +18,6 @@ public interface WordService {
     boolean insertRandomFailWord(String[] answerIds);
     
     String insertWord(MultipartFile file) throws IOException;
+    
+    String insertWord(Word word);
 }
