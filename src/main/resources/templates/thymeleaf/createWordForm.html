@@ -26,15 +26,16 @@
                   <td th:text="${rowStat.count}">1</td>
                   <td>
                     <input class="form-control" th:field="*{words[__${rowStat.index}__].text}">
-                    <span th:if="${#fields.hasErrors('word')}" th:errors="*{word}"></span>
                   </td>
                   <td>
                     <input class="form-control" th:field="*{meanings[__${rowStat.index}__].text}">
-                    <span th:if="${#fields.hasErrors('meaning')}" th:errors="*{meaning}"></span>
                   </td>
                 </tr>
               </tbody>
             </table>
+            <div th:if="${#fields.hasErrors('words')}" th:errors="*{words}" style="float:left; margin-right:1rem;" ></div>
+            <div th:if="${#fields.hasErrors('meanings')}" th:errors="*{meanings}"></div>
+            
           <div class="submit">
             <button type="submit" name="save" th:text="#{word.create}">Add Word</button>    
           </div>

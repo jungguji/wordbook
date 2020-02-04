@@ -12,7 +12,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import javax.validation.constraints.NotBlank;
 
 import com.jgji.spring.domain.user.model.User;
 
@@ -22,9 +21,8 @@ public class Word {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @NotBlank
+    
     private String word;
-    @NotBlank
     private String meaning;
     private LocalDate nextDate;
     private int level;
@@ -34,11 +32,9 @@ public class Word {
     private User user;
     
     @Transient
-    
     private List<Row> words = new ArrayList<Row>();
     
     @Transient
-    
     private List<Row> meanings = new ArrayList<Row>();
     
     public int getId() {

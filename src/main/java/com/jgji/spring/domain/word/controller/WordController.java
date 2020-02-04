@@ -9,7 +9,9 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -111,11 +113,30 @@ public class WordController {
     
     @PostMapping(value="/word/add", params= {"save"})
     public String createWord(@Valid Word word, BindingResult bindingResult) {
+        bindingResult = isValidation(word, bindingResult);
+        
         if (bindingResult.hasErrors()) {
             return "thymeleaf/createWordForm";
         }
         service.insertWord(word);
         return "thymeleaf/index";
+    }
+    
+    private BindingResult isValidation(Word word, BindingResult bindingResult) {
+        int wordCount = word.getWords().size();
+        for (int i = 0; i < wordCount; i++) {
+            int wordsErrorCount = bindingResult.getFieldErrorCount("words");
+            if (StringUtils.isEmpty(word.getWords().get(i).getText()) && wordsErrorCount == 0) {
+                bindingResult.rejectValue("words", "words", "어딘가 단어가 비어 있음");
+            }
+            
+            int meaningsErrorCount = bindingResult.getFieldErrorCount("meanings");
+            if (StringUtils.isEmpty(word.getMeanings().get(i).getText()) && meaningsErrorCount == 0) {
+                bindingResult.rejectValue("meanings", "meanings", "어딘가 뜻을 입력 안했음");
+            }
+        }
+        
+        return bindingResult;
     }
     
 }
