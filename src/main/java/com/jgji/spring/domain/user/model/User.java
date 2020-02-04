@@ -24,7 +24,6 @@ public class User {
     private String username;
     
     @Column(name = "password")
-    @NotEmpty
     @Size(min=6, max=15, message="6자이상 15자 이하로 입력하여야 합니다." )
     private String password;
 
