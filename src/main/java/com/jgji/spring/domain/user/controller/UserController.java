@@ -29,6 +29,10 @@ public class UserController {
     
     @PostMapping("/user/create")
     public String processCreationForm(@Valid User user, BindingResult result) {
+        if (userService.isExistName(user.getUsername())) {
+            result.rejectValue("username", "username", "이미 존재하는 아이디 입니다.");
+        }
+        
         if (result.hasErrors()) {
             return "thymeleaf/createUserForm";
         }

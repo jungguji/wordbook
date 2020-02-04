@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import com.jgji.spring.domain.user.model.User;
 import com.jgji.spring.domain.user.model.UserRepository;
@@ -21,14 +22,14 @@ import com.jgji.spring.domain.user.model.UserRepository;
 public class UserService implements UserDetailsService {
 
     @Autowired
-    private UserRepository UserRepository;
+    private UserRepository userRepository;
     
     @Autowired
     private BCryptPasswordEncoder bcryptPasswordEncoder;
     
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = UserRepository.findByUserName(username);
+        User user = userRepository.findByUserName(username);
         
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
@@ -39,9 +40,8 @@ public class UserService implements UserDetailsService {
     public User save(User user) {
         user.setPassword(bcryptPasswordEncoder.encode(user.getPassword()));
         
-        return UserRepository.save(user);
+        return userRepository.save(user);
     }
-    
     
     public String getCurrentUserName() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -49,13 +49,21 @@ public class UserService implements UserDetailsService {
     }
     
     public User getUserByUserName(String username) {
-        User user = UserRepository.findByUserName(username);
+        User user = userRepository.findByUserName(username);
         return user;
     }
     
     public String getUserIdByUserName(String userName) {
-        User user = UserRepository.findByUserName(userName);
+        User user = userRepository.findByUserName(userName);
         return user.getId();
+    }
+    
+    public boolean isExistName(String userName) {
+        if (ObjectUtils.isEmpty(userRepository.findByUserName(userName))) {
+            return false;
+        }
+        
+        return true;
     }
 
 }
