@@ -86,6 +86,9 @@ public class WordController {
     
     @GetMapping(value="/word/add")
     public String getWordAdd(Word word, Model model) throws ParseException, JsonProcessingException {
+        word.getWords().add(new Row());
+        word.getMeanings().add(new Row());
+        
         return "thymeleaf/createWordForm";
     }
     
