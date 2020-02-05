@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.jgji.spring.domain.user.model.User;
 import com.jgji.spring.domain.user.service.UserService;
@@ -39,5 +40,15 @@ public class UserController {
         
         this.userService.save(user);
         return "redirect:/";
+    }
+    
+    @GetMapping("/user/profile")
+    public ModelAndView showUserProfileForm() {
+        ModelAndView mav = new ModelAndView("thymeleaf/viewUserProfileForm");
+        User user = userService.getUserByUserName(userService.getCurrentUserName());
+        System.out.println(user.getUsername());
+        mav.addObject("user", user);
+        
+        return mav;
     }
 }

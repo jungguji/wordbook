@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" 
+    xmlns:th="http://www.thymeleaf.org" 
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+    layout:decorator="layout/default">
+    
+    <th:block layout:fragment="content">
+        <h1> 유저 정보 Form </h1>
+        <table class="table table-striped" th:object="${user}">
+          <tr>
+            <th>Name</th>
+            <td><b th:text="*{username}"></b></td>
+          </tr>
+        </table>
+        
+        <div id="grid"></div>
+        <link th:href="@{/lib/tui-grid/dist/tui-grid.css}" rel="stylesheet" type="text/css">
+        <!-- <link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" /> -->
+        <script th:src="@{/lib/tui-grid/dist/tui-grid.js}"></script>
+        <!-- <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script> -->
+    <script th:inline="javascript">
+            /* <![CDATA[ */   
+            	
+    const grid = new tui.Grid({
+      el: document.getElementById('grid'),
+      data: [
+    	    {
+    	      name: 'Beautiful Lies',
+    	      artist: 'Birdy',
+    	      release: '2016.03.26',
+    	      genre: 'Pop'
+    	    }
+    	  ],
+    	  scrollX: false,
+          scrollY: false,
+          minBodyHeight: 30,
+          rowHeaders: ['rowNum'],
+          pageOptions: {
+            perPage: 5
+          },
+          columns: [
+            {
+              header: 'Name',
+              name: 'name'
+            },
+            {
+              header: 'Artist',
+              name: 'artist'
+            },
+            {
+              header: 'Type',
+              name: 'type'
+            },
+            {
+              header: 'Release',
+              name: 'release'
+            },
+            {
+              header: 'Genre',
+              name: 'genre'
+            }
+          ]
+    });
+  
+           /* ]]> */
+    </script>
+    </th:block>
+    
+</html>
