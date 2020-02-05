@@ -12,55 +12,70 @@
             <td><b th:text="*{username}"></b></td>
           </tr>
         </table>
-        
+        <table id="table_8" class="table classic">
+            <thead>
+            <tr>
+                <th width="50px">No</th>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Location</th>
+            </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    
         <div id="grid"></div>
-        <link th:href="@{/lib/tui-grid/dist/tui-grid.css}" rel="stylesheet" type="text/css">
-        <!-- <link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" /> -->
-        <script th:src="@{/lib/tui-grid/dist/tui-grid.js}"></script>
-        <!-- <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script> -->
+        <!-- Basic style components -->
+        <link rel="stylesheet" th:href="@{/lib/jui/dist/ui.min.css}" />
+        <link rel="stylesheet" th:href="@{/lib/jui/dist/ui-jennifer.min.css}" />
+
+        <!-- Grid style components -->
+        <link rel="stylesheet" th:href="@{/lib/jui-grid/dist/grid.min.css}" />
+        <link rel="stylesheet" th:href="@{/lib/jui-grid/dist/grid-jennifer.min.css}" />
+        
+        <!-- Required script files -->
+        <script th:src="@{/lib/jui-core/dist/core.min.js}"></script>
+        
+        <!-- Basic script components -->
+        <script th:src="@{/lib/jui/dist/ui.min.js}"></script>
+        
+        <!-- Grid script components -->
+        <script th:src="@{/lib/jui-grid/dist/grid.min.js}"></script>
+
+         <script id="tpl_row" type="text/template">
+             <tr>
+                 <td><!= row.index !></td>
+                 <td><!= word !></td>
+                 <td><!= meaning !></td>
+                 <td><!= location !></td>
+             </tr>
+         </script>
     <script th:inline="javascript">
-            /* <![CDATA[ */   
-            	
-    const grid = new tui.Grid({
-      el: document.getElementById('grid'),
-      data: [
-    	    {
-    	      name: 'Beautiful Lies',
-    	      artist: 'Birdy',
-    	      release: '2016.03.26',
-    	      genre: 'Pop'
-    	    }
-    	  ],
-    	  scrollX: false,
-          scrollY: false,
-          minBodyHeight: 30,
-          rowHeaders: ['rowNum'],
-          pageOptions: {
-            perPage: 5
-          },
-          columns: [
-            {
-              header: 'Name',
-              name: 'name'
-            },
-            {
-              header: 'Artist',
-              name: 'artist'
-            },
-            {
-              header: 'Type',
-              name: 'type'
-            },
-            {
-              header: 'Release',
-              name: 'release'
-            },
-            {
-              header: 'Genre',
-              name: 'genre'
-            }
-          ]
-    });
+            /* <![CDATA[ */
+            	var data = [(${data})];
+            	jui.ready([ "grid.table" ], function(table) {
+                table_8 = table("#table_8", {
+                    fields: [ null, "word", "meaning", "location" ],
+                    data: data
+                    ,
+                    editRow: [ "word", "meaning" ],
+                    resize: true,
+                    sort: true,
+                    event: {
+                        editend: function(row) {
+                            for(var key in row.data) {
+                                if(key == "age" && isNaN(row.data[key])) {
+                                    alert("Age must enter a numeric value.");
+                                    return false;
+                                }
+                            }
+                        }
+                    },
+                    tpl: {
+                        row: $("#tpl_row").html()
+                    }
+                });
+            });
   
            /* ]]> */
     </script>
