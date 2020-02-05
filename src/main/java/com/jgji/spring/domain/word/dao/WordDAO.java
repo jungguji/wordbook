@@ -18,8 +18,23 @@ public class WordDAO {
     @PersistenceContext
     private EntityManager em;
     
+    public List<Word> findAllByUserId(String userId) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("    SELECT                      ");
+        sb.append("        w                       ");
+        sb.append("    FROM                        ");
+        sb.append("        Word w                  ");
+        sb.append("    JOIN                        ");
+        sb.append("        w.user u                ");
+        sb.append("    WHERE                       ");
+        sb.append("        u.id = :userId          ");
+        
+        return em.createQuery(sb.toString(), Word.class)
+            .setParameter("userId", userId)
+            .getResultList();
+    }
+    
     public List<Word> getToDayWordList(Word word, String userId) {
-        System.out.println("userId >> " + userId);
         StringBuilder sb = new StringBuilder();
         sb.append("    SELECT                      ");
         sb.append("        w                       ");
@@ -38,7 +53,7 @@ public class WordDAO {
             .getResultList();
     }
     
-    public List<Word> getRandomWordList(Word word, String userId) {
+    public List<Word> getRandomWordList(String userId) {
         StringBuilder sb = new StringBuilder();
         sb.append("    SELECT                ");
         sb.append("        w                 ");

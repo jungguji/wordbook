@@ -29,16 +29,19 @@ public class WordServiceImpl implements WordService{
     @Autowired
     private UserService userService;
     
+    public List<Word> findAllByUserId() {
+        String userId = userService.getUserIdByUserName();
+        return wordDAO.findAllByUserId(userId);
+    }
+    
     public List<Word> getToDayWordList(Word word) {
         String userId = getUserId();
-        
         return wordDAO.getToDayWordList(word, userId);
     }
     
-    public List<Word> getRandomWordList(Word word) {
+    public List<Word> getRandomWordList() {
         String userId = getUserId();
-        
-        return wordDAO.getRandomWordList(word, userId);
+        return wordDAO.getRandomWordList(userId);
     }
     
     private String getUserId() {

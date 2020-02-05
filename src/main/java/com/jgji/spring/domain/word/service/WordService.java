@@ -9,9 +9,11 @@ import com.jgji.spring.domain.word.model.Word;
 
 public interface WordService {
     
+    List<Word> findAllByUserId();
+    
     List<Word> getToDayWordList(Word word);
     
-    List<Word> getRandomWordList(Word word);
+    List<Word> getRandomWordList();
 
     boolean updateNextDateAndInsert(String[] answerIds);
     
