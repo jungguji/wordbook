@@ -1,13 +1,13 @@
-.jui table.table > tbody::-webkit-scrollbar {
+ table.table > tbody::-webkit-scrollbar {
   width: 10px;
   height: 10px;
 }
-.jui table.table > tbody::-webkit-scrollbar-corner {
+ table.table > tbody::-webkit-scrollbar-corner {
   background: transparent;
   border-right: 1px solid #e6e6e6;
   border-bottom: 1px solid #e6e6e6;
 }
-.jui table.table > tbody::-webkit-scrollbar-track {
+ table.table > tbody::-webkit-scrollbar-track {
   background-color: #f2f2f2;
   background-image: -moz-linear-gradient(left, #f2f2f2 0%, #fff 100%);
   background-image: linear-gradient(left, #f2f2f2 0%, #fff 100%);
@@ -16,21 +16,18 @@
   background-image: -ms-linear-gradient(left, #f2f2f2 0%, #fff 100%);
   border: 1px solid #e6e6e6;
 }
-.jui table.table > tbody::-webkit-scrollbar-thumb {
+ table.table > tbody::-webkit-scrollbar-thumb {
   background: #c8c8c8;
   border: 1px solid #b8b8b8;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;
 }
-.jui table.table > tbody::-webkit-scrollbar-thumb:hover {
+ table.table > tbody::-webkit-scrollbar-thumb:hover {
   background: #8a8a8a;
   border: 1px solid #737373;
 }
-.jui .table.classic {
-  border-bottom: 1px solid #dfdce3;
-}
-.jui .table.classic > thead th {
+ .table.classic > thead th {
   color: #fff;
   border-left: 1px solid #7e798c;
   border-right: 1px solid #4e4765;
@@ -42,50 +39,50 @@
   background-image: -o-linear-gradient(top, #6d687e 0%, #49435b 100%);
   background-image: -ms-linear-gradient(top, #6d687e 0%, #49435b 100%);
 }
-.jui .table.classic > thead th:first-child {
+ .table.classic > thead th:first-child {
   border-left: 1px solid #4e4765;
 }
-.jui .table.classic > thead th:last-child {
+ .table.classic > thead th:last-child {
   border-right: 1px solid #4e4765;
 }
-.jui .table.classic > tbody > tr {
+ .table.classic > tbody > tr {
   background: #fafafa;
 }
-.jui .table.classic > tbody > tr > td {
+ .table.classic > tbody > tr > td {
   color: #000;
   border-top: 1px solid #fff;
   border-bottom: 1px solid #ebe9ee;
   border-left: 1px solid #ebe9ee;
 }
-.jui .table.classic > tbody > tr > td:first-child {
+ .table.classic > tbody > tr > td:first-child {
   border-left: 1px solid #dfdce3;
 }
-.jui .table.classic > tbody > tr > td:last-child {
+ .table.classic > tbody > tr > td:last-child {
   border-right: 1px solid #dfdce3;
 }
-.jui .table.classic > tbody > tr > td.none {
+ .table.classic > tbody > tr > td.none {
   background: #fafafa;
 }
-.jui .table.classic > tbody > tr > td.none > .msg {
+ .table.classic > tbody > tr > td.none > .msg {
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.1);
 }
-.jui .table.classic > tbody > tr:last-child > td {
+ .table.classic > tbody > tr:last-child > td {
   border-bottom-width: 0px;
 }
-.jui .table.classic > tbody > tr.selected {
+ .table.classic > tbody > tr.selected {
   background: #aa8bc6;
 }
-.jui .table.classic > tbody > tr.selected > td {
+ .table.classic > tbody > tr.selected > td {
   color: #fff;
 }
-.jui .table.classic > tbody > tr.checked {
+ .table.classic > tbody > tr.checked {
   background: #cfb4e7;
 }
-.jui .table.classic > tbody > tr.checked > td {
+ .table.classic > tbody > tr.checked > td {
   color: #fff;
 }
-.jui .table.classic > tbody tr.open,
-.jui .table.classic > tbody tr.expand {
+ .table.classic > tbody tr.open,
+ .table.classic > tbody tr.expand {
   background-color: #fff !important;
   background-image: -moz-linear-gradient(top, #fff 0%, #fff 100%) !important;
   background-image: linear-gradient(top, #fff 0%, #fff 100%) !important;
@@ -93,8 +90,8 @@
   background-image: -o-linear-gradient(top, #fff 0%, #fff 100%) !important;
   background-image: -ms-linear-gradient(top, #fff 0%, #fff 100%) !important;
 }
-.jui .table.classic > tbody tr.open:hover,
-.jui .table.classic > tbody tr.expand:hover {
+ .table.classic > tbody tr.open:hover,
+ .table.classic > tbody tr.expand:hover {
   background-color: #fff !important;
   background-image: -moz-linear-gradient(top, #fff 0%, #fff 100%) !important;
   background-image: linear-gradient(top, #fff 0%, #fff 100%) !important;
@@ -102,31 +99,31 @@
   background-image: -o-linear-gradient(top, #fff 0%, #fff 100%) !important;
   background-image: -ms-linear-gradient(top, #fff 0%, #fff 100%) !important;
 }
-.jui .table.classic > tbody tr.open > td {
+ .table.classic > tbody tr.open > td {
   font-weight: bold;
 }
-.jui .table.classic > tbody tr.expand > td {
+ .table.classic > tbody tr.expand > td {
   background: #fff;
 }
-.jui .table.classic > tbody tr.expand > td:hover {
+ .table.classic > tbody tr.expand > td:hover {
   background: #fff;
 }
-.jui .table.classic.table.stripe tr:nth-child(even) {
+ .table.classic.table.stripe tr:nth-child(even) {
   background: #f6f5f8;
 }
-.jui .table.classic.table.stripeless tr {
+ .table.classic.table.stripeless tr {
   background: #fafafa !important;
 }
-.jui .table.classic tr:nth-child(even) {
+ .table.classic tr:nth-child(even) {
   background: #f6f5f8;
 }
-.jui .table.classic.hover > tbody > tr:hover:not(.selected):not(.dragtarget) {
+ .table.classic.hover > tbody > tr:hover:not(.selected):not(.dragtarget) {
   background: #efebf5;
 }
-.jui .table.expand {
+ .table.expand {
   border-bottom: 1px solid #dfdce3;
 }
-.jui .table.expand > thead th {
+ .table.expand > thead th {
   color: #fff;
   border-left: 1px solid #7e798c;
   border-right: 1px solid #4e4765;
@@ -138,50 +135,50 @@
   background-image: -o-linear-gradient(top, #6d687e 0%, #49435b 100%);
   background-image: -ms-linear-gradient(top, #6d687e 0%, #49435b 100%);
 }
-.jui .table.expand > thead th:first-child {
+ .table.expand > thead th:first-child {
   border-left: 1px solid #4e4765;
 }
-.jui .table.expand > thead th:last-child {
+ .table.expand > thead th:last-child {
   border-right: 1px solid #4e4765;
 }
-.jui .table.expand > tbody > tr {
+ .table.expand > tbody > tr {
   background: #fafafa;
 }
-.jui .table.expand > tbody > tr > td {
+ .table.expand > tbody > tr > td {
   color: #000;
   border-top: 1px solid #fff;
   border-bottom: 1px solid #ebe9ee;
   border-left: 1px solid #ebe9ee;
 }
-.jui .table.expand > tbody > tr > td:first-child {
+ .table.expand > tbody > tr > td:first-child {
   border-left: 1px solid #dfdce3;
 }
-.jui .table.expand > tbody > tr > td:last-child {
+ .table.expand > tbody > tr > td:last-child {
   border-right: 1px solid #dfdce3;
 }
-.jui .table.expand > tbody > tr > td.none {
+ .table.expand > tbody > tr > td.none {
   background: #fafafa;
 }
-.jui .table.expand > tbody > tr > td.none > .msg {
+ .table.expand > tbody > tr > td.none > .msg {
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.1);
 }
-.jui .table.expand > tbody > tr:last-child > td {
+ .table.expand > tbody > tr:last-child > td {
   border-bottom-width: 0px;
 }
-.jui .table.expand > tbody > tr.selected {
+ .table.expand > tbody > tr.selected {
   background: #aa8bc6;
 }
-.jui .table.expand > tbody > tr.selected > td {
+ .table.expand > tbody > tr.selected > td {
   color: #fff;
 }
-.jui .table.expand > tbody > tr.checked {
+ .table.expand > tbody > tr.checked {
   background: #cfb4e7;
 }
-.jui .table.expand > tbody > tr.checked > td {
+ .table.expand > tbody > tr.checked > td {
   color: #fff;
 }
-.jui .table.expand > tbody tr.open,
-.jui .table.expand > tbody tr.expand {
+ .table.expand > tbody tr.open,
+ .table.expand > tbody tr.expand {
   background-color: #fff !important;
   background-image: -moz-linear-gradient(top, #fff 0%, #fff 100%) !important;
   background-image: linear-gradient(top, #fff 0%, #fff 100%) !important;
@@ -189,8 +186,8 @@
   background-image: -o-linear-gradient(top, #fff 0%, #fff 100%) !important;
   background-image: -ms-linear-gradient(top, #fff 0%, #fff 100%) !important;
 }
-.jui .table.expand > tbody tr.open:hover,
-.jui .table.expand > tbody tr.expand:hover {
+ .table.expand > tbody tr.open:hover,
+ .table.expand > tbody tr.expand:hover {
   background-color: #fff !important;
   background-image: -moz-linear-gradient(top, #fff 0%, #fff 100%) !important;
   background-image: linear-gradient(top, #fff 0%, #fff 100%) !important;
@@ -198,25 +195,25 @@
   background-image: -o-linear-gradient(top, #fff 0%, #fff 100%) !important;
   background-image: -ms-linear-gradient(top, #fff 0%, #fff 100%) !important;
 }
-.jui .table.expand > tbody tr.open > td {
+ .table.expand > tbody tr.open > td {
   font-weight: bold;
 }
-.jui .table.expand > tbody tr.expand > td {
+ .table.expand > tbody tr.expand > td {
   background: #fff;
 }
-.jui .table.expand > tbody tr.expand > td:hover {
+ .table.expand > tbody tr.expand > td:hover {
   background: #fff;
 }
-.jui .table.expand.table.stripe tr:nth-child(even) {
+ .table.expand.table.stripe tr:nth-child(even) {
   background: #f6f5f8;
 }
-.jui .table.expand.table.stripeless tr {
+ .table.expand.table.stripeless tr {
   background: #fafafa !important;
 }
-.jui .table.expand tr:nth-child(even) {
+ .table.expand tr:nth-child(even) {
   background: #f6f5f8;
 }
-.jui .table.expand > tbody > tr {
+ .table.expand > tbody > tr {
   background-color: #fff !important;
   background-image: -moz-linear-gradient(top, #fff 0%, #f5f5f5 100%) !important;
   background-image: linear-gradient(top, #fff 0%, #f5f5f5 100%) !important;
@@ -224,7 +221,7 @@
   background-image: -o-linear-gradient(top, #fff 0%, #f5f5f5 100%) !important;
   background-image: -ms-linear-gradient(top, #fff 0%, #f5f5f5 100%) !important;
 }
-.jui .table.expand > tbody > tr.selected {
+ .table.expand > tbody > tr.selected {
   background-color: #b892f0 !important;
   background-image: -moz-linear-gradient(top, #b892f0 0%, #8453cd 100%) !important;
   background-image: linear-gradient(top, #b892f0 0%, #8453cd 100%) !important;
@@ -232,10 +229,10 @@
   background-image: -o-linear-gradient(top, #b892f0 0%, #8453cd 100%) !important;
   background-image: -ms-linear-gradient(top, #b892f0 0%, #8453cd 100%) !important;
 }
-.jui .table.expand > tbody > tr.selected > td {
+ .table.expand > tbody > tr.selected > td {
   color: #fff !important;
 }
-.jui .table.expand > tbody > tr.checked {
+ .table.expand > tbody > tr.checked {
   background-color: #faf8ff !important;
   background-image: -moz-linear-gradient(top, #faf8ff 0%, #cfb4e7 100%) !important;
   background-image: linear-gradient(top, #faf8ff 0%, #cfb4e7 100%) !important;
@@ -243,10 +240,10 @@
   background-image: -o-linear-gradient(top, #faf8ff 0%, #cfb4e7 100%) !important;
   background-image: -ms-linear-gradient(top, #faf8ff 0%, #cfb4e7 100%) !important;
 }
-.jui .table.expand > tbody > tr.checked > td {
+ .table.expand > tbody > tr.checked > td {
   color: #000 !important;
 }
-.jui .table.expand.hover > tbody > tr:hover:not(.selected):not(.dragtarget) {
+ .table.expand.hover > tbody > tr:hover:not(.selected):not(.dragtarget) {
   background-color: #faf8ff !important;
   background-image: -moz-linear-gradient(top, #faf8ff 0%, #efebf5 100%) !important;
   background-image: linear-gradient(top, #faf8ff 0%, #efebf5 100%) !important;
@@ -254,50 +251,50 @@
   background-image: -o-linear-gradient(top, #faf8ff 0%, #efebf5 100%) !important;
   background-image: -ms-linear-gradient(top, #faf8ff 0%, #efebf5 100%) !important;
 }
-.jui .table.simple {
+ .table.simple {
   border-bottom: 1px solid #dfdce3 !important;
 }
-.jui .table.simple > thead th {
+ .table.simple > thead th {
   color: #000;
   background: #f5f5f5;
   border-top: 1px solid #dedede;
   border-bottom: 1px solid #dedede;
 }
-.jui .table.simple > tbody > tr {
+ .table.simple > tbody > tr {
   background: #fff;
 }
-.jui .table.simple > tbody > tr > td {
+ .table.simple > tbody > tr > td {
   color: #000;
   border-bottom: 1px solid #eee;
   border-left: 1px solid #eee;
 }
-.jui .table.simple > tbody > tr > td:first-child {
+ .table.simple > tbody > tr > td:first-child {
   border-left-width: 0px;
 }
-.jui .table.simple > tbody > tr > td.none {
+ .table.simple > tbody > tr > td.none {
   border-bottom-width: 0px !important;
   background: #fafafa;
 }
-.jui .table.simple > tbody > tr > td.none > .msg {
+ .table.simple > tbody > tr > td.none > .msg {
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.1);
 }
-.jui .table.simple > tbody > tr:last-child > td {
+ .table.simple > tbody > tr:last-child > td {
   border-bottom-width: 0px;
 }
-.jui .table.simple > tbody > tr.selected {
+ .table.simple > tbody > tr.selected {
   background: #aa8bc6;
 }
-.jui .table.simple > tbody > tr.selected > td {
+ .table.simple > tbody > tr.selected > td {
   color: #fff;
 }
-.jui .table.simple > tbody > tr.checked {
+ .table.simple > tbody > tr.checked {
   background: #cfb4e7;
 }
-.jui .table.simple > tbody > tr.checked > td {
+ .table.simple > tbody > tr.checked > td {
   color: #fff;
 }
-.jui .table.simple > tbody tr.open,
-.jui .table.simple > tbody tr.expand {
+ .table.simple > tbody tr.open,
+ .table.simple > tbody tr.expand {
   background-color: #fff !important;
   background-image: -moz-linear-gradient(top, #fff 0%, #fff 100%) !important;
   background-image: linear-gradient(top, #fff 0%, #fff 100%) !important;
@@ -305,8 +302,8 @@
   background-image: -o-linear-gradient(top, #fff 0%, #fff 100%) !important;
   background-image: -ms-linear-gradient(top, #fff 0%, #fff 100%) !important;
 }
-.jui .table.simple > tbody tr.open:hover,
-.jui .table.simple > tbody tr.expand:hover {
+ .table.simple > tbody tr.open:hover,
+ .table.simple > tbody tr.expand:hover {
   background-color: #fff !important;
   background-image: -moz-linear-gradient(top, #fff 0%, #fff 100%) !important;
   background-image: linear-gradient(top, #fff 0%, #fff 100%) !important;
@@ -314,31 +311,31 @@
   background-image: -o-linear-gradient(top, #fff 0%, #fff 100%) !important;
   background-image: -ms-linear-gradient(top, #fff 0%, #fff 100%) !important;
 }
-.jui .table.simple > tbody tr.open > td {
+ .table.simple > tbody tr.open > td {
   font-weight: bold;
 }
-.jui .table.simple > tbody tr.expand > td {
+ .table.simple > tbody tr.expand > td {
   background: #fff;
 }
-.jui .table.simple > tbody tr.expand > td:hover {
+ .table.simple > tbody tr.expand > td:hover {
   background: #fff;
 }
-.jui .table.simple.table.stripe tr:nth-child(even) {
+ .table.simple.table.stripe tr:nth-child(even) {
   background: #fafafa;
 }
-.jui .table.simple.table.stripeless tr {
+ .table.simple.table.stripeless tr {
   background: #fff !important;
 }
-.jui .table.simple.table.headline > thead tr > th:not(:first-child) {
+ .table.simple.table.headline > thead tr > th:not(:first-child) {
   border-left: 1px solid #dedede;
 }
-.jui .table.simple tr:nth-child(even) {
+ .table.simple tr:nth-child(even) {
   background: #fafafa;
 }
-.jui .table.simple.hover > tbody > tr:hover:not(.selected):not(.dragtarget) {
+ .table.simple.hover > tbody > tr:hover:not(.selected):not(.dragtarget) {
   background: #efebf5;
 }
-.jui .table > tbody td > .edit {
+ .table > tbody td > .edit {
   background-color: #fff;
   border: 1px solid #c8c8c8;
   -webkit-box-shadow: "0 4px 5px -5px rgba(0,0,0,0.3) inset";
@@ -346,7 +343,7 @@
   box-shadow: "0 4px 5px -5px rgba(0,0,0,0.3) inset";
   color: #333333;
 }
-.jui .table > tbody td > .edit:focus {
+ .table > tbody td > .edit:focus {
   border-color: #b08bfc;
   outline: 0;
   -webkit-box-shadow: inset 0 4px 5px -5px rgba(0,0,0,0.3), 0 0 1px 1px rgba(136,74,228,.095);
@@ -357,69 +354,69 @@
   -o-transition: border linear .2s, box-shadow linear .2s;
   transition: border linear .2s, box-shadow linear .2s;
 }
-.jui .table > tbody td > .edit[disabled],
-.jui .table > tbody td > .edit[readonly] {
+ .table > tbody td > .edit[disabled],
+ .table > tbody td > .edit[readonly] {
   cursor: not-allowed;
   background-color: #eee;
   color: #333;
 }
-.jui .table.layer {
+ .table.layer {
   z-index: 5001;
   border-bottom-width: 0px !important;
   -webkit-border-radius: 0px !important;
   -moz-border-radius: 0px !important;
   border-radius: 0px !important;
 }
-.jui .table > tbody > tr.dragtarget {
+ .table > tbody > tr.dragtarget {
   background-color: #d4d4d4 !important;
   background-image: none !important;
 }
-.jui .table > tbody > tr.dragclone {
+ .table > tbody > tr.dragclone {
   background-color: rgba(255, 255, 255, 0.5) !important;
   background-image: none !important;
   color: rgba(0, 0, 0, 0.8) !important;
   border: 1px solid #666 !important;
 }
-.jui .table > tbody > tr.dragclone > td {
+ .table > tbody > tr.dragclone > td {
   border-top: 1px solid #666 !important;
   border-bottom: 1px solid #666 !important;
 }
-.jui .table > tbody > tr.dragclone > td:first-child {
+ .table > tbody > tr.dragclone > td:first-child {
   border-left: 1px solid #666 !important;
   -webkit-border-bottom-left-radius: 0px !important;
   -moz-border-radius-bottomleft: 0px !important;
   border-bottom-left-radius: 0px !important;
 }
-.jui .table > tbody > tr.dragclone > td:last-child {
+ .table > tbody > tr.dragclone > td:last-child {
   border-right: 1px solid #666 !important;
   -webkit-border-bottom-right-radius: 0px !important;
   -moz-border-radius-bottomright: 0px !important;
   border-bottom-right-radius: 0px !important;
 }
-.jui .table > tbody > tr.dragclone > td:not(:first-child) {
+ .table > tbody > tr.dragclone > td:not(:first-child) {
   border-left-width: 0px !important;
 }
-.jui .table > tbody > tr.dragclone > td:not(:last-child) {
+ .table > tbody > tr.dragclone > td:not(:last-child) {
   border-right-width: 0px !important;
 }
-.jui .table > tbody > tr.dragline > td {
+ .table > tbody > tr.dragline > td {
   padding: 0px !important;
   height: 2px !important;
   background: #8945ee !important;
 }
-.jui .xtable > .loading {
+ .xtable > .loading {
   background-image: url("../img/theme/jennifer/xtable-loading.gif");
 }
-.jui .xtable > .body::-webkit-scrollbar {
+ .xtable > .body::-webkit-scrollbar {
   width: 10px;
   height: 10px;
 }
-.jui .xtable > .body::-webkit-scrollbar-corner {
+ .xtable > .body::-webkit-scrollbar-corner {
   background: transparent;
   border-right: 1px solid #e6e6e6;
   border-bottom: 1px solid #e6e6e6;
 }
-.jui .xtable > .body::-webkit-scrollbar-track {
+ .xtable > .body::-webkit-scrollbar-track {
   background-color: #f2f2f2;
   background-image: -moz-linear-gradient(left, #f2f2f2 0%, #fff 100%);
   background-image: linear-gradient(left, #f2f2f2 0%, #fff 100%);
@@ -428,22 +425,26 @@
   background-image: -ms-linear-gradient(left, #f2f2f2 0%, #fff 100%);
   border: 1px solid #e6e6e6;
 }
-.jui .xtable > .body::-webkit-scrollbar-thumb {
+ .xtable > .body::-webkit-scrollbar-thumb {
   background: #c8c8c8;
   border: 1px solid #b8b8b8;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;
 }
-.jui .xtable > .body::-webkit-scrollbar-thumb:hover {
+ .xtable > .body::-webkit-scrollbar-thumb:hover {
   background: #8a8a8a;
   border: 1px solid #737373;
 }
-.jui .xtable.scroll > .head {
+ .xtable.scroll > .head {
   border-left: 1px solid #e6e6e6;
   border-right: 1px solid #e6e6e6;
 }
-.jui .xtable.scroll > .body {
+ .xtable.scroll > .body {
   border-left: 1px solid #e6e6e6;
   border-bottom: 1px solid #e6e6e6;
+}
+
+.table.classic {
+  border-bottom: 1px solid #dfdce3;
 }
