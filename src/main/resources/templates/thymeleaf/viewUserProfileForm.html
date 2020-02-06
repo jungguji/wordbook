@@ -52,23 +52,35 @@
          </script>
     <script th:inline="javascript">
             /* <![CDATA[ */
-            	var data = [(${data})];
-            	jui.ready([ "grid.table" ], function(table) {
+                var data = [(${data})];
+                jui.ready([ "grid.table" ], function(table) {
                 table_8 = table("#table_8", {
                     fields: [ null, "word", "meaning", "location" ],
                     data: data
                     ,
-                    editRow: [ "word", "meaning" ],
+                    editRow: [ "meaning" ],
                     resize: true,
                     sort: true,
                     event: {
                         editend: function(row) {
-                            for(var key in row.data) {
-                                if(key == "age" && isNaN(row.data[key])) {
-                                    alert("Age must enter a numeric value.");
-                                    return false;
-                                }
-                            }
+                            let data = JSON.stringify(row.data);
+                             $.ajax({
+                                 type:"POST"
+                                 , contentType: "application/json; charset=UTF-8"
+                                 , url: "/word/update"
+                                 , data: data
+                                 , dataType : 'json'
+                                 , cache: false
+                                 , success: function(data) {
+                                     alert(data);
+                                 }
+                             });
+//                             for(var key in row.data) {
+//                                 if(key == "age" && isNaN(row.data[key])) {
+//                                     alert("Age must enter a numeric value.");
+//                                     return false;
+//                                 }
+//                             }
                         }
                     },
                     tpl: {

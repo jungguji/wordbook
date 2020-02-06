@@ -182,4 +182,10 @@ public class WordDAO {
         em.persist(word);
         em.flush();
     }
+    
+    @Transactional
+    public void updateMeaning(Word word) {
+        em.merge(word);
+        em.flush();
+    }
 }

@@ -45,7 +45,7 @@ public class WordController {
         String jsonText = objMapper.writeValueAsString(service.getToDayWordList(word));
         model.addAttribute("wordList", jsonText);
         
-        return "thymeleaf/viewWordTest";
+        return "thymeleaf/viewWordTestForm";
     }
 
     @GetMapping("/word/test/random")
@@ -139,6 +139,17 @@ public class WordController {
         }
         
         return bindingResult;
+    }
+    
+    @PostMapping(value="/word/update", produces = "application/json")
+    @ResponseBody
+    public String updateMeaning(@RequestBody Word word) {
+        String result = "fail";
+        boolean isResult = service.updateMeaning(word);
+        if (isResult) {
+            result = "good";
+        }
+        return result;
     }
     
 }

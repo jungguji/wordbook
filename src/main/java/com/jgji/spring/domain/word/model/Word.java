@@ -87,7 +87,7 @@ public class Word {
     }
     
     public String toString() {
-        return "id = " + this.id + " word = " + this.word + " next_date = " + this.nextDate;
+        return "id = " + this.id + " word = " + this.word + " meaning = " + meaning + " next_date = " + this.nextDate;
     }
     
 }

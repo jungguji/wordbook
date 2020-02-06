@@ -187,4 +187,9 @@ public class WordServiceImpl implements WordService{
             e.printStackTrace();
         }
     }
+    
+    public boolean updateMeaning(Word word) {
+        wordDAO.updateMeaning(word);
+        return true;
+    }
 }

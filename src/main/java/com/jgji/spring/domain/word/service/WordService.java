@@ -22,4 +22,6 @@ public interface WordService {
     String insertWord(MultipartFile file) throws IOException;
     
     String insertWord(Word word);
+    
+    boolean updateMeaning(Word word);
 }
