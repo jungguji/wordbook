@@ -192,4 +192,8 @@ public class WordServiceImpl implements WordService{
         wordDAO.updateMeaning(word);
         return true;
     }
+    
+    public void delete(String[] rowIds) {
+        wordDAO.delete(rowIds);
+    }
 }

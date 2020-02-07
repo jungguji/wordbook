@@ -12,6 +12,10 @@
             <td><b th:text="*{username}"></b></td>
           </tr>
         </table>
+        
+        <button type="button" class="btn btn-danger" onclick="rowDelete()" style="float:right">Delete</button>
+        <br />
+        <br />
         <table id="table_8" class="table classic">
             <thead>
             <tr>
@@ -19,12 +23,12 @@
                 <th>단어</th>
                 <th>뜻</th>
                 <th>다음 시험 일자</th>
+                <th style="display: none"> ID </th>
             </tr>
             </thead>
             <tbody></tbody>
         </table>
     
-        <div id="grid"></div>
         <!-- Grid style components -->
         <link rel="stylesheet" th:href="@{/lib/jui-grid/dist/grid-jennifer.css}" />
         
@@ -35,7 +39,7 @@
         <script th:src="@{/lib/jui/dist/ui.min.js}"></script>
                 
         <!-- Grid script components -->
-        <script th:src="@{/lib/jui-grid/dist/grid.min.js}"></script>
+        <script th:src="@{/lib/jui-grid/dist/grid.js}"></script>
 
          <script id="tpl_row" data-jui="#table_8" data-tpl="row" type="text/template">
              <tr style="cursor: pointer;">
@@ -43,13 +47,44 @@
                  <td><!= word !></td>
                  <td><!= meaning !></td>
                  <td><!= nextDate !></td>
+                 <td style="display: none"><!= id !></td>
              </tr>
          </script>
          <script th:inline="javascript">
             /* <![CDATA[ */
+            	function rowDelete() {
+            		const rowIds = [];
+            		let removeTr = [];
+            		const row = document.querySelectorAll("tr.checked");
+            		for (i = 0; i < row.length; i++) {
+            			const tr = row[i];
+            			removeTr.push(row[i]);
+            			
+            			rowIds.push(tr.cells[4].textContent)
+            		}
+            		
+            		 const data = JSON.stringify(rowIds);
+            		 $.ajax({
+                         type:"DELETE"
+                         , contentType: "application/json"
+                         , url: "/word/delete"
+                         , data: data
+                         , dataType : 'json'
+                         , cache: false
+                         , success: function(data) {
+                        	 alert(data);
+                         }
+                         , complete : function() {
+                        	 for (i = 0; i < removeTr.length; i++) {
+                        		 removeTr[i].remove();
+                        	 }
+                         }
+                     });
+        	    }
+            	
                 jui.ready([ "grid.table" ], function(table) {
                 table_8 = table("#table_8", {
-                    fields: [ null, "word", "meaning", "nextDate" ],
+                    fields: [ null, "word", "meaning", "nextDate", "id"],
                     data: [(${data})],
                     editRow: [ "meaning" ],
                     resize: true,

@@ -2,6 +2,7 @@ package com.jgji.spring.domain.word.dao;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -187,5 +188,20 @@ public class WordDAO {
     public void updateMeaning(Word word) {
         em.merge(word);
         em.flush();
+    }
+    
+    @Transactional
+    public void delete(String[] rowIds) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("    DELETE FROM Word       ");
+        sb.append("    WHERE id IN :rowIds    ");
+        
+        int deletedCount = em.createNativeQuery(sb.toString())
+        .setParameter("rowIds", Arrays.asList(rowIds))
+        .executeUpdate();
+        
+        em.flush();
+        
+        System.out.println("deletedCount >> " + deletedCount);
     }
 }

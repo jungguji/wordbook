@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -143,13 +144,16 @@ public class WordController {
     
     @PostMapping(value="/word/update", produces = "application/json")
     @ResponseBody
-    public String updateMeaning(@RequestBody Word word) {
-        String result = "fail";
+    public boolean updateMeaning(@RequestBody Word word) {
         boolean isResult = service.updateMeaning(word);
-        if (isResult) {
-            result = "good";
-        }
-        return result;
+        return isResult;
+    }
+    
+    @DeleteMapping(value="/word/delete", produces = "application/json")
+    @ResponseBody
+    public String delete(@RequestBody String[] rowIds) {
+        service.delete(rowIds);
+        return "good";
     }
     
 }

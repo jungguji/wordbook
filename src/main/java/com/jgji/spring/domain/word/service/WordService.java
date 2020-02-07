@@ -24,4 +24,6 @@ public interface WordService {
     String insertWord(Word word);
     
     boolean updateMeaning(Word word);
+    
+    void delete(String[] args);
 }
