@@ -27,13 +27,14 @@
             </div>
         </div>
       </li>
+      <li class="nav-item">
+          <a class="nav-link" href="/user/profile" sec:authorize="isAuthenticated()">Profile</a>
+      </li>
     </ul>
-    
-    
-      <a th:href="@{/login}" sec:authorize="!isAuthenticated()"  class="btn btn-outline-success my-2 my-sm-0" type="submit" style="margin: 1rem">Sign In</a>
-      <a th:href="@{/user/create}" sec:authorize="!isAuthenticated()" class="btn btn-outline-success my-2 my-sm-0" >Sign Up</a>
-      <a th:href="@{/logout}" sec:authorize="isAuthenticated()" class="btn btn-outline-success my-2 my-sm-0" >Sign Out</a>
   </div>
+  <a th:href="@{/login}" sec:authorize="!isAuthenticated()"  class="btn btn-outline-success my-2 my-sm-0" style="margin: 1rem">Sign In</a>
+  <a th:href="@{/user/create}" sec:authorize="!isAuthenticated()" class="btn btn-outline-success my-2 my-sm-0" >Sign Up</a>
+  <a th:href="@{/logout}" sec:authorize="isAuthenticated()" class="btn btn-outline-success my-2 my-sm-0" >Sign Out</a>
 </nav>
    
 </html>
