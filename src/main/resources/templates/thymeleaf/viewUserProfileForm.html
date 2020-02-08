@@ -8,7 +8,7 @@
         <h1> 유저 정보 Form </h1>
         <table class="table table-striped" th:object="${user}">
           <tr>
-            <th>Name</th>
+            <th th:text="#{word.profile.name}">Name</th>
             <td><b th:text="*{username}"></b></td>
           </tr>
         </table>
@@ -20,9 +20,9 @@
             <thead>
             <tr>
                 <th width="50px">No</th>
-                <th>단어</th>
-                <th>뜻</th>
-                <th>다음 시험 일자</th>
+                <th th:text="#{word.profile.word}"> 단어</th>
+                <th th:text="#{word.profile.meaning}">뜻</th>
+                <th th:text="#{word.profile.nextdate}">다음 시험 일자</th>
                 <th style="display: none"> ID </th>
             </tr>
             </thead>
