@@ -3,7 +3,7 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
       <meta charset="UTF-8" />
 <nav th:fragment="headerFragment" class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="#">단어 시험</a>
+  <a class="navbar-brand" href="/" th:text="#{word.navigate.wordtest}">단어 시험</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -11,24 +11,26 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="/" th:text="#{word.navigate.home}"> Home <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/word/test">Test</a>
+        <a class="nav-link" href="/word/test" th:text="#{word.navigate.test}">Test</a>
       </li>
       <li class="nav-item">
           <div class="dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" 
+            role="button" data-toggle="dropdown" aria-expanded="false"
+            th:text="#{word.navigate.add}">
               Add
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" th:href="@{/word/add}">Typing</a>
-              <a class="dropdown-item" th:href="@{/word/add/file}">File Upload</a>
+              <a class="dropdown-item" th:href="@{/word/add}" th:text="#{word.navigate.typing}">Typing</a>
+              <a class="dropdown-item" th:href="@{/word/add/file}" th:text="#{word.navigate.fileupload}">File Upload</a>
             </div>
         </div>
       </li>
       <li class="nav-item">
-          <a class="nav-link" href="/user/profile" sec:authorize="isAuthenticated()">Profile</a>
+          <a class="nav-link" href="/user/profile" sec:authorize="isAuthenticated()" th:text="#{word.navigate.profile}">Profile</a>
       </li>
     </ul>
   </div>
