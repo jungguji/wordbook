@@ -44,6 +44,10 @@ public class WordServiceImpl implements WordService{
         return wordDAO.getRandomWordList(userId);
     }
     
+    public List<Word> getRandomByAllWordList() {
+        return wordDAO.getRandomByAllWordList();
+    }
+    
     private String getUserId() {
         return userService.getUserIdByUserName(userService.getCurrentUserName());
     }

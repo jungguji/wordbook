@@ -30,8 +30,15 @@
             
             window.onload = () => {
                 if (empty(wordList)) {
+                	const isRamdomWord = [(${isExist})];
+                	
+                	if (!isRamdomWord) {
+                		alert("저장된 단어가 존재하지 않아 전체 단어들 중 랜덤으로 테스트 합니다.");
+                		window.location.href = /*[[@{/word/test/random?all}]]*/
+                		return;
+                	}
                     
-                    if (confirm("오늘 시험 볼 단어가 없습니다. \n 여태 시험 본 단어들 중 랜덤으로 시험보시겠습니까?")) {
+                    if (confirm("오늘 테스트 할 단어가 없습니다. \n 시험 본 단어들 중 랜덤으로 테스트 하시겠습니까?")) {
                         alert("최대 15개의 단어가 선택됩니다.");
                         window.location.href = /*[[@{/word/test/random}]]*/
                     } else {

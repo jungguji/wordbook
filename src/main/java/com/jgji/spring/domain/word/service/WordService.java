@@ -14,6 +14,8 @@ public interface WordService {
     List<Word> getToDayWordList(Word word);
     
     List<Word> getRandomWordList();
+    
+    List<Word> getRandomByAllWordList();
 
     boolean updateNextDateAndInsert(String[] answerIds);
     

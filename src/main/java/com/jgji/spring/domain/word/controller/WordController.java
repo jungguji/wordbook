@@ -3,12 +3,14 @@ package com.jgji.spring.domain.word.controller;
 import java.io.IOException;
 import java.text.ParseException;
 import java.time.LocalDate;
+import java.util.List;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -45,19 +47,39 @@ public class WordController {
         
         String jsonText = objMapper.writeValueAsString(service.getToDayWordList(word));
         model.addAttribute("wordList", jsonText);
+        model.addAttribute("isExist", true);
         
         return "thymeleaf/viewWordTestForm";
     }
 
     @GetMapping("/word/test/random")
-    public String getrandomWordList(Word word, Model model) throws ParseException, JsonProcessingException {
+    public String getRandomByUserWordList(Word word, Model model) throws ParseException, JsonProcessingException {
         ObjectMapper objMapper = getObjectMapperConfig();
         
-        String jsonText = objMapper.writeValueAsString(service.getRandomWordList());
+        List<Word> wordList = service.getRandomWordList();
+        
+        boolean isExist = true;
+        if (ObjectUtils.isEmpty(wordList)) {
+            isExist = false;
+        }
+        
+        String jsonText = objMapper.writeValueAsString(wordList);
         
         model.addAttribute("wordList", jsonText);
+        model.addAttribute("isExist", isExist);
         
-        return "thymeleaf/viewWordTest";
+        return "thymeleaf/viewWordTestForm";
+    }
+    
+    @GetMapping(value="/word/test/random", params= {"all"})
+    public String getRandomByAllWordList(Model model) throws ParseException, JsonProcessingException {
+        ObjectMapper objMapper = getObjectMapperConfig();
+        
+        String jsonText = objMapper.writeValueAsString(service.getRandomByAllWordList());
+        model.addAttribute("wordList", jsonText);
+        model.addAttribute("isExist", true);
+        
+        return "thymeleaf/viewWordTestForm";
     }
     
     private ObjectMapper getObjectMapperConfig() {
@@ -106,7 +128,7 @@ public class WordController {
         return words;
     }
     
-    @PostMapping(value="/word/add", params= {"addRow"})
+    @PostMapping(value="/word/add", params={"addRow"})
     public String addRow(final Word word, final BindingResult bindingResult) {
         word.getWords().add(new Row());
         word.getMeanings().add(new Row());

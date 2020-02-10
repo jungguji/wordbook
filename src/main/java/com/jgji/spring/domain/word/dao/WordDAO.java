@@ -72,6 +72,21 @@ public class WordDAO {
         .getResultList();
     }
     
+    public List<Word> getRandomByAllWordList() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("    SELECT                ");
+        sb.append("        w                 ");
+        sb.append("    FROM                  ");
+        sb.append("        Word w            ");
+        sb.append("    JOIN                  ");
+        sb.append("        w.user u          ");
+        sb.append("    ORDER BY RAND()       ");
+        
+        return em.createQuery(sb.toString(), Word.class)
+                .setMaxResults(15)
+                .getResultList();
+    }
+    
     
     @Transactional
     public boolean updateNextDateAndInsert(List<String> passWordList, List<String> failWordList, User user) {
