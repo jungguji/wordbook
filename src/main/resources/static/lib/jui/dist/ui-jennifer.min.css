@@ -392,7 +392,7 @@
     background-color: #dcdcdc
 }
 
-.jui .tab li>a {
+.tab li>a {
     color: #740CD2;
     border: 1px solid #e6e6e6;
     background-color: #fff;
@@ -403,7 +403,7 @@
     background-image: -ms-linear-gradient(top, #fff 0, #f4f4f4 100%)
 }
 
-.jui .tab li>a:focus, .jui .tab li>a:hover {
+.tab li>a:focus, .tab li>a:hover {
     border: 1px solid #c7c7c7
 }
 
@@ -431,11 +431,11 @@
     background-image: -ms-linear-gradient(top, #605977 0, #605977 100%)
 }
 
-.jui .tab.tab.top {
+.tab.tab.top {
     border-bottom: 1px solid #ddd
 }
 
-.jui .tab.tab.top li.active>a {
+.tab.tab.top li.active>a {
     border-color: #ddd #ddd transparent
 }
 
