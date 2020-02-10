@@ -211,12 +211,10 @@ public class WordDAO {
         sb.append("    DELETE FROM Word       ");
         sb.append("    WHERE id IN :rowIds    ");
         
-        int deletedCount = em.createNativeQuery(sb.toString())
+        em.createNativeQuery(sb.toString())
         .setParameter("rowIds", Arrays.asList(rowIds))
         .executeUpdate();
         
         em.flush();
-        
-        System.out.println("deletedCount >> " + deletedCount);
     }
 }
