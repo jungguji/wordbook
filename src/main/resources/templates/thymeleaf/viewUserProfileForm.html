@@ -172,18 +172,8 @@
                 });
                 
                 graph.ready([ "chart.builder" ], function(builder) {
-                	var data = [
-                	    { quarter : "01", sales : 50 },
-                	    { quarter : "02", sales : 20 },
-                	    { quarter : "03", sales : 10 },
-                	    { quarter : "04", sales : 30 },
-                	    { quarter : "05", sales : 44 },
-                	    { quarter : "06", sales : 22 },
-                	    { quarter : "07", sales : 21 },
-                	    { quarter : "08", sales : 36 },
-                	    { quarter : "09", sales : 56 },
-                	    { quarter : "10", sales : 30 },
-                	];
+                	var data = [(${graphData})];
+                	
 
                 	builder("#result", {
                 		width: 1000,
@@ -191,27 +181,27 @@
                 	    axis : [{
                 	        x : {
                 	            type : "range",
-                	            domain : "sales",
-                	            step : 10,
+                	            domain : "qty",
+                	            step : 7,
                 	            line : true
                 	        },
                 	        y : {
                 	            type : "block",
-                	            domain : "quarter",
+                	            domain : "word",
                 	            line : true
                 	        },
                 	        data : data
                 	    }],
                 	    brush : [{
                 	        type : "bar",
-                	        target : "sales",
+                	        target : "qty",
                 	        display : "max",
                 	        activeEvent : "mouseover",
                 	        animate : true
                 	    }],
                 	    widget : [{
                 	        type : "title",
-                	        text : "Bar Sample",
+                	        text : "많이 틀린 단어",
                 	        align : "start"
                 	    }]
                 	});

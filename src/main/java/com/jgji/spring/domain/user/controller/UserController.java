@@ -54,13 +54,15 @@ public class UserController {
     public ModelAndView showUserProfileForm() throws JsonProcessingException {
         ModelAndView mav = new ModelAndView("thymeleaf/viewUserProfileForm");
         User user = userService.getUserByUserName(userService.getCurrentUserName());
-        System.out.println(user.getUsername());
         
         mav.addObject("user", user);
         
         ObjectMapper objMapper = getObjectMapperConfig();
         String jsonText = objMapper.writeValueAsString(wordService.findAllByUserId());
         mav.addObject("data", jsonText);
+        
+        String graphData = objMapper.writeValueAsString(wordService.getFrequentFailWord(user.getId()));
+        mav.addObject("graphData", graphData);
         
         return mav;
     }

@@ -200,4 +200,10 @@ public class WordServiceImpl implements WordService{
     public void delete(String[] rowIds) {
         wordDAO.delete(rowIds);
     }
+    
+    public List<Map<String, Object>> getFrequentFailWord(String userId) {
+        List<Map<String, Object>> test = wordDAO.getFrequentFailWord(userId);
+        
+        return test;
+    }
 }

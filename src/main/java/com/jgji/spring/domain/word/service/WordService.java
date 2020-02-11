@@ -2,6 +2,7 @@ package com.jgji.spring.domain.word.service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,4 +29,6 @@ public interface WordService {
     boolean updateMeaning(Word word);
     
     void delete(String[] args);
+    
+    List<Map<String, Object>> getFrequentFailWord(String userId);
 }
