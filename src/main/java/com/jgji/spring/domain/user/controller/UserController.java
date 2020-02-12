@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,6 +28,12 @@ public class UserController {
     
     @Autowired
     private WordService wordService;
+    
+    @GetMapping("/login")
+    public String  initLoginForm(Model model) {
+        System.out.println("@@@@@@@@@@@@@@@@");
+        return "thymeleaf/login";
+    }
     
     @GetMapping("/user/create")
     public String initCreationForm(Map<String, Object> model) {
