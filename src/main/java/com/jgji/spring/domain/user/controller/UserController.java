@@ -30,8 +30,7 @@ public class UserController {
     private WordService wordService;
     
     @GetMapping("/login")
-    public String  initLoginForm(Model model) {
-        System.out.println("@@@@@@@@@@@@@@@@");
+    public String initLoginForm(Model model) {
         return "thymeleaf/login";
     }
     
