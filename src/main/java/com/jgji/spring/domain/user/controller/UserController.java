@@ -10,6 +10,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -31,7 +33,7 @@ public class UserController {
     
     @GetMapping("/login")
     public String initLoginForm(Model model) {
-        return "thymeleaf/login";
+        return "thymeleaf/viewLoginForm";
     }
     
     @GetMapping("/user/create")
@@ -79,5 +81,35 @@ public class UserController {
         objMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
         
         return objMapper;
+    }
+    
+    @GetMapping("/reset/password")
+    public String initResetPasswordForm() {
+        return "thymeleaf/viewForgotPasswordForm";
+    }
+    
+    @PostMapping(value="/reset/password/check", produces = "application/json")
+    @ResponseBody
+    public String checkUserId(@RequestBody String userName) throws JsonProcessingException {
+        String msg = "";
+        userName = userName.replace("\"", "");
+        if (!userService.isExistName(userName)) {
+            
+            msg = "존재하지 않는 아이디 입니다.";
+        }
+        
+        ObjectMapper objMapper = getObjectMapperConfig();
+        return objMapper.writeValueAsString(msg);
+    }
+    
+    @PostMapping(value="/reset/password", produces = "application/json")
+    @ResponseBody
+    public String processResetPasswordForm(@RequestBody User user) throws JsonProcessingException {
+        String tempPassword = userService.setTempPassWord(user);
+        String msg = "임시 비밀번호 : " + tempPassword;
+        
+        System.out.println(msg);
+        ObjectMapper objMapper = getObjectMapperConfig();
+        return objMapper.writeValueAsString(msg);
     }
 }
