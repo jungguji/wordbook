@@ -43,7 +43,31 @@
                 <div id="result" style="position: relative; user-select: none;" unselectable="on">
                 </div>
             </div>
-            <div id="script">script
+            <div id="script">
+                <form>
+                    <table class="table table-striped" th:object="${changePassword}">
+                         <tr>
+                             <th>현재 비밀번호</th>
+                             <td>
+                                <input type="password" class="form-control input-text" name="oldPassword" placeholder="현재 비밀번호" />
+                            </td>
+                         </tr>
+                         <tr>
+                             <th>새 비밀번호</th>
+                             <td>
+                                <input type="password" class="form-control input-text" name="newPassword" placeholder="새 비밀번호">
+                            </td>
+                         </tr>
+                         <tr>
+                             <th>새 비밀번호 확인</th>
+                             <td>
+                                <input type="password" class="form-control input-text" name="newPasswordConfrim" placeholder="새 비밀번호 확인">
+                            </td>
+                         </tr>
+                    </table>
+                    
+                    <button type="button" id="Change" class="btn btn-success" onclick="" style="float:right" disabled >Change</button>
+                </form>
             </div>
         </div>
     
@@ -53,6 +77,10 @@
             }
             * {
                 box-sizing: initial;
+            }
+            .input-text {
+                width: auto;
+                height: auto
             }
         </style>
         <link th:href="@{/css/tab.css}" rel="stylesheet" type="text/css">
@@ -209,6 +237,7 @@
   
            /* ]]> */
     </script>
+    
     </th:block>
     
 </html>
