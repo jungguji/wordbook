@@ -19,6 +19,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.jgji.spring.domain.user.model.User;
+import com.jgji.spring.domain.user.model.UserDTO;
+import com.jgji.spring.domain.user.model.UserDTO.ChangePassword;
 import com.jgji.spring.domain.user.service.UserService;
 import com.jgji.spring.domain.word.service.WordService;
 
@@ -72,6 +74,12 @@ public class UserController {
         String graphData = objMapper.writeValueAsString(wordService.getFrequentFailWord(user.getId()));
         mav.addObject("graphData", graphData);
         
+        UserDTO dto = new UserDTO();
+        ChangePassword cpw = dto.getChangePassword();
+        cpw.setUserName(user.getUsername());
+        
+        mav.addObject("change", cpw);
+        
         return mav;
     }
     
@@ -108,8 +116,15 @@ public class UserController {
         String tempPassword = userService.setTempPassWord(user);
         String msg = "임시 비밀번호 : " + tempPassword;
         
-        System.out.println(msg);
         ObjectMapper objMapper = getObjectMapperConfig();
         return objMapper.writeValueAsString(msg);
+    }
+    
+    @PostMapping(value="/change/password", produces = "application/json")
+    @ResponseBody
+    public String processChangePassword(@RequestBody UserDTO.ChangePassword changPassword) {
+        System.out.println("@@@@@@@@@@@");
+        userService.test(changPassword);
+        return "";
     }
 }
