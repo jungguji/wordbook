@@ -44,8 +44,12 @@
                 </div>
             </div>
             <div id="script">
-                <form>
-                    <table class="table table-striped" th:object="${changePassword}">
+                <form id="changeFrm" th:object="${change}" th:action="@{/change/password}" method="post">
+                    <table class="table table-striped" >
+                         <tr>
+                             <th th:text="#{word.profile.name}">Name</th>
+                             <td><b th:text="*{userName}"></b></td>
+                         </tr>
                          <tr>
                              <th>현재 비밀번호</th>
                              <td>
@@ -66,7 +70,7 @@
                          </tr>
                     </table>
                     
-                    <button type="button" id="Change" class="btn btn-success" onclick="" style="float:right" disabled >Change</button>
+                    <button class="btn btn-success" style="float:right" >Change</button>
                 </form>
             </div>
         </div>
@@ -201,7 +205,6 @@
                 
                 graph.ready([ "chart.builder" ], function(builder) {
                 	var data = [(${graphData})];
-                	
 
                 	builder("#result", {
                 		width: 1000,
@@ -234,7 +237,32 @@
                 	    }]
                 	});
                 });
-  
+
+                document.querySelector("#changeFrm").addEventListener('submit', function(e) {
+                    e.preventDefault();
+            
+                    changePassword();
+                });
+                
+                function changePassword() {
+                	 var fromdata = {
+                			 userName : "jgji"
+                			 , oldPassword : "Tv4$LoWAWjH208^U"
+                	 }
+                     const data = JSON.stringify(fromdata);
+                     
+                     $.ajax({
+                         type:"post"
+                         , contentType: "application/json"
+                         , url: "/change/password"
+                         , data: data
+                         , dataType : 'json'
+                         , cache: false
+                         , success: function(data) {
+                             alert(data);
+                         }
+                     });
+                }
            /* ]]> */
     </script>
     
