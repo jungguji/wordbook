@@ -83,14 +83,6 @@ public class UserController {
         return mav;
     }
     
-    private ObjectMapper getObjectMapperConfig() {
-        ObjectMapper objMapper = new ObjectMapper();
-        objMapper.registerModule(new JavaTimeModule());
-        objMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-        
-        return objMapper;
-    }
-    
     @GetMapping("/reset/password")
     public String initResetPasswordForm() {
         return "thymeleaf/viewForgotPasswordForm";
@@ -106,8 +98,7 @@ public class UserController {
             msg = "존재하지 않는 아이디 입니다.";
         }
         
-        ObjectMapper objMapper = getObjectMapperConfig();
-        return objMapper.writeValueAsString(msg);
+        return returnJsonMsg(msg);
     }
     
     @PostMapping(value="/reset/password", produces = "application/json")
@@ -116,15 +107,27 @@ public class UserController {
         String tempPassword = userService.setTempPassWord(user);
         String msg = "임시 비밀번호 : " + tempPassword;
         
-        ObjectMapper objMapper = getObjectMapperConfig();
-        return objMapper.writeValueAsString(msg);
+        return returnJsonMsg(msg);
     }
     
     @PostMapping(value="/change/password", produces = "application/json")
     @ResponseBody
-    public String processChangePassword(@RequestBody UserDTO.ChangePassword changPassword) {
-        System.out.println("@@@@@@@@@@@");
-        userService.test(changPassword);
-        return "";
+    public String processChangePassword(@RequestBody ChangePassword changPassword) throws JsonProcessingException {
+        String msg = userService.changePassword(changPassword);
+        
+        return returnJsonMsg(msg);
+    }
+    
+    private String returnJsonMsg(String msg) throws JsonProcessingException {
+        ObjectMapper objMapper = getObjectMapperConfig();
+        return objMapper.writeValueAsString(msg);
+    }
+    
+    private ObjectMapper getObjectMapperConfig() {
+        ObjectMapper objMapper = new ObjectMapper();
+        objMapper.registerModule(new JavaTimeModule());
+        objMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+        
+        return objMapper;
     }
 }

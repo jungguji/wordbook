@@ -47,10 +47,6 @@
                 <form id="changeFrm" th:object="${change}" th:action="@{/change/password}" method="post">
                     <table class="table table-striped" >
                          <tr>
-                             <th th:text="#{word.profile.name}">Name</th>
-                             <td><b th:text="*{userName}"></b></td>
-                         </tr>
-                         <tr>
                              <th>현재 비밀번호</th>
                              <td>
                                 <input type="password" class="form-control input-text" name="oldPassword" placeholder="현재 비밀번호" />
@@ -199,7 +195,7 @@
                             }
                         },
                         target: "#tab_contents_1",
-                        index: 0
+                        index: 2
                     });
                 });
                 
@@ -245,16 +241,18 @@
                 });
                 
                 function changePassword() {
+                	
                 	 var fromdata = {
-                			 userName : "jgji"
-                			 , oldPassword : "Tv4$LoWAWjH208^U"
-                	 }
+                			 oldPassword : document.querySelector("input[name=oldPassword]").value
+                			 , newPassword : document.querySelector("input[name=newPassword]").value
+                			 , newPasswordConfrim : document.querySelector("input[name=newPasswordConfrim]").value
+                			}
                      const data = JSON.stringify(fromdata);
                      
                      $.ajax({
                          type:"post"
-                         , contentType: "application/json"
                          , url: "/change/password"
+                         , contentType: 'application/json'
                          , data: data
                          , dataType : 'json'
                          , cache: false

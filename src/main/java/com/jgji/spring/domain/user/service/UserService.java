@@ -100,14 +100,18 @@ public class UserService implements UserDetailsService {
       return ranPw.toString();
     }
     
-    public void test(ChangePassword changePassword) {
-        UsernamePasswordAuthenticationToken authToken = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+    public String changePassword(ChangePassword changePassword) {
+        String msg = "성공";
         String oldPassword = changePassword.getOldPassword();
+        System.out.println(changePassword.toString());
         
+        Authentication authToken = SecurityContextHolder.getContext().getAuthentication();
         User user = getUserByUserName(authToken.getName());
         
         if (!bcryptPasswordEncoder.matches(oldPassword, user.getPassword())) {
-            System.out.println("AASDASDASDASD");
+            msg = "현재 비밀번호가 아닙니다.";
         }
+        
+        return msg;
     }
 }
