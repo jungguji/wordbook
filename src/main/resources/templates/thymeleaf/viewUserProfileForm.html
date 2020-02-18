@@ -14,37 +14,15 @@
         </table>
         
         <ul id="tab_1" class="tab top">
-            <li>
-                <a href="#home">단어 목록</a>
-            </li>
-            <li><a href="#css">그래프</a></li>
-            <li><a href="#script">Script</a></li>
+            <li><a href="#change">개인정보</a></li>
+            <li><a href="#list">단어 목록</a> </li>
+            <li><a href="#graph">그래프</a></li>
         </ul>
         
         <div id="tab_contents_1">
-            <div id="home">
-                <button type="button" id="delete" class="btn btn-danger" onclick="rowDelete()" style="float:right" disabled >Delete</button>
-                <br />
-                <br />
-                <table id="table_8" class="table classic">
-                    <thead>
-                    <tr>
-                        <th width="50px">No</th>
-                        <th th:text="#{word.profile.word}"> 단어</th>
-                        <th th:text="#{word.profile.meaning}">뜻</th>
-                        <th th:text="#{word.profile.nextdate}">다음 시험 일자</th>
-                        <th style="display: none"> ID </th>
-                    </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-            <div id="css">
-                <div id="result" style="position: relative; user-select: none;" unselectable="on">
-                </div>
-            </div>
-            <div id="script">
+            <div id="change">
                 <form id="changeFrm" th:object="${change}" th:action="@{/change/password}" method="post">
+                <div class="alert alert-danger" role="alert" style="display:none; margin-right:1rem;" ></div>
                     <table class="table table-striped" >
                          <tr>
                              <th>현재 비밀번호</th>
@@ -68,6 +46,27 @@
                     
                     <button class="btn btn-success" style="float:right" >Change</button>
                 </form>
+            </div>
+            <div id="list">
+                <button type="button" id="delete" class="btn btn-danger" onclick="rowDelete()" style="float:right" disabled >Delete</button>
+                <br />
+                <br />
+                <table id="table_8" class="table classic">
+                    <thead>
+                    <tr>
+                        <th width="50px">No</th>
+                        <th th:text="#{word.profile.word}"> 단어</th>
+                        <th th:text="#{word.profile.meaning}">뜻</th>
+                        <th th:text="#{word.profile.nextdate}">다음 시험 일자</th>
+                        <th style="display: none"> ID </th>
+                    </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div id="graph">
+                <div id="result" style="position: relative; user-select: none;" unselectable="on">
+                </div>
             </div>
         </div>
     
@@ -195,7 +194,7 @@
                             }
                         },
                         target: "#tab_contents_1",
-                        index: 2
+                        index: 0
                     });
                 });
                 
@@ -257,7 +256,12 @@
                          , dataType : 'json'
                          , cache: false
                          , success: function(data) {
-                             alert(data);
+                             if ("성공" !== data) {
+                            	 document.querySelector(".alert.alert-danger").style.display = "block";
+                            	 document.querySelector(".alert.alert-danger").innerHTML = data;
+                             } else {
+                            	 window.location.href = "/user/profile";
+                             }
                          }
                      });
                 }

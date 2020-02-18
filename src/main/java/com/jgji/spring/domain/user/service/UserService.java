@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -15,9 +14,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 
 import com.jgji.spring.domain.user.model.User;
-import com.jgji.spring.domain.user.model.UserDTO.ChangePassword;
+import com.jgji.spring.domain.user.model.UserDTO.UserProfile;
 import com.jgji.spring.domain.user.model.UserRepository;
 
 @Service
@@ -48,6 +48,10 @@ public class UserService implements UserDetailsService {
     public String getCurrentUserName() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return auth.getName();
+    }
+    
+    public User getCurrentUser() {
+        return getUserByUserName(getCurrentUserName());
     }
     
     public User getUserByUserName(String username) {
@@ -100,18 +104,86 @@ public class UserService implements UserDetailsService {
       return ranPw.toString();
     }
     
-    public String changePassword(ChangePassword changePassword) {
-        String msg = "성공";
-        String oldPassword = changePassword.getOldPassword();
-        System.out.println(changePassword.toString());
+    public String changePassword(UserProfile changePassword) {
+        String validationmsg = getMessageChangePasswordValidation(changePassword);
         
-        Authentication authToken = SecurityContextHolder.getContext().getAuthentication();
-        User user = getUserByUserName(authToken.getName());
-        
-        if (!bcryptPasswordEncoder.matches(oldPassword, user.getPassword())) {
-            msg = "현재 비밀번호가 아닙니다.";
+        if (!StringUtils.isEmpty(validationmsg)) {
+            return validationmsg;
         }
         
-        return msg;
+        User user = getCurrentUser();
+        user.setPassword(changePassword.getNewPassword());
+        
+        save(user);
+        
+        return "성공";
+    }
+    
+    private String getMessageChangePasswordValidation(UserProfile changePassword) {
+        String oldPassword = changePassword.getOldPassword();
+        
+        if (isNullPassword(changePassword)) {
+            return "비밀번호를 입력 해주십시오.";
+        }
+        
+        if (isFailOldPasswordCompare(oldPassword)) {
+            return "입력한 비밀번호와 현재 비밀번호가 일치하지 않습니다.";
+        }
+        
+        String newPassword = changePassword.getNewPassword();
+        
+        if (isFailPasswordSize(newPassword)) {
+            return "비밀번호는 6 자 이상이어야 합니다.";
+        }
+        
+        if (isFailNewPasswordCompare(changePassword)) {
+            return "변경 할 비밀번호가 일치하지 않습니다.";
+        }
+        
+        return "";
+    }
+    
+    private boolean isNullPassword(UserProfile changePassword) {
+        if (StringUtils.isEmpty(changePassword.getOldPassword()) || StringUtils.isEmpty(changePassword.getNewPassword())
+                || StringUtils.isEmpty(changePassword.getNewPasswordConfrim())) {
+            return true;
+        }
+        
+        return false;
+    }
+    
+    private boolean isFailOldPasswordCompare(String oldPassword) {
+        boolean result = false;
+        
+        User user = getCurrentUser();
+        
+        if (!bcryptPasswordEncoder.matches(oldPassword, user.getPassword())) {
+            result = true;
+        }
+        
+        return result;
+    }
+    
+    private boolean isFailPasswordSize(String newPassword) {
+        boolean result = false;
+        if (newPassword.trim().length() < 6) {
+            result = true;
+        }
+        
+        return result;
+    }
+    
+    private boolean isFailNewPasswordCompare(UserProfile changePassword) {
+        boolean result = true;
+        
+        if (changePassword.getNewPassword().equals(changePassword.getNewPasswordConfrim())) {
+            result = false;
+        }
+        
+        return result;
+    }
+    
+    public void getMostWrongWord(String userId) {
+        List<Object[]> wrongWordList = userRepository.findMostWrongWord(userId);
     }
 }
