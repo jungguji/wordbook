@@ -118,6 +118,11 @@
          
          <script th:inline="javascript">
             /* <![CDATA[ */
+            	window.onload = () => {
+                    clearliTagClass();
+                    addClassliTag(3);
+                }
+            	
             	function rowDelete() {
             		const rowIds = [];
             		let removeTr = [];

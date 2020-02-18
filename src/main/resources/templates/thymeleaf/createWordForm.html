@@ -40,7 +40,12 @@
             <button class="btn btn-lg btn-primary" type="submit" name="save" th:text="#{word.create}">Add Word</button>    
           </div>
         </form>
+        
         <script th:inline="javascript">
+            window.onload = () => {
+                clearliTagClass();
+                addClassliTag(2);
+            }
         </script>
     </th:block>
 </html>
