@@ -21,9 +21,18 @@
         
         <div id="tab_contents_1">
             <div id="change">
-                <form id="changeFrm" th:object="${change}" th:action="@{/change/password}" method="post">
+                <form id="changeFrm" th:object="${userProfile}" th:action="@{/change/password}" method="post">
                 <div class="alert alert-danger" role="alert" style="display:none; margin-right:1rem;" ></div>
                     <table class="table table-striped" >
+                        <tr>
+                             <th>가장 많이 틀린 단어</th>
+                             <td >
+                                <div th:each="row,rowStat : *{mostWrongWord}">
+                                    <b th:text="*{mostWrongWord[__${rowStat.index}__]}"></b>
+                                    (<span th:text="*{mostWrongCount[__${rowStat.index}__]}"></span> 회)
+                                </div>
+                             </td>
+                         </tr>
                          <tr>
                              <th>현재 비밀번호</th>
                              <td>

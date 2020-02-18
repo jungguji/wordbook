@@ -1,5 +1,7 @@
 package com.jgji.spring.domain.user.controller;
 
+import java.math.BigInteger;
+import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -19,8 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.jgji.spring.domain.user.model.User;
-import com.jgji.spring.domain.user.model.UserDTO;
-import com.jgji.spring.domain.user.model.UserDTO.ChangePassword;
+import com.jgji.spring.domain.user.model.UserDTO.UserProfile;
 import com.jgji.spring.domain.user.service.UserService;
 import com.jgji.spring.domain.word.service.WordService;
 
@@ -71,14 +72,22 @@ public class UserController {
         String jsonText = objMapper.writeValueAsString(wordService.findAllByUserId());
         mav.addObject("data", jsonText);
         
-        String graphData = objMapper.writeValueAsString(wordService.getFrequentFailWord(user.getId()));
+        String userId = user.getId();
+        String graphData = objMapper.writeValueAsString(wordService.getFrequentFailWord(userId));
         mav.addObject("graphData", graphData);
         
-        UserDTO dto = new UserDTO();
-        ChangePassword cpw = dto.getChangePassword();
-        cpw.setUserName(user.getUsername());
+        UserProfile userProfile = new UserProfile();
+        List<Map<String, Object>> wrongWordList = userService.getMostWrongWord(userId);
         
-        mav.addObject("change", cpw);
+        userProfile.setUserName(user.getUsername());
+        
+        for (Map<String, Object> map : wrongWordList) {
+            System.out.println(map.toString());
+            userProfile.setMostWrongWord((String) map.get("mostWrongWord"));
+            userProfile.setMostWrongCount((BigInteger) map.get("mostWrongCount"));
+        }
+        
+        mav.addObject("userProfile", userProfile);
         
         return mav;
     }
@@ -112,7 +121,7 @@ public class UserController {
     
     @PostMapping(value="/change/password", produces = "application/json")
     @ResponseBody
-    public String processChangePassword(@RequestBody ChangePassword changPassword) throws JsonProcessingException {
+    public String processChangePassword(@RequestBody UserProfile changPassword) throws JsonProcessingException {
         String msg = userService.changePassword(changPassword);
         
         return returnJsonMsg(msg);
