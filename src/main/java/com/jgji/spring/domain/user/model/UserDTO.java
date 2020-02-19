@@ -6,17 +6,17 @@ import java.util.List;
 
 public class UserDTO {
     
-    CreateUser CreateUser;
-    UserProfile ChangeProfile;
+    CreateUser createUser;
+    UserProfile changeProfile;
     
     public CreateUser getCreateUser() {
-        return this.CreateUser;
+        return this.createUser;
     }
 
     public UserProfile getUserProfile() {
-        return this.getUserProfile();
+        return this.changeProfile;
     }
-
+    
     public static class CreateUser {
         private String id;
         private String username;

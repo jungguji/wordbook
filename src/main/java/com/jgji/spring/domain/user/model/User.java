@@ -24,7 +24,7 @@ public class User {
     private String username;
     
     @Column(name = "password")
-    @Size(min=6, message="6자이상으로 입력하여야 합니다." )
+    @Size(min=6, message="비밀번호는 6 자 이상이어야 합니다." )
     private String password;
 
     public String getId() {
