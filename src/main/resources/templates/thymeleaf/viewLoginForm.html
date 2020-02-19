@@ -14,6 +14,9 @@
                     <h3 th:text="#{word.login.signin}">Sign In</h3>
                 </div>
                 <div class="card-body">
+                    <div class="alert alert-danger" th:if="${param.error}" role="alert">
+                       <span th:text="${session.SPRING_SECURITY_LAST_EXCEPTION.message}"></span>
+                   </div>
                     <form th:action="@{/login}" method="post">
                         <div class="input-group form-group">
                             <div class="input-group-prepend">

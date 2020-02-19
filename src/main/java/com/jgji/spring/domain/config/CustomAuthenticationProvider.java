@@ -1,7 +1,6 @@
 package com.jgji.spring.domain.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -13,7 +12,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.jgji.spring.domain.user.service.UserService;
 
-@Configuration
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
     @Autowired
@@ -28,11 +26,11 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
         User user = (User) userService.loadUserByUsername(authToken.getName());
         if (user == null) {
-          throw new UsernameNotFoundException(authToken.getName());
+          throw new UsernameNotFoundException("아이디 혹은 비밀번호가 올바르지 않습니다.");
         }
 
         if (!passwordEncoder.matches((String) authToken.getCredentials(), user.getPassword())) {
-          throw new BadCredentialsException("not matching username or password");
+          throw new BadCredentialsException("아이디 혹은 비밀번호가 올바르지 않습니다.");
         }
 
         return new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
