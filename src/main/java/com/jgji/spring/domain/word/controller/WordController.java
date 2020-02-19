@@ -148,17 +148,41 @@ public class WordController {
     }
     
     private BindingResult isValidation(Word word, BindingResult bindingResult) {
+        StringBuilder wordRow = new StringBuilder();
+        StringBuilder meaningRow = new StringBuilder();
+        
         int wordCount = word.getWords().size();
         for (int i = 0; i < wordCount; i++) {
             int wordsErrorCount = bindingResult.getFieldErrorCount("words");
             if (StringUtils.isEmpty(word.getWords().get(i).getText()) && wordsErrorCount == 0) {
-                bindingResult.rejectValue("words", "words", "어딘가 단어가 비어 있음");
+                
+                if (wordRow.length() != 0) {
+                    wordRow.append(", ");
+                }
+                wordRow.append((i+1));
             }
             
             int meaningsErrorCount = bindingResult.getFieldErrorCount("meanings");
             if (StringUtils.isEmpty(word.getMeanings().get(i).getText()) && meaningsErrorCount == 0) {
-                bindingResult.rejectValue("meanings", "meanings", "어딘가 뜻을 입력 안했음");
+                
+                if (meaningRow.length() != 0) {
+                    meaningRow.append(", ");
+                }
+                
+                meaningRow.append((i+1));
             }
+        }
+            
+        if (wordRow.length() != 0) {
+            wordRow.append("행에 단어가 비어 있습니다.");
+            
+            bindingResult.rejectValue("words", "words", wordRow.toString());
+        }
+        
+        if (meaningRow.length() != 0) {
+            meaningRow.append("행에 뜻이 비어 있습니다.");
+            
+            bindingResult.rejectValue("words", "words", meaningRow.toString());
         }
         
         return bindingResult;
