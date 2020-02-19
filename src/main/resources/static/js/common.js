@@ -3,7 +3,7 @@
  */
 
 function clearliTagClass() {
-	const liTagList = document.querySelectorAll("li");
+	const liTagList = document.querySelectorAll("li.nav-item");
 	
 	for (li of liTagList) {
 		li.removeAttribute("class");
