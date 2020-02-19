@@ -11,40 +11,56 @@
             뜻이 여러 가지 일 경우 "," 로 구분하여 입력하여야 합니다.
         </p>
         <form th:action="@{/word/add}" th:object="${word}" class="form-horizontal" id="add-owner-form" method="post">
-            <h1><label th:text="#{word.rows}"></label></h1>
-            <button class="btn btn-lg btn-primary" type="submit" id="addRow" name="addRow" th:text="#{word.row.add}">Add row</button>
-            <table>
-              <thead>
+            <div class="alert alert-danger" th:if="${#fields.hasErrors('words')}" th:errors="*{words}" role="alert">
+            </div>
+            <div class="submit">
+                <button class="btn btn-primary" type="submit" id="save" name="save" th:text="#{word.create}" style="float:right;">Add Word</button>
+                <button class="btn btn-primary" type="submit" id="addRow" name="addRow" th:text="#{word.row.add}" style="float:right;  margin-right: 1rem">Add row</button>
+            </div>
+            <br />
+            <br />
+            <table id="table_8" class="table classic">
+                <thead>
                 <tr>
-                  <th th:text="#{word.rows.head.rownum}">Row</th>
-                  <th th:text="#{word.rows.head.word}"></th>
-                  <th >뜻</th>
+                    <th th:text="#{word.rows.head.rownum}">Row</th>
+                     <th th:text="#{word.rows.head.word}"></th>
+                     <th >뜻</th>
                 </tr>
-              </thead>
-              <tbody>
-                <tr th:each="row,rowStat : *{words}">
-                  <td th:text="${rowStat.count}">1</td>
-                  <td>
-                    <input class="form-control" th:field="*{words[__${rowStat.index}__].text}">
-                  </td>
-                  <td>
-                    <input class="form-control" th:field="*{meanings[__${rowStat.index}__].text}">
-                  </td>
-                </tr>
-              </tbody>
+                </thead>
+                <tbody>
+                    <tr th:each="row,rowStat : *{words}">
+                        <td style="text-align: center;"><b th:text="${rowStat.count}" >1 </b></td>
+                        <td>
+                          <input onkeyup="isDisabled()" class="form-control" th:field="*{words[__${rowStat.index}__].text}">
+                        </td>
+                        <td>
+                          <input onkeyup="isDisabled()" class="form-control" th:field="*{meanings[__${rowStat.index}__].text}">
+                        </td>
+                    </tr>
+                </tbody>
             </table>
-            <div th:if="${#fields.hasErrors('words')}" th:errors="*{words}" style="float:left; margin-right:1rem;" ></div>
-            <div th:if="${#fields.hasErrors('meanings')}" th:errors="*{meanings}"></div>
-            
-          <div class="submit">
-            <button class="btn btn-lg btn-primary" type="submit" name="save" th:text="#{word.create}">Add Word</button>    
-          </div>
         </form>
         
+        <link rel="stylesheet" th:href="@{/lib/jui-grid/dist/grid-jennifer.css}" />
         <script th:inline="javascript">
             window.onload = () => {
                 clearliTagClass();
                 addClassliTag(2);
+            }
+            
+            function isDisabled() {
+            	const inputTag = document.querySelectorAll("input.form-control");
+                let isInputNotEmpty = true;
+                for (i = 0; i < inputTag.length; i++) {
+                    if (empty(inputTag[i].value)) {
+                        isInputNotEmpty = false;
+                        break;
+                    }
+                }
+                
+                if (isInputNotEmpty) {
+                    document.querySelector("#save").removeAttribute("disabled");
+                }
             }
         </script>
     </th:block>
