@@ -4,6 +4,9 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
+
 public class UserDTO {
     
     CreateUser createUser;
@@ -19,8 +22,13 @@ public class UserDTO {
     
     public static class CreateUser {
         private String id;
+        
+        @NotEmpty
         private String username;
+        
+        @Size(min=6, message="비밀번호는 6 자 이상이어야 합니다." )
         private String password;
+        
         public String getId() {
             return id;
         }

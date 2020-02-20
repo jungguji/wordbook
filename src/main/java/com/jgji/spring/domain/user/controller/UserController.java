@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.jgji.spring.domain.user.model.User;
+import com.jgji.spring.domain.user.model.UserDTO.CreateUser;
 import com.jgji.spring.domain.user.model.UserDTO.UserProfile;
 import com.jgji.spring.domain.user.service.UserService;
 import com.jgji.spring.domain.word.service.WordService;
@@ -41,15 +42,15 @@ public class UserController {
     
     @GetMapping("/user/create")
     public String initCreationForm(Map<String, Object> model) {
-        User user = new User();
-        model.put("user", user);
+        CreateUser user = new CreateUser();
+        model.put("createUser", user);
         
         return "thymeleaf/createUserForm";
     }
     
     @PostMapping("/user/create")
-    public String processCreationForm(@Valid User user, BindingResult result) {
-        if (userService.isExistName(user.getUsername())) {
+    public String processCreationForm(@Valid CreateUser createUser, BindingResult result) {
+        if (userService.isExistName(createUser.getUsername())) {
             result.rejectValue("username", "username", "이미 존재하는 아이디 입니다.");
         }
         
@@ -57,7 +58,12 @@ public class UserController {
             return "thymeleaf/createUserForm";
         }
         
+        User user = new User();
+        user.setUsername(createUser.getUsername());
+        user.setPassword(createUser.getPassword());
+        
         this.userService.save(user);
+        
         return "redirect:/";
     }
     

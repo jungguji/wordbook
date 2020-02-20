@@ -6,8 +6,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
 
 
 @Entity
@@ -20,11 +18,9 @@ public class User {
     private String id;
     
     @Column(name = "username")
-    @NotEmpty
     private String username;
     
     @Column(name = "password")
-    @Size(min=6, message="비밀번호는 6 자 이상이어야 합니다." )
     private String password;
 
     public String getId() {

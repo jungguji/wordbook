@@ -14,7 +14,7 @@
                     <h3>Sign Up</h3>
                 </div>
                 <div class="card-body">
-                    <form th:action="@{/user/create}" th:object="${user}" class="form-horizontal" id="add-owner-form" method="post">
+                    <form th:action="@{/user/create}" th:object="${createUser}" class="form-horizontal" id="add-owner-form" method="post">
                         <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="alert alert-danger" role="alert" style="float:left; margin-right:1rem;" ></div>
                         <div class="input-group form-group">
                             <div class="input-group-prepend">
