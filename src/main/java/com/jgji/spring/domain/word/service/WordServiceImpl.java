@@ -11,17 +11,22 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.jgji.spring.domain.user.model.User;
 import com.jgji.spring.domain.user.service.UserService;
 import com.jgji.spring.domain.word.dao.WordDAO;
+import com.jgji.spring.domain.word.model.Row;
 import com.jgji.spring.domain.word.model.Word;
 
 @Service("wordService")
 public class WordServiceImpl implements WordService{
     final static String PASS_LIST = "pass";
     final static String FAIL_LIST = "fail";
+    final static String WORD_FIELD = "words";
+    final static String MEANING_FIELD = "meanings";
     
     @Autowired
     private WordDAO wordDAO;
@@ -205,5 +210,62 @@ public class WordServiceImpl implements WordService{
         List<Map<String, Object>> test = wordDAO.getFrequentFailWord(userId);
         
         return test;
+    }
+    
+    public BindingResult getCreateWordBindingResult(Word word, BindingResult bindingResult) {
+        
+        String wordRowErrorMsg = getRejectMessage(word, bindingResult, WORD_FIELD);
+        
+        System.out.println("wordRowErrorMsg >> " + wordRowErrorMsg);
+        String meaingRowErrorMsg = getRejectMessage(word, bindingResult, MEANING_FIELD);
+        
+        System.out.println("meaingRowErrorMsg >> " + meaingRowErrorMsg);
+        
+        bindingResult = setRejectValue(bindingResult, wordRowErrorMsg, WORD_FIELD);
+        bindingResult = setRejectValue(bindingResult, meaingRowErrorMsg, MEANING_FIELD);
+        
+        return bindingResult;
+    }
+    
+    private String getRejectMessage(Word word, BindingResult bindingResult, String fieldName) {
+        StringBuilder sb = new StringBuilder();
+        
+        int wordCount = word.getWords().size();
+        
+        List<Row> row;
+        if (WORD_FIELD.equals(fieldName)) {
+            row = word.getWords();
+        } else {
+            row = word.getMeanings();
+        }
+        
+        for (int i = 0; i < wordCount; i++) {
+            int wordsErrorCount = bindingResult.getFieldErrorCount(fieldName);
+            if (StringUtils.isEmpty(row.get(i).getText()) && wordsErrorCount == 0) {
+                
+                if (sb.length() != 0) {
+                    sb.append(", ");
+                }
+                sb.append((i+1));
+            }
+        }
+        
+        return sb.toString();
+    }
+    
+    private BindingResult setRejectValue(BindingResult bindingResult, String errorMsg, String fieldName) {
+        if (!StringUtils.isEmpty(errorMsg)) {
+            if (WORD_FIELD.equals(fieldName)) {
+                errorMsg += "행에 단어가 비어 있습니다.";
+            } else {
+                errorMsg += "행에 뜻이 비어 있습니다.";
+            }
+            
+            
+            System.out.println("fieldName >> " + fieldName + " error >> " + errorMsg);
+            bindingResult.rejectValue(fieldName, fieldName, errorMsg);
+        }
+        
+        return bindingResult;
     }
 }

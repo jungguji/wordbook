@@ -136,56 +136,26 @@ public class WordController {
         return "thymeleaf/createWordForm";
     }
     
+    @PostMapping(value="/word/add", params={"removeRow"})
+    public String removeRow(final Word word, final BindingResult bindingResult) {
+        if (word.getWords().size() > 1) {
+            word.getWords().remove(word.getWords().size()-1);
+            word.getMeanings().remove(word.getMeanings().size()-1);
+        }
+        
+        return "thymeleaf/createWordForm";
+    }
+    
     @PostMapping(value="/word/add", params= {"save"})
     public String createWord(@Valid Word word, BindingResult bindingResult) {
-        bindingResult = isValidation(word, bindingResult);
+        bindingResult = service.getCreateWordBindingResult(word, bindingResult);
         
         if (bindingResult.hasErrors()) {
             return "thymeleaf/createWordForm";
         }
+        
         service.insertWord(word);
         return "thymeleaf/index";
-    }
-    
-    private BindingResult isValidation(Word word, BindingResult bindingResult) {
-        StringBuilder wordRow = new StringBuilder();
-        StringBuilder meaningRow = new StringBuilder();
-        
-        int wordCount = word.getWords().size();
-        for (int i = 0; i < wordCount; i++) {
-            int wordsErrorCount = bindingResult.getFieldErrorCount("words");
-            if (StringUtils.isEmpty(word.getWords().get(i).getText()) && wordsErrorCount == 0) {
-                
-                if (wordRow.length() != 0) {
-                    wordRow.append(", ");
-                }
-                wordRow.append((i+1));
-            }
-            
-            int meaningsErrorCount = bindingResult.getFieldErrorCount("meanings");
-            if (StringUtils.isEmpty(word.getMeanings().get(i).getText()) && meaningsErrorCount == 0) {
-                
-                if (meaningRow.length() != 0) {
-                    meaningRow.append(", ");
-                }
-                
-                meaningRow.append((i+1));
-            }
-        }
-            
-        if (wordRow.length() != 0) {
-            wordRow.append("행에 단어가 비어 있습니다.");
-            
-            bindingResult.rejectValue("words", "words", wordRow.toString());
-        }
-        
-        if (meaningRow.length() != 0) {
-            meaningRow.append("행에 뜻이 비어 있습니다.");
-            
-            bindingResult.rejectValue("words", "words", meaningRow.toString());
-        }
-        
-        return bindingResult;
     }
     
     @PostMapping(value="/word/update", produces = "application/json")

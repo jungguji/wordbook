@@ -11,11 +11,12 @@
             뜻이 여러 가지 일 경우 "," 로 구분하여 입력하여야 합니다.
         </p>
         <form th:action="@{/word/add}" th:object="${word}" class="form-horizontal" id="add-owner-form" method="post">
-            <div class="alert alert-danger" th:if="${#fields.hasErrors('words')}" th:errors="*{words}" role="alert">
-            </div>
-            <div class="submit">
-                <button class="btn btn-primary" type="submit" id="save" name="save" th:text="#{word.create}" style="float:right;">Add Word</button>
-                <button class="btn btn-primary" type="submit" id="addRow" name="addRow" th:text="#{word.row.add}" style="float:right;  margin-right: 1rem">Add row</button>
+            <div class="alert alert-danger" th:if="${#fields.hasErrors('words')}" th:errors="*{words}" role="alert"></div>
+            <div class="alert alert-danger" th:if="${#fields.hasErrors('meanings')}" th:errors="*{meanings}" role="alert"></div>
+            <div class="submit" style="float: right">
+                <button class="btn btn-success button-margin" type="submit" id="save" name="save" th:text="#{word.create}" disabled>Add Word</button>
+                <button class="btn btn-primary button-margin" type="submit" id="addRow" name="addRow" th:text="#{word.row.add}">Add row</button>
+                <button class="btn btn-danger" type="submit" id="removeRow" name="removeRow" onclick="remove()">Remove Row</button>
             </div>
             <br />
             <br />
@@ -42,10 +43,20 @@
         </form>
         
         <link rel="stylesheet" th:href="@{/lib/jui-grid/dist/grid-jennifer.css}" />
+        <style>
+            .button-margin {
+                margin-right: 1rem;
+            }
+        </style>
         <script th:inline="javascript">
             window.onload = () => {
                 clearliTagClass();
                 addClassliTag(2);
+                isDisabled();
+            }
+            
+            function remove() {
+            	isDisabled();
             }
             
             function isDisabled() {
