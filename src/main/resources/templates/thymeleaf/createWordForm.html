@@ -16,7 +16,7 @@
             <div class="submit" style="float: right">
                 <button class="btn btn-success button-margin" type="submit" id="save" name="save" th:text="#{word.create}" disabled>Add Word</button>
                 <button class="btn btn-primary button-margin" type="submit" id="addRow" name="addRow" th:text="#{word.row.add}">Add row</button>
-                <button class="btn btn-danger" type="submit" id="removeRow" name="removeRow" onclick="remove()">Remove Row</button>
+                <button class="btn btn-danger" type="submit" id="removeRow" name="removeRow" onclick="remove()" disabled>Remove Row</button>
             </div>
             <br />
             <br />
@@ -52,16 +52,26 @@
             window.onload = () => {
                 clearliTagClass();
                 addClassliTag(2);
-                isDisabled();
+                isSaveDisabled();
+                isRemoveDisabeld();
             }
             
             function remove() {
             	isDisabled();
             }
             
-            function isDisabled() {
+            function isRemoveDisabeld() {
+            	if (document.querySelectorAll("input.form-control").length === 2) {
+                    document.querySelector("#removeRow").setAttribute("disabled", "disabled");
+                } else {
+                    document.querySelector("#removeRow").removeAttribute("disabled");
+                }
+            }
+            
+            function isSaveDisabled() {
             	const inputTag = document.querySelectorAll("input.form-control");
                 let isInputNotEmpty = true;
+                
                 for (i = 0; i < inputTag.length; i++) {
                     if (empty(inputTag[i].value)) {
                         isInputNotEmpty = false;
