@@ -12,30 +12,26 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.jgji.spring.domain.user.model.User;
 import com.jgji.spring.domain.word.model.Word;
+import com.jgji.spring.domain.word.repository.WordMapper;
 
 @Repository
 public class WordDAO {
     @PersistenceContext
     private EntityManager em;
     
+    @Autowired
+    private WordMapper wordMapper;
+    
     public List<Word> findAllByUserId(String userId) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("    SELECT                      ");
-        sb.append("        w                       ");
-        sb.append("    FROM                        ");
-        sb.append("        Word w                  ");
-        sb.append("    JOIN                        ");
-        sb.append("        w.user u                ");
-        sb.append("    WHERE                       ");
-        sb.append("        u.id = :userId          ");
+        System.out.println("ASDASD");
+        List<Word> list = wordMapper.findAllByUserId(userId);
         
-        return em.createQuery(sb.toString(), Word.class)
-            .setParameter("userId", userId)
-            .getResultList();
+        return list;
     }
     
     public List<Word> getToDayWordList(Word word, String userId) {
