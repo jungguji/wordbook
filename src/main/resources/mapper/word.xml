@@ -14,4 +14,43 @@
         WHERE             
             w.users_id = ${id}
     </select>
+    
+     <select id="findToDayWordListByUserId" parameterType="hashmap" resultType="word">
+     <![CDATA[
+        SELECT                      
+            w                       
+        FROM                        
+            Word w                  
+        WHERE
+            w.users_id = ${id}
+        AND                         
+            w.nextDate <= #{date}
+      ]]>               
+      </select>
+      
+      
+      <select id="findWordListByUserIdAndWordId" parameterType="hashmap" resultType="word">
+            SELECT            
+                *             
+            FROM              
+                Word w        
+            WHERE             
+                w.users_id = ${userId}
+            AND               
+                w.id IN
+            <foreach collection="wordIdList" item="id" index="idx" separator=","
+            open="(" close=")">
+                ${id}
+            </foreach>
+        </select>
+        
+        <update id="updateSuccessWord" parameterType="word">
+            UPDATE
+                Word
+            SET
+                next_date = #{nextDate}
+                , level = ${level}
+            WHERE
+                id = ${id}
+        </update>
 </mapper>

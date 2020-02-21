@@ -15,8 +15,7 @@ public class Word {
     private String meaning;
     private LocalDate nextDate;
     private int level;
-    
-    private User user;
+    private String usersId;
     
     private List<Row> words = new ArrayList<Row>();
     
@@ -57,13 +56,12 @@ public class Word {
         this.level = level;
     }
     
-    public User getUser() {
-        return user;
+    public String getUsersId() {
+        return usersId;
     }
-    public void setUser(User user) {
-        this.user = user;
+    public void setUsersId(String usersId) {
+        this.usersId = usersId;
     }
-    
     public List<Row> getWords() {
         return words;
     }
