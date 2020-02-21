@@ -7,7 +7,7 @@ public class WordDTO {
     public AddWord getAddWord() {
         return new AddWord();
     }
-
+ 
     public static class AddWord {
         private String word;
         private String meaning;
