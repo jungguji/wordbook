@@ -28,7 +28,6 @@ public class WordDAO {
     private WordMapper wordMapper;
     
     public List<Word> findAllByUserId(String userId) {
-        System.out.println("ASDASD");
         List<Word> list = wordMapper.findAllByUserId(userId);
         
         return list;
