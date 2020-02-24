@@ -24,7 +24,7 @@ public interface WordMapper {
     @Select("SELECT * FROM Word w WHERE w.users_id = #{userId} ORDER BY RAND() limit 10")
     List<Word> findRandomWordListByUserId(@Param("userId") String userId);
     
-    @Select("SELECT * FROM Word w ORDER BY RAND() LIMIT 3")
+    @Select("SELECT * FROM Word w ORDER BY RAND() LIMIT 10")
     List<Word> getRandomByAllWordList();
     
     List<Word> findWordListByUserIdAndWordId(List<String> list);
