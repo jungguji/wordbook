@@ -32,10 +32,10 @@
                     <tr th:each="row,rowStat : *{words}">
                         <td style="text-align: center;"><b th:text="${rowStat.count}" >1 </b></td>
                         <td>
-                          <input onkeyup="isDisabled()" class="form-control" th:field="*{words[__${rowStat.index}__].text}">
+                          <input onkeyup="isSaveDisabled()" class="form-control" th:field="*{words[__${rowStat.index}__].text}">
                         </td>
                         <td>
-                          <input onkeyup="isDisabled()" class="form-control" th:field="*{meanings[__${rowStat.index}__].text}">
+                          <input onkeyup="isSaveDisabled()" class="form-control" th:field="*{meanings[__${rowStat.index}__].text}">
                         </td>
                     </tr>
                 </tbody>
@@ -57,7 +57,7 @@
             }
             
             function remove() {
-            	isDisabled();
+            	isRemoveDisabeld();
             }
             
             function isRemoveDisabeld() {
