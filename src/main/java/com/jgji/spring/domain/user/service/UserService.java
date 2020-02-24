@@ -66,7 +66,7 @@ public class UserService implements UserDetailsService {
         return user;
     }
     
-    public String getUserIdByUserName() {
+    public String getCurrentUserId() {
         User user = userRepository.findByUserName(getCurrentUserName());
         return user.getId();
     }
