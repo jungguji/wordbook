@@ -13,25 +13,25 @@ public interface WordService {
     
     List<Word> findAllByUserId();
     
-//    List<Word> getToDayWordList(Word word);
-//    
-//    List<Word> getRandomWordList();
-//    
-//    List<Word> getRandomByAllWordList();
-//
+    List<Word> getToDayWordList(Word word);
+    
+    List<Word> getRandomWordList();
+    
+    List<Word> getRandomByAllWordList();
+
     String updateNextDateAndInsert(String[] answerIds);
-//    
-//    boolean insertRandomFailWord(String[] answerIds);
-//    
-//    String insertWord(MultipartFile file) throws IOException;
-//    
-//    String insertWord(Word word);
-//    
-//    boolean updateMeaning(Word word);
-//    
-//    void delete(String[] args);
-//    
-//    List<Map<String, Object>> getFrequentFailWord(String userId);
-//    
-//    BindingResult getCreateWordBindingResult(Word word, BindingResult bindingResult);
+    
+    String insertRandomFailWord(String[] answerIds);
+    
+    String insertWordByFileUpload(MultipartFile file) throws IOException;
+    
+    String insertWord(Word word);
+    
+    boolean updateMeaning(Word word);
+    
+    void delete(String[] args);
+    
+    List<Map<String, Object>> getFrequentFailWord(String userId);
+    
+    BindingResult getCreateWordBindingResult(Word word, BindingResult bindingResult);
 }

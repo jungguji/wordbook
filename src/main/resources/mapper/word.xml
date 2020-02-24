@@ -18,27 +18,25 @@
      <select id="findToDayWordListByUserId" parameterType="hashmap" resultType="word">
      <![CDATA[
         SELECT                      
-            w                       
+            *                       
         FROM                        
             Word w                  
         WHERE
             w.users_id = ${id}
         AND                         
-            w.nextDate <= #{date}
+            w.next_date <= #{date}
       ]]>               
       </select>
       
       
-      <select id="findWordListByUserIdAndWordId" parameterType="hashmap" resultType="word">
+      <select id="findWordListByUserIdAndWordId" parameterType="list" resultType="word">
             SELECT            
                 *             
             FROM              
                 Word w        
             WHERE             
-                w.users_id = ${userId}
-            AND               
                 w.id IN
-            <foreach collection="wordIdList" item="id" index="idx" separator=","
+            <foreach collection="list" item="id" index="idx" separator=","
             open="(" close=")">
                 ${id}
             </foreach>
@@ -53,4 +51,22 @@
             WHERE
                 id = ${id}
         </update>
+        
+        <insert id="insertBatchWord">
+            INSERT INTO WORD(word, meaning, next_date, users_id)
+            VALUES
+            <foreach collection="list" item="word" index="idx">
+                <if test="idx > 0"> , </if>
+                (#{word.word}, #{word.meaning}, #{word.nextDate}, ${word.usersId})
+            </foreach>
+        </insert>
+        
+        <delete id="delete">
+            DELETE FROM Word
+            WHERE id IN
+            <foreach collection="list" item="id" separator=","
+            open="(" close=")">
+                ${id}
+            </foreach>
+        </delete>
 </mapper>
