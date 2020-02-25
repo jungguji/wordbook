@@ -26,6 +26,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.jgji.spring.domain.word.model.Row;
 import com.jgji.spring.domain.word.model.Word;
+import com.jgji.spring.domain.word.model.WordDTO.AddWord;
 import com.jgji.spring.domain.word.service.WordService;
 
 @Controller
@@ -106,7 +107,7 @@ public class WordController {
     }
     
     @GetMapping(value="/word/add")
-    public String getWordAdd(Word word, Model model) throws ParseException, JsonProcessingException {
+    public String getWordAdd(AddWord word, Model model) throws ParseException, JsonProcessingException {
         word.getWords().add(new Row());
         word.getMeanings().add(new Row());
         
@@ -122,13 +123,13 @@ public class WordController {
     @ResponseBody
     public String createWordByFileUpload(@RequestParam(value="file") MultipartFile[] files) throws ParseException, IOException {
         MultipartFile file = files[0];
-        String words = service.insertWord(file);
+        String words = service.insertWordByFileUpload(file);
         
         return words;
     }
     
     @PostMapping(value="/word/add", params={"addRow"})
-    public String addRow(final Word word, final BindingResult bindingResult) {
+    public String addRow(final AddWord word, final BindingResult bindingResult) {
         word.getWords().add(new Row());
         word.getMeanings().add(new Row());
         
@@ -136,7 +137,7 @@ public class WordController {
     }
     
     @PostMapping(value="/word/add", params={"removeRow"})
-    public String removeRow(final Word word, final BindingResult bindingResult) {
+    public String removeRow(final AddWord word, final BindingResult bindingResult) {
         if (word.getWords().size() > 1) {
             word.getWords().remove(word.getWords().size()-1);
             word.getMeanings().remove(word.getMeanings().size()-1);
@@ -146,7 +147,7 @@ public class WordController {
     }
     
     @PostMapping(value="/word/add", params= {"save"})
-    public String createWord(@Valid Word word, BindingResult bindingResult) {
+    public String createWord(@Valid AddWord word, BindingResult bindingResult) {
         bindingResult = service.getCreateWordBindingResult(word, bindingResult);
         
         if (bindingResult.hasErrors()) {

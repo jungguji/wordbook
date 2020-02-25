@@ -20,6 +20,7 @@ import com.jgji.spring.domain.user.service.UserService;
 import com.jgji.spring.domain.word.dao.WordDAO;
 import com.jgji.spring.domain.word.model.Row;
 import com.jgji.spring.domain.word.model.Word;
+import com.jgji.spring.domain.word.model.WordDTO.AddWord;
 
 @Service("wordService")
 public class WordServiceImpl implements WordService{
@@ -94,7 +95,7 @@ public class WordServiceImpl implements WordService{
         return map;
     }
     
-    public String insertWord(MultipartFile file) throws IOException {
+    public String insertWordByFileUpload(MultipartFile file) throws IOException {
         StringBuffer result = new StringBuffer();
         InputStreamReader isr = null;
         BufferedReader br = null;
@@ -132,10 +133,9 @@ public class WordServiceImpl implements WordService{
         return result.toString();
     }
     
-    public String insertWord(Word word) {
+    public String insertWord(AddWord word) {
         User user = userService.getUserByUserName(userService.getCurrentUserName());
         
-        word.setUser(user);
         int wordCount = word.getWords().size();
         for (int i = 0; i < wordCount; i++) {
             Word insertNewWord = setWordAttribute(word.getWords().get(i).getText(), word.getMeanings().get(i).getText(), user);
@@ -208,7 +208,7 @@ public class WordServiceImpl implements WordService{
         return test;
     }
     
-    public BindingResult getCreateWordBindingResult(Word word, BindingResult bindingResult) {
+    public BindingResult getCreateWordBindingResult(AddWord word, BindingResult bindingResult) {
         
         String wordRowErrorMsg = getRejectMessage(word, bindingResult, WORD_FIELD);
         String meaingRowErrorMsg = getRejectMessage(word, bindingResult, MEANING_FIELD);
@@ -219,7 +219,7 @@ public class WordServiceImpl implements WordService{
         return bindingResult;
     }
     
-    private String getRejectMessage(Word word, BindingResult bindingResult, String fieldName) {
+    private String getRejectMessage(AddWord word, BindingResult bindingResult, String fieldName) {
         StringBuilder sb = new StringBuilder();
         
         int wordCount = word.getWords().size();

@@ -8,6 +8,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.jgji.spring.domain.word.model.Word;
+import com.jgji.spring.domain.word.model.WordDTO.AddWord;
 
 public interface WordService {
     
@@ -23,9 +24,9 @@ public interface WordService {
     
     boolean insertRandomFailWord(String[] answerIds);
     
-    String insertWord(MultipartFile file) throws IOException;
+    String insertWordByFileUpload(MultipartFile file) throws IOException;
     
-    String insertWord(Word word);
+    String insertWord(AddWord word);
     
     boolean updateMeaning(Word word);
     
@@ -33,5 +34,5 @@ public interface WordService {
     
     List<Map<String, Object>> getFrequentFailWord(String userId);
     
-    BindingResult getCreateWordBindingResult(Word word, BindingResult bindingResult);
+    BindingResult getCreateWordBindingResult(AddWord word, BindingResult bindingResult);
 }

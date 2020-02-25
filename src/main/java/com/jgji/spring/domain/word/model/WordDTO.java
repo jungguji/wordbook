@@ -1,5 +1,8 @@
 package com.jgji.spring.domain.word.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class WordDTO {
     
     AddWord addWord;
@@ -11,6 +14,8 @@ public class WordDTO {
     public static class AddWord {
         private String word;
         private String meaning;
+        private List<Row> words = new ArrayList<Row>();
+        private List<Row> meanings = new ArrayList<Row>();
         
         public String getWord() {
             return word;
@@ -23,6 +28,13 @@ public class WordDTO {
         }
         public void setMeaning(String meaning) {
             this.meaning = meaning;
+        }
+        
+        public List<Row> getWords() {
+            return words;
+        }
+        public List<Row> getMeanings() {
+            return meanings;
         }
     }
 }

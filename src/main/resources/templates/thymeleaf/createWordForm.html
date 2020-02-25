@@ -10,7 +10,7 @@
             테스트 할 단어를 추가 하는 페이지 입니다. <br />
             뜻이 여러 가지 일 경우 "," 로 구분하여 입력하여야 합니다.
         </p>
-        <form th:action="@{/word/add}" th:object="${word}" class="form-horizontal" id="add-owner-form" method="post">
+        <form th:action="@{/word/add}" th:object="${addWord}" class="form-horizontal" id="add-owner-form" method="post">
             <div class="alert alert-danger" th:if="${#fields.hasErrors('words')}" th:errors="*{words}" role="alert"></div>
             <div class="alert alert-danger" th:if="${#fields.hasErrors('meanings')}" th:errors="*{meanings}" role="alert"></div>
             <div class="submit" style="float: right">
