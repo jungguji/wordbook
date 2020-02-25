@@ -88,7 +88,6 @@ public class UserController {
         userProfile.setUserName(user.getUsername());
         
         for (Map<String, Object> map : wrongWordList) {
-            System.out.println(map.toString());
             userProfile.setMostWrongWord((String) map.get("mostWrongWord"));
             userProfile.setMostWrongCount((BigInteger) map.get("mostWrongCount"));
         }

@@ -40,12 +40,12 @@ public class WordServiceImpl implements WordService{
     }
     
     public List<Word> getToDayWordList(Word word) {
-        String userId = getUserId();
+        String userId = userService.getUserIdByUserName();
         return wordDAO.getToDayWordList(word, userId);
     }
     
     public List<Word> getRandomWordList() {
-        String userId = getUserId();
+        String userId = userService.getUserIdByUserName();
         return wordDAO.getRandomWordList(userId);
     }
     
@@ -53,10 +53,6 @@ public class WordServiceImpl implements WordService{
         return wordDAO.getRandomByAllWordList();
     }
     
-    private String getUserId() {
-        return userService.getUserIdByUserName(userService.getCurrentUserName());
-    }
-
     public boolean updateNextDateAndInsert(String[] answerIds) {
         Map<String, List<String>> passAndFail = getPassAndFailWordList(answerIds);
         List<String> passWordList = passAndFail.get(PASS_LIST);
@@ -215,11 +211,7 @@ public class WordServiceImpl implements WordService{
     public BindingResult getCreateWordBindingResult(Word word, BindingResult bindingResult) {
         
         String wordRowErrorMsg = getRejectMessage(word, bindingResult, WORD_FIELD);
-        
-        System.out.println("wordRowErrorMsg >> " + wordRowErrorMsg);
         String meaingRowErrorMsg = getRejectMessage(word, bindingResult, MEANING_FIELD);
-        
-        System.out.println("meaingRowErrorMsg >> " + meaingRowErrorMsg);
         
         bindingResult = setRejectValue(bindingResult, wordRowErrorMsg, WORD_FIELD);
         bindingResult = setRejectValue(bindingResult, meaingRowErrorMsg, MEANING_FIELD);
@@ -261,8 +253,6 @@ public class WordServiceImpl implements WordService{
                 errorMsg += "행에 뜻이 비어 있습니다.";
             }
             
-            
-            System.out.println("fieldName >> " + fieldName + " error >> " + errorMsg);
             bindingResult.rejectValue(fieldName, fieldName, errorMsg);
         }
         
