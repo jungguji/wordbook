@@ -6,8 +6,6 @@ import java.util.List;
 
 import org.apache.ibatis.type.Alias;
 
-import com.jgji.spring.domain.user.model.User;
-
 @Alias("word")
 public class Word {
     private int id;
