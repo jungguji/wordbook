@@ -4,22 +4,37 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.ibatis.type.Alias;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.jgji.spring.domain.user.model.User;
 
-@Alias("word")
+@Entity
+@Table(name = "word")
 public class Word {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    
     private String word;
     private String meaning;
     private LocalDate nextDate;
     private int level;
     
+    @ManyToOne
+    @JoinColumn(name = "users_id")
     private User user;
     
+    @Transient
     private List<Row> words = new ArrayList<Row>();
     
+    @Transient
     private List<Row> meanings = new ArrayList<Row>();
     
     public int getId() {
