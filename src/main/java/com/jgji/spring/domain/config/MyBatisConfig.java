@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 @Configuration
-@MapperScan(basePackages = "com.jgji.spring.domain.word.repository")
+@MapperScan({"com.jgji.spring.domain.word.repository", "com.jgji.spring.domain.user.repository"})
 public class MyBatisConfig {
     
     @Bean
@@ -21,7 +21,8 @@ public class MyBatisConfig {
          SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
          
          bean.setDataSource(dataSource);
-         bean.setTypeAliasesPackage("com.jgji.spring.domain.word.model");
+         bean.setTypeAliasesPackage("com.jgji.spring.domain");
+         
          bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:mapper/*.xml"));
          
          Properties prop = new Properties();
