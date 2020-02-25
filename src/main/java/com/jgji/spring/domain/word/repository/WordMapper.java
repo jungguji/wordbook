@@ -48,6 +48,36 @@ public interface WordMapper {
     })
     List<Map<String, Object>> findFrequentFailWord(@Param("userId") String userId);
     
+    @Select(" SELECT                                        " + 
+            "     w.word as word                            " +
+            "     , COUNT(1) as qty                         " + 
+            " FROM                                          " + 
+            "     Word w                                    " + 
+            " WHERE                                         " +
+            "    w.users_id = ${userId}                     " + 
+            " GROUP BY                                      " + 
+            "     w.word                                    " + 
+            " HAVING                                        " + 
+            "     COUNT(1) = (                              " + 
+            "             SELECT                            " + 
+            "                 MAX(cnt)                      " + 
+            "             FROM (                            " + 
+            "                     SELECT                    " + 
+            "                         COUNT(1) AS cnt       " + 
+            "                     FROM                      " + 
+            "                         Word w                " + 
+            "                     WHERE                     " + 
+            "                         w.users_id = ${userId}" + 
+            "                     GROUP BY                  " + 
+            "                         w.word                " + 
+            "                  ) AS maxfrom                 " + 
+            "             )                                 ")
+    @Results(value = {
+            @Result(property = "word", column = "word")
+            , @Result(property = "qty", column = "qty")
+    })
+     List<Map<String, Object>> findMostWrongWord(@Param("userId") String userId);
+    
     void updateSuccessWord(Word word);
     
     @Update("UPDATE Word SET meaning = #{meaning} WHERE id = ${id}")

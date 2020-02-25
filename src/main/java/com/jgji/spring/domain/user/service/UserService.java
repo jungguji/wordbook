@@ -21,20 +21,28 @@ import org.springframework.util.StringUtils;
 
 import com.jgji.spring.domain.user.model.User;
 import com.jgji.spring.domain.user.model.UserDTO.UserProfile;
-import com.jgji.spring.domain.user.model.UserRepository;
+import com.jgji.spring.domain.user.repository.UserMapper;
+import com.jgji.spring.domain.word.repository.WordMapper;
 
 @Service
 public class UserService implements UserDetailsService {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserMapper userMapper;
+    
+    @Autowired
+    private WordMapper wordMapper;
     
     @Autowired
     private BCryptPasswordEncoder bcryptPasswordEncoder;
     
+    public int create(String username, String password) {
+        return userMapper.create(username, bcryptPasswordEncoder.encode(password));
+    }
+    
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUserName(username);
+        User user = userMapper.findByUserName(username);
         
         if (user == null) {
             return null;
@@ -46,10 +54,10 @@ public class UserService implements UserDetailsService {
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), authorities);
     }
     
-    public User save(User user) {
+    public int updatePassword(User user) {
         user.setPassword(bcryptPasswordEncoder.encode(user.getPassword()));
         
-        return userRepository.save(user);
+        return userMapper.updatePassword(user.getUsername(), user.getPassword());
     }
     
     public String getCurrentUserName() {
@@ -62,22 +70,22 @@ public class UserService implements UserDetailsService {
     }
     
     public User getUserByUserName(String username) {
-        User user = userRepository.findByUserName(username);
+        User user = userMapper.findByUserName(username);
         return user;
     }
     
     public String getCurrentUserId() {
-        User user = userRepository.findByUserName(getCurrentUserName());
+        User user = userMapper.findByUserName(getCurrentUserName());
         return user.getId();
     }
     
     public String getUserIdByUserName(String userName) {
-        User user = userRepository.findByUserName(userName);
+        User user = userMapper.findByUserName(userName);
         return user.getId();
     }
     
     public boolean isExistName(String userName) {
-        if (ObjectUtils.isEmpty(userRepository.findByUserName(userName))) {
+        if (ObjectUtils.isEmpty(userMapper.findByUserName(userName))) {
             return false;
         }
         
@@ -89,7 +97,7 @@ public class UserService implements UserDetailsService {
         String tempPassword = getTempPassword();
         
         updateUser.setPassword(tempPassword);
-        save(updateUser);
+        updatePassword(updateUser);
         
         return tempPassword;
     }
@@ -121,7 +129,7 @@ public class UserService implements UserDetailsService {
         User user = getCurrentUser();
         user.setPassword(changePassword.getNewPassword());
         
-        save(user);
+        updatePassword(user);
         
         return "성공";
     }
@@ -191,31 +199,8 @@ public class UserService implements UserDetailsService {
     }
     
     public List<Map<String, Object>> getMostWrongWord(String userId) {
-        List<Object[]> findList = userRepository.findMostWrongWord(userId);
+        List<Map<String, Object>> result =  wordMapper.findMostWrongWord(userId);
         
-        List<String> columns = new ArrayList<String>();
-        columns.add("mostWrongWord");
-        columns.add("mostWrongCount");
-        
-        return convertListMap(findList, columns);
-    }
-    
-    public List<Map<String, Object>> convertListMap(List<Object[]> resultList, List<String> columns) {
-        List<Map<String,Object>> mapList = new ArrayList<Map<String,Object>>();
-        Map<String, Object> itemMap;
-        
-        Iterator<Object[]> it = resultList.iterator();
-        while(it.hasNext()) {
-            Object[] item = it.next();
-            
-            itemMap = new HashMap<String, Object>();
-            int idx = 0;
-            
-            for(String key : columns) {
-                itemMap.put(key, item[idx++]);
-            }
-            mapList.add(itemMap);
-        }
-        return mapList;
+        return result;
     }
 }
