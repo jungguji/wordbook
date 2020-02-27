@@ -14,7 +14,7 @@ public interface WordService {
     
     List<Word> findAllByUserId();
     
-    List<Word> getToDayWordList(Word word);
+    List<Word> findToDayWordList(Word word);
     
     List<Word> getRandomWordList();
     

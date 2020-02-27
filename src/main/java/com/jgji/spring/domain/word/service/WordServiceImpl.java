@@ -11,16 +11,17 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.jgji.spring.domain.user.model.User;
 import com.jgji.spring.domain.user.service.UserService;
-import com.jgji.spring.domain.word.dao.WordDAO;
 import com.jgji.spring.domain.word.model.Row;
 import com.jgji.spring.domain.word.model.Word;
 import com.jgji.spring.domain.word.model.WordDTO.AddWord;
+import com.jgji.spring.domain.word.repository.WordRepository;
 
 @Service("wordService")
 public class WordServiceImpl implements WordService{
@@ -30,57 +31,69 @@ public class WordServiceImpl implements WordService{
     final static String MEANING_FIELD = "meanings";
     
     @Autowired
-    private WordDAO wordDAO;
+    private WordRepository repository;
     
     @Autowired
     private UserService userService;
     
     public List<Word> findAllByUserId() {
         String userId = userService.getUserIdByUserName();
-        return wordDAO.findAllByUserId(userId);
+        return repository.findByUserId(userId);
     }
     
-    public List<Word> getToDayWordList(Word word) {
+    public List<Word> findToDayWordList(Word word) {
         String userId = userService.getUserIdByUserName();
-        return wordDAO.getToDayWordList(word, userId);
+        return repository.findByUserIdAndNextDateLessThanEqual(userId, word.getNextDate());
     }
     
     public List<Word> getRandomWordList() {
         String userId = userService.getUserIdByUserName();
-        return wordDAO.getRandomWordList(userId);
+        return repository.findByUserIdOrderByRandom(userId);
     }
     
     public List<Word> getRandomByAllWordList() {
-        return wordDAO.getRandomByAllWordList();
+        return repository.findOrderByRandom();
     }
     
+    @Transactional
     public boolean updateNextDateAndInsert(String[] answerIds) {
-        Map<String, List<String>> passAndFail = getPassAndFailWordList(answerIds);
-        List<String> passWordList = passAndFail.get(PASS_LIST);
-        List<String> failWordList = passAndFail.get(FAIL_LIST);
+        Map<String, List<Integer>> passAndFail = getPassAndFailWordList(answerIds);
+        List<Integer> passWordList = passAndFail.get(PASS_LIST);
+        List<Integer> failWordList = passAndFail.get(FAIL_LIST);
+        
+        List<Word> passList = repository.findByIdIn(passWordList);
+        List<Word> failList = repository.findByIdIn(failWordList);
+        
         User user = userService.getUserByUserName(userService.getCurrentUserName());
         
-        return wordDAO.updateNextDateAndInsert(passWordList, failWordList, user);
+        repository.updateSuccessWord(passList, user.getId());
+        repository.insertFailWord(failList, user);
+        
+        return true;
     }
     
+    @Transactional
     public boolean insertRandomFailWord(String[] answerIds) {
-        Map<String, List<String>> passAndFail = getPassAndFailWordList(answerIds);
-        List<String> passWordList = passAndFail.get(PASS_LIST);
-        List<String> failWordList = passAndFail.get(FAIL_LIST);
+        Map<String, List<Integer>> passAndFail = getPassAndFailWordList(answerIds);
+        List<Integer> failWordList = passAndFail.get(FAIL_LIST);
         User user = userService.getUserByUserName(userService.getCurrentUserName());
         
-        return wordDAO.insertRandomFailWord(passWordList, failWordList, user);
+        List<Word> wordList = repository.findByIdIn(failWordList);
+        
+        repository.insertFailWord(wordList, user);
+        
+        return true;
     }
     
-    private Map<String, List<String>> getPassAndFailWordList(String[] answerIds) {
-        List<String> passWordList = new ArrayList<String>();
-        List<String> failWordList = new ArrayList<String>();
+    private Map<String, List<Integer>> getPassAndFailWordList(String[] answerIds) {
+        List<Integer> passWordList = new ArrayList<Integer>();
+        List<Integer> failWordList = new ArrayList<Integer>();
         
         for (int i = 0; i < answerIds.length; i++) {
             if (answerIds[i].endsWith("_1")) {
-                passWordList.add(answerIds[i].split("_")[0]);
+                passWordList.add(Integer.parseInt(answerIds[i].split("_")[0]));
             } else {
-                String id = answerIds[i].split("_")[0];
+                int id = Integer.parseInt(answerIds[i].split("_")[0]);
                 
                 if (!failWordList.contains(id)) {
                     failWordList.add(id);
@@ -88,13 +101,14 @@ public class WordServiceImpl implements WordService{
             }
         }
         
-        Map<String, List<String>> map = new HashMap<String, List<String>>();
+        Map<String, List<Integer>> map = new HashMap<String, List<Integer>>();
         map.put(PASS_LIST, passWordList);
         map.put(FAIL_LIST, failWordList);
         
         return map;
     }
     
+    @Transactional
     public String insertWordByFileUpload(MultipartFile file) throws IOException {
         StringBuffer result = new StringBuffer();
         InputStreamReader isr = null;
@@ -115,7 +129,7 @@ public class WordServiceImpl implements WordService{
                 
                 Word insertNewWord = setWordAttribute(wordAndMeaning[0], wordAndMeaning[1], user);
                 
-                wordDAO.insertWord(insertNewWord);
+                repository.save(insertNewWord);
                 
                 if (i != 0) {
                     result.append(", ");
@@ -133,6 +147,7 @@ public class WordServiceImpl implements WordService{
         return result.toString();
     }
     
+    @Transactional
     public String insertWord(AddWord word) {
         User user = userService.getUserByUserName(userService.getCurrentUserName());
         
@@ -140,7 +155,7 @@ public class WordServiceImpl implements WordService{
         for (int i = 0; i < wordCount; i++) {
             Word insertNewWord = setWordAttribute(word.getWords().get(i).getText(), word.getMeanings().get(i).getText(), user);
             
-            wordDAO.insertWord(insertNewWord);
+            repository.save(insertNewWord);
         }
         
         return "good";
@@ -194,16 +209,21 @@ public class WordServiceImpl implements WordService{
     }
     
     public boolean updateMeaning(Word word) {
-        wordDAO.updateMeaning(word);
+        repository.save(word);
         return true;
     }
     
     public void delete(String[] rowIds) {
-        wordDAO.delete(rowIds);
+        List<Integer> list = new ArrayList<Integer>();
+        for (int i = 0 ; i < rowIds.length; i++) {
+            list.add(Integer.parseInt(rowIds[i]));
+        }
+        
+        repository.deleteByIdIn(list);
     }
     
     public List<Map<String, Object>> getFrequentFailWord(String userId) {
-        List<Map<String, Object>> test = wordDAO.getFrequentFailWord(userId);
+        List<Map<String, Object>> test = repository.findFrequentFailWord(userId);
         
         return test;
     }

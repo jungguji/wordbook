@@ -45,7 +45,7 @@ public class WordController {
         
         ObjectMapper objMapper = getObjectMapperConfig();
         
-        String jsonText = objMapper.writeValueAsString(service.getToDayWordList(word));
+        String jsonText = objMapper.writeValueAsString(service.findToDayWordList(word));
         model.addAttribute("wordList", jsonText);
         model.addAttribute("isExist", true);
         
@@ -76,6 +76,7 @@ public class WordController {
         ObjectMapper objMapper = getObjectMapperConfig();
         
         String jsonText = objMapper.writeValueAsString(service.getRandomByAllWordList());
+        
         model.addAttribute("wordList", jsonText);
         model.addAttribute("isExist", true);
         
