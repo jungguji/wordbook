@@ -1,8 +1,6 @@
 package com.jgji.spring.domain.user.service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -21,7 +19,8 @@ import org.springframework.util.StringUtils;
 
 import com.jgji.spring.domain.user.model.User;
 import com.jgji.spring.domain.user.model.UserDTO.UserProfile;
-import com.jgji.spring.domain.user.model.UserRepository;
+import com.jgji.spring.domain.user.repository.UserRepository;
+import com.jgji.spring.domain.util.Utils;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -197,25 +196,6 @@ public class UserService implements UserDetailsService {
         columns.add("mostWrongWord");
         columns.add("mostWrongCount");
         
-        return convertListMap(findList, columns);
-    }
-    
-    public List<Map<String, Object>> convertListMap(List<Object[]> resultList, List<String> columns) {
-        List<Map<String,Object>> mapList = new ArrayList<Map<String,Object>>();
-        Map<String, Object> itemMap;
-        
-        Iterator<Object[]> it = resultList.iterator();
-        while(it.hasNext()) {
-            Object[] item = it.next();
-            
-            itemMap = new HashMap<String, Object>();
-            int idx = 0;
-            
-            for(String key : columns) {
-                itemMap.put(key, item[idx++]);
-            }
-            mapList.add(itemMap);
-        }
-        return mapList;
+        return Utils.convertListMap(findList, columns);
     }
 }
