@@ -14,4 +14,4 @@
 
 해당 프로젝트는 [Fontawesome](https://fontawesome.com/) 이 사용되었으므로 GPL 라이센스가 적용되어 있습니다.
 
-[https://github.com/jungguji/wordbook](https://github.com/jungguji/wordbook)
+[https://github.com/jungguji](https://github.com/jungguji)
