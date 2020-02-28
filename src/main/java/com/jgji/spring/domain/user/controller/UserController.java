@@ -18,12 +18,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.jgji.spring.domain.user.model.User;
 import com.jgji.spring.domain.user.model.UserDTO.CreateUser;
 import com.jgji.spring.domain.user.model.UserDTO.UserProfile;
 import com.jgji.spring.domain.user.service.UserService;
+import com.jgji.spring.domain.util.Utils;
 import com.jgji.spring.domain.word.service.WordService;
 
 @Controller
@@ -74,7 +73,7 @@ public class UserController {
         
         mav.addObject("user", user);
         
-        ObjectMapper objMapper = getObjectMapperConfig();
+        ObjectMapper objMapper = Utils.getObjectMapperConfig();
         String jsonText = objMapper.writeValueAsString(wordService.findAllByUserId());
         mav.addObject("data", jsonText);
         
@@ -112,7 +111,7 @@ public class UserController {
             msg = "존재하지 않는 아이디 입니다.";
         }
         
-        return returnJsonMsg(msg);
+        return Utils.returnJsonMsg(msg);
     }
     
     @PostMapping(value="/reset/password", produces = "application/json")
@@ -121,7 +120,7 @@ public class UserController {
         String tempPassword = userService.setTempPassWord(user);
         String msg = "임시 비밀번호 : " + tempPassword;
         
-        return returnJsonMsg(msg);
+        return Utils.returnJsonMsg(msg);
     }
     
     @PostMapping(value="/change/password", produces = "application/json")
@@ -129,19 +128,6 @@ public class UserController {
     public String processChangePassword(@RequestBody UserProfile changPassword) throws JsonProcessingException {
         String msg = userService.changePassword(changPassword);
         
-        return returnJsonMsg(msg);
-    }
-    
-    private String returnJsonMsg(String msg) throws JsonProcessingException {
-        ObjectMapper objMapper = getObjectMapperConfig();
-        return objMapper.writeValueAsString(msg);
-    }
-    
-    private ObjectMapper getObjectMapperConfig() {
-        ObjectMapper objMapper = new ObjectMapper();
-        objMapper.registerModule(new JavaTimeModule());
-        objMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-        
-        return objMapper;
+        return Utils.returnJsonMsg(msg);
     }
 }

@@ -22,8 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.jgji.spring.domain.util.Utils;
 import com.jgji.spring.domain.word.model.Row;
 import com.jgji.spring.domain.word.model.Word;
 import com.jgji.spring.domain.word.model.WordDTO.AddWord;
@@ -43,7 +42,7 @@ public class WordController {
     public String getToDayWordList(Word word, Model model) throws ParseException, JsonProcessingException {
         word.setNextDate(LocalDate.now());
         
-        ObjectMapper objMapper = getObjectMapperConfig();
+        ObjectMapper objMapper = Utils.getObjectMapperConfig();
         
         String jsonText = objMapper.writeValueAsString(service.findToDayWordList(word));
         model.addAttribute("wordList", jsonText);
@@ -54,7 +53,7 @@ public class WordController {
 
     @GetMapping("/word/test/random")
     public String getRandomByUserWordList(Word word, Model model) throws ParseException, JsonProcessingException {
-        ObjectMapper objMapper = getObjectMapperConfig();
+        ObjectMapper objMapper = Utils.getObjectMapperConfig();
         
         List<Word> wordList = service.getRandomWordList();
         
@@ -73,7 +72,7 @@ public class WordController {
     
     @GetMapping(value="/word/test/random", params= {"all"})
     public String getRandomByAllWordList(Model model) throws ParseException, JsonProcessingException {
-        ObjectMapper objMapper = getObjectMapperConfig();
+        ObjectMapper objMapper = Utils.getObjectMapperConfig();
         
         String jsonText = objMapper.writeValueAsString(service.getRandomByAllWordList());
         
@@ -81,14 +80,6 @@ public class WordController {
         model.addAttribute("isExist", true);
         
         return "thymeleaf/word/viewWordTestForm";
-    }
-    
-    private ObjectMapper getObjectMapperConfig() {
-        ObjectMapper objMapper = new ObjectMapper();
-        objMapper.registerModule(new JavaTimeModule());
-        objMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-        
-        return objMapper;
     }
     
     @PostMapping(path="/word/answers", produces = "application/json")
