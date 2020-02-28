@@ -1,11 +1,17 @@
 # wordbook
-단어집
+자신이 외운 단어 저장하고 망각곡선 주기에 맞춰 시험을 보게합니다.
 
-### 1. 화면
+## 사용 예제
+- 로그인 후 오늘 공부한 단어를 추가하여 시험봅니다.
+![GIF 2020-02-28 오후 2-22-40](https://user-images.githubusercontent.com/20533433/75512888-3872c180-5a36-11ea-967e-b7cfdfa81135.gif)
 
-#1. Test 화면
-![캡처](https://user-images.githubusercontent.com/20533433/72721605-ca79e580-3bbf-11ea-9a6e-b74abb9a27e5.PNG)
+## 업데이트 내역
 
+* 1.0.0
+    * 첫 출시
+    
+## 정보
 
-#2. 단어 추가 화면
-![캡처](https://user-images.githubusercontent.com/20533433/72894515-d059fd00-3d5e-11ea-8910-fbbc0b260a8c.PNG)
+해당 프로젝트는 [Fontawesome](https://fontawesome.com/) 이 사용되었으므로 GPL 라이센스가 적용되어 있습니다.
+
+[https://github.com/elementbyid](https://fontawesome.com/)
