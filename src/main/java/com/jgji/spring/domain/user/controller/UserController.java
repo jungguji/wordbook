@@ -37,7 +37,7 @@ public class UserController {
     
     @GetMapping("/login")
     public String initLoginForm(Model model) {
-        return "thymeleaf/viewLoginForm";
+        return "thymeleaf/user/viewLoginForm";
     }
     
     @GetMapping("/user/create")
@@ -45,7 +45,7 @@ public class UserController {
         CreateUser user = new CreateUser();
         model.put("createUser", user);
         
-        return "thymeleaf/createUserForm";
+        return "thymeleaf/user/createUserForm";
     }
     
     @PostMapping("/user/create")
@@ -55,7 +55,7 @@ public class UserController {
         }
         
         if (result.hasErrors()) {
-            return "thymeleaf/createUserForm";
+            return "thymeleaf/user/createUserForm";
         }
         
         User user = new User();
@@ -69,7 +69,7 @@ public class UserController {
     
     @GetMapping("/user/profile")
     public ModelAndView showUserProfileForm() throws JsonProcessingException {
-        ModelAndView mav = new ModelAndView("thymeleaf/viewUserProfileForm");
+        ModelAndView mav = new ModelAndView("thymeleaf/user/viewUserProfileForm");
         User user = userService.getUserByUserName(userService.getCurrentUserName());
         
         mav.addObject("user", user);
@@ -99,7 +99,7 @@ public class UserController {
     
     @GetMapping("/reset/password")
     public String initResetPasswordForm() {
-        return "thymeleaf/viewForgotPasswordForm";
+        return "thymeleaf/user/viewForgotPasswordForm";
     }
     
     @PostMapping(value="/reset/password/check", produces = "application/json")

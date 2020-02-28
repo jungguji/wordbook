@@ -49,7 +49,7 @@ public class WordController {
         model.addAttribute("wordList", jsonText);
         model.addAttribute("isExist", true);
         
-        return "thymeleaf/viewWordTestForm";
+        return "thymeleaf/word/viewWordTestForm";
     }
 
     @GetMapping("/word/test/random")
@@ -68,7 +68,7 @@ public class WordController {
         model.addAttribute("wordList", jsonText);
         model.addAttribute("isExist", isExist);
         
-        return "thymeleaf/viewWordTestForm";
+        return "thymeleaf/word/viewWordTestForm";
     }
     
     @GetMapping(value="/word/test/random", params= {"all"})
@@ -80,7 +80,7 @@ public class WordController {
         model.addAttribute("wordList", jsonText);
         model.addAttribute("isExist", true);
         
-        return "thymeleaf/viewWordTestForm";
+        return "thymeleaf/word/viewWordTestForm";
     }
     
     private ObjectMapper getObjectMapperConfig() {
@@ -112,12 +112,12 @@ public class WordController {
         word.getWords().add(new Row());
         word.getMeanings().add(new Row());
         
-        return "thymeleaf/createWordForm";
+        return "thymeleaf/word/createWordForm";
     }
     
     @GetMapping(value="/word/add/file")
     public String getWordAddByFileUpload(Word word, Model model) throws ParseException, JsonProcessingException {
-        return "thymeleaf/createWordFileUploadForm";
+        return "thymeleaf/word/createWordFileUploadForm";
     }
     
     @PostMapping(path="/word/add/upload", headers = "content-type=multipart/form-data")
@@ -134,7 +134,7 @@ public class WordController {
         word.getWords().add(new Row());
         word.getMeanings().add(new Row());
         
-        return "thymeleaf/createWordForm";
+        return "thymeleaf/word/createWordForm";
     }
     
     @PostMapping(value="/word/add", params={"removeRow"})
@@ -144,7 +144,7 @@ public class WordController {
             word.getMeanings().remove(word.getMeanings().size()-1);
         }
         
-        return "thymeleaf/createWordForm";
+        return "thymeleaf/word/createWordForm";
     }
     
     @PostMapping(value="/word/add", params= {"save"})
@@ -152,7 +152,7 @@ public class WordController {
         bindingResult = service.getCreateWordBindingResult(word, bindingResult);
         
         if (bindingResult.hasErrors()) {
-            return "thymeleaf/createWordForm";
+            return "thymeleaf/word/createWordForm";
         }
         
         service.insertWord(word);
