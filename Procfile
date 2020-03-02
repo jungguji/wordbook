@@ -1,0 +1,1 @@
+web: java -Dserver.port=8887 $JAVA_OPTS -jar target/EnglishWord-0.0.1-SNAPSHOT.jar 
