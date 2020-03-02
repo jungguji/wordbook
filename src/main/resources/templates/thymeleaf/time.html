@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" 
+    xmlns:th="http://www.thymeleaf.org" 
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+    layout:decorator="layout/default">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+ <th:block layout:fragment="content">
+<body>
+    분 : <input type="text" name="min">
+    <br />
+    초 : <input type="text" name="sec">
+    
+    <button onclick="getTime()">시작</button>
+    <div>
+        <h1 id="tt"></h1>
+    </div>
+</body>
+<script th:inline="javascript">
+
+function getTime() {
+    
+    var fromdata = {
+    		min : document.querySelector("input[name=min]").value
+            , sec : document.querySelector("input[name=sec]").value
+           };
+    const data = JSON.stringify(fromdata);
+    
+    $.ajax({
+        type:"post"
+        , url: "/time"
+        , contentType: 'application/json'
+        , data: data
+        , dataType : 'json'
+        , cache: false
+        , success: function(data) {
+            document.querySelector("#tt").innerHTML = data;
+        }
+    });
+}
+</script>
+ </th:block>
+</html>
