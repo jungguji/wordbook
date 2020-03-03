@@ -1,6 +1,8 @@
 # wordbook
 자신이 외운 단어 저장하고 망각곡선 주기에 맞춰 시험을 보게합니다.
 
+https://wordbooks.herokuapp.com/
+
 ## 사용 예제
 - 로그인 후 오늘 공부한 단어를 추가하여 시험봅니다.
 ![GIF 2020-02-28 오후 2-22-40](https://user-images.githubusercontent.com/20533433/75512888-3872c180-5a36-11ea-967e-b7cfdfa81135.gif)
