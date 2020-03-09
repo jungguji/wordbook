@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Error page</title>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="css/error.css" th:href="@{/css/error.css}" />
+    </head>
+<body>
+    <img th:alt="${msg}" th:src="${src}">
+</body>
+</html>

@@ -1,0 +1,14 @@
+@CHARSET "UTF-8";
+
+body {
+    background-color: #313131;
+}
+
+img {
+    top: 0;
+    bottom :0;
+    left :0;
+    right :0;
+    position: absolute;
+    margin: auto;
+}
