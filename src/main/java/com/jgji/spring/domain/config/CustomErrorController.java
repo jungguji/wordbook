@@ -34,5 +34,4 @@ public class CustomErrorController implements ErrorController {
         // TODO Auto-generated method stub
         return "/error";
     }
-
 }
