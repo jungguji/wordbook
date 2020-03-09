@@ -9,6 +9,8 @@ https://wordbooks.herokuapp.com/
 
 ## 업데이트 내역
 
+* 1.0.1
+    * 에러 페이지 리다이렉트 추가 
 * 1.0.0
     * 첫 출시
     
