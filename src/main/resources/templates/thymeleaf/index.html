@@ -1,33 +1,27 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" 
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" 
     xmlns:th="http://www.thymeleaf.org" 
     xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
     layout:decorator="layout/default">
     
     <th:block layout:fragment="content">
-        <h1>소개</h1>
+        <h1><span th:text="#{word.home.introduce}"></span></h1>
         <br />
         <p class="lead">
-            공부한 단어를 저장하고 시험 보세요. <br />
-            에빙 하우스가 제시한 망각곡선에 따라 시험을 보게 되어 있습니다. <br /> 
-            저장된 단어는 당일, 1 일, 1 일, 3 일, 7 일, 15 일, 30 일, 60 일 ,60 일, ... <br />
-            순으로 시험보게 됩니다.
-            <br /> <br />
-            예) 1월 1일에 추가한 단어는 1월 1일, 1일 후인 1월 2일, 또 1일 후인 1월 3일, <br />
-            그리고 3일 후인 1월 6일, 7일 후인 1월 13일, 15일 후인 28일, ... 식으로 시험보게 됩니다. <br />
+            <span th:utext="#{word.home.infomation}"></span>
         </p>
         <br />
         <br />
         <div>
             <div style="float: left">
-                에빙 하우스의 망각곡선 <br />
+                <span th:text="#{word.home.curve}"></span> <br />
                 <a href="https://ko.wikipedia.org/wiki/%EB%A7%9D%EA%B0%81_%EA%B3%A1%EC%84%A0">
-                    <img th:src="@{/images/forgetting_curve.png}" th:attr="alt='에빙 하우스의 망각곡선',height=300, width=300" />
+                    <img th:src="@{/images/forgetting_curve.png}" th:attr="alt='#{word.home.curve}',height=300, width=300" />
                 </a>
             </div>
             <div style="pedding: 60px">
-                시험 주기 <br />
-                <img th:src="@{/images/calendar.png}" th:attr="alt='시험주기',height=300, width=300"/>
+                <span th:text="#{word.home.testcycle}"></span> <br />
+                <img th:src="@{/images/calendar.png}" th:attr="alt='#{word.home.testcycle}',height=300, width=300"/>
             </div>
         </div>
         <script th:inline="javascript">
