@@ -1,9 +1,9 @@
 package com.jgji.spring.domain.user.service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
+import com.jgji.spring.domain.user.model.User;
+import com.jgji.spring.domain.user.model.UserDTO.UserProfile;
+import com.jgji.spring.domain.user.repository.UserRepository;
+import com.jgji.spring.domain.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,10 +17,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
-import com.jgji.spring.domain.user.model.User;
-import com.jgji.spring.domain.user.model.UserDTO.UserProfile;
-import com.jgji.spring.domain.user.repository.UserRepository;
-import com.jgji.spring.domain.util.Utils;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -76,11 +75,7 @@ public class UserService implements UserDetailsService {
     }
     
     public boolean isExistName(String userName) {
-        if (ObjectUtils.isEmpty(userRepository.findByUserName(userName))) {
-            return false;
-        }
-        
-        return true;
+        return !ObjectUtils.isEmpty(userRepository.findByUserName(userName));
     }
     
     public String setTempPassWord(User user) {
@@ -150,12 +145,8 @@ public class UserService implements UserDetailsService {
     }
     
     private boolean isNullPassword(UserProfile changePassword) {
-        if (StringUtils.isEmpty(changePassword.getOldPassword()) || StringUtils.isEmpty(changePassword.getNewPassword())
-                || StringUtils.isEmpty(changePassword.getNewPasswordConfrim())) {
-            return true;
-        }
-        
-        return false;
+        return !(StringUtils.isEmpty(changePassword.getOldPassword()) || StringUtils.isEmpty(changePassword.getNewPassword())
+                || StringUtils.isEmpty(changePassword.getNewPasswordConfrim()));
     }
     
     private boolean isFailOldPasswordCompare(String oldPassword) {
