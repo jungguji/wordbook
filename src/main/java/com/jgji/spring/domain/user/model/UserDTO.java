@@ -1,16 +1,15 @@
 package com.jgji.spring.domain.user.model;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
-
 public class UserDTO {
     
-    CreateUser createUser;
-    UserProfile changeProfile;
+    public CreateUser createUser;
+    public UserProfile changeProfile;
     
     public CreateUser getCreateUser() {
         return this.createUser;
@@ -51,8 +50,8 @@ public class UserDTO {
     
     public static class UserProfile {
         private String userName;
-        private List<String> mostWrongWord = new ArrayList<String>();
-        private List<BigInteger> mostWrongCount = new ArrayList<BigInteger>();
+        private List<String> mostWrongWord = new ArrayList<>();
+        private List<BigInteger> mostWrongCount = new ArrayList<>();
         private String oldPassword;
         private String newPassword;
         private String newPasswordConfrim;
