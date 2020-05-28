@@ -1,11 +1,13 @@
 package com.jgji.spring.domain.user.controller;
 
-import java.math.BigInteger;
-import java.util.List;
-import java.util.Map;
-
-import javax.validation.Valid;
-
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jgji.spring.domain.user.model.User;
+import com.jgji.spring.domain.user.model.UserDTO.CreateUser;
+import com.jgji.spring.domain.user.model.UserDTO.UserProfile;
+import com.jgji.spring.domain.user.service.UserService;
+import com.jgji.spring.domain.util.Utils;
+import com.jgji.spring.domain.word.service.WordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,14 +18,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jgji.spring.domain.user.model.User;
-import com.jgji.spring.domain.user.model.UserDTO.CreateUser;
-import com.jgji.spring.domain.user.model.UserDTO.UserProfile;
-import com.jgji.spring.domain.user.service.UserService;
-import com.jgji.spring.domain.util.Utils;
-import com.jgji.spring.domain.word.service.WordService;
+import javax.validation.Valid;
+import java.math.BigInteger;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 public class UserController {
@@ -100,13 +98,13 @@ public class UserController {
     public String initResetPasswordForm() {
         return "thymeleaf/user/viewForgotPasswordForm";
     }
-    
+
     @PostMapping(value="/reset/password/check", produces = "application/json")
     @ResponseBody
     public String checkUserId(@RequestBody String userName) throws JsonProcessingException {
         String msg = "";
-        userName = userName.replace("\"", "");
-        if (!userService.isExistName(userName)) {
+        String replaceUserName = userName.replace("\"", "");
+        if (!userService.isExistName(replaceUserName)) {
             
             msg = "존재하지 않는 아이디 입니다.";
         }
