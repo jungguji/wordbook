@@ -1,25 +1,5 @@
 package com.jgji.spring.domain.word.controller;
 
-import java.io.IOException;
-import java.text.ParseException;
-import java.time.LocalDate;
-import java.util.List;
-
-import javax.validation.Valid;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.util.ObjectUtils;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jgji.spring.domain.util.Utils;
@@ -27,6 +7,19 @@ import com.jgji.spring.domain.word.model.Row;
 import com.jgji.spring.domain.word.model.Word;
 import com.jgji.spring.domain.word.model.WordDTO.AddWord;
 import com.jgji.spring.domain.word.service.WordService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.util.ObjectUtils;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.validation.Valid;
+import java.io.IOException;
+import java.text.ParseException;
+import java.time.LocalDate;
+import java.util.List;
 
 @Controller
 public class WordController {
@@ -43,7 +36,7 @@ public class WordController {
         word.setNextDate(LocalDate.now());
         
         ObjectMapper objMapper = Utils.getObjectMapperConfig();
-        
+
         String jsonText = objMapper.writeValueAsString(service.findToDayWordList(word));
         model.addAttribute("wordList", jsonText);
         model.addAttribute("isExist", true);
@@ -111,10 +104,10 @@ public class WordController {
         return "thymeleaf/word/createWordFileUploadForm";
     }
     
-    @PostMapping(path="/word/add/upload", headers = "content-type=multipart/form-data")
+    @RequestMapping(value="/word/add/upload", method=RequestMethod.POST, headers = "content-type=multipart/form-data")
     @ResponseBody
-    public String createWordByFileUpload(@RequestParam(value="file") MultipartFile[] files) throws ParseException, IOException {
-        MultipartFile file = files[0];
+    public String createWordByFileUpload(@RequestParam(value="file") MultipartFile files) throws ParseException, IOException {
+        MultipartFile file = files;
         String words = service.insertWordByFileUpload(file);
         
         return words;
@@ -140,9 +133,9 @@ public class WordController {
     
     @PostMapping(value="/word/add", params= {"save"})
     public String createWord(@Valid AddWord word, BindingResult bindingResult) {
-        bindingResult = service.getCreateWordBindingResult(word, bindingResult);
+        BindingResult result = service.getCreateWordBindingResult(word, bindingResult);
         
-        if (bindingResult.hasErrors()) {
+        if (result.hasErrors()) {
             return "thymeleaf/word/createWordForm";
         }
         
@@ -153,8 +146,7 @@ public class WordController {
     @PostMapping(value="/word/update", produces = "application/json")
     @ResponseBody
     public boolean updateMeaning(@RequestBody Word word) {
-        boolean isResult = service.updateMeaning(word);
-        return isResult;
+        return service.updateMeaning(word);
     }
     
     @DeleteMapping(value="/word/delete", produces = "application/json")
