@@ -1,5 +1,18 @@
 package com.jgji.spring.domain.word.service;
 
+import com.jgji.spring.domain.user.model.User;
+import com.jgji.spring.domain.user.service.UserService;
+import com.jgji.spring.domain.word.model.Row;
+import com.jgji.spring.domain.word.model.Word;
+import com.jgji.spring.domain.word.model.WordDTO.AddWord;
+import com.jgji.spring.domain.word.repository.WordRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -8,20 +21,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.multipart.MultipartFile;
-
-import com.jgji.spring.domain.user.model.User;
-import com.jgji.spring.domain.user.service.UserService;
-import com.jgji.spring.domain.word.model.Row;
-import com.jgji.spring.domain.word.model.Word;
-import com.jgji.spring.domain.word.model.WordDTO.AddWord;
-import com.jgji.spring.domain.word.repository.WordRepository;
 
 @Service("wordService")
 public class WordServiceImpl implements WordService{
@@ -232,11 +231,11 @@ public class WordServiceImpl implements WordService{
         
         String wordRowErrorMsg = getRejectMessage(word, bindingResult, WORD_FIELD);
         String meaingRowErrorMsg = getRejectMessage(word, bindingResult, MEANING_FIELD);
-        
-        bindingResult = setRejectValue(bindingResult, wordRowErrorMsg, WORD_FIELD);
-        bindingResult = setRejectValue(bindingResult, meaingRowErrorMsg, MEANING_FIELD);
-        
-        return bindingResult;
+
+        BindingResult result = setRejectValue(bindingResult, wordRowErrorMsg, WORD_FIELD);
+        result = setRejectValue(result, meaingRowErrorMsg, MEANING_FIELD);
+
+        return result;
     }
     
     private String getRejectMessage(AddWord word, BindingResult bindingResult, String fieldName) {
@@ -267,13 +266,15 @@ public class WordServiceImpl implements WordService{
     
     private BindingResult setRejectValue(BindingResult bindingResult, String errorMsg, String fieldName) {
         if (!StringUtils.isEmpty(errorMsg)) {
+            StringBuilder errorMessage = new StringBuilder(errorMsg);
+
             if (WORD_FIELD.equals(fieldName)) {
-                errorMsg += "행에 단어가 비어 있습니다.";
+                errorMessage.append("행에 단어가 비어 있습니다.");
             } else {
-                errorMsg += "행에 뜻이 비어 있습니다.";
+                errorMessage.append("행에 뜻이 비어 있습니다.");
             }
             
-            bindingResult.rejectValue(fieldName, fieldName, errorMsg);
+            bindingResult.rejectValue(fieldName, fieldName, errorMessage.toString());
         }
         
         return bindingResult;
