@@ -49,6 +49,7 @@ body {
   display: table-cell;
   vertical-align: top;
 }
+
 .cover-container {
   margin-right: auto;
   margin-left: auto;
@@ -80,7 +81,7 @@ body {
   font-size: 16px;
   font-weight: bold;
   color: #fff; /* IE8 proofing */
-  color: rgba(255,255,255,.75);
+  color: rgba(255, 255, 255, .75);
   border-bottom: 2px solid transparent;
 }
 .masthead-nav > li > a:hover,
