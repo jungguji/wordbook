@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class CustomErrorController implements ErrorController {
 
-    private static String IMAGE_PATH = "images/error/";
+    private static String IMAGE_PATH = "/images/error/";
     
     @ExceptionHandler(Throwable.class)
     @GetMapping("/error")
