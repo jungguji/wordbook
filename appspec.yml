@@ -2,4 +2,5 @@ version: 0.0
 os: linux
 files:
   - source:  /
-    destination: /home/ec2-user/app/webservice/zip/
+    destination: /home/ec2-user/app/travis/zip/
+    overwrite: yes
