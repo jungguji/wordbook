@@ -19,7 +19,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
            " SELECT                                     " + 
            "     w.word, COUNT(1)                       " + 
            " FROM                                       " + 
-           "     Word w                                 " + 
+           "     word w                                 " + 
            " WHERE                                      " +
            "    w.users_id =:userId                     " + 
            " GROUP BY                                   " + 
@@ -32,7 +32,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
            "                     SELECT                 " + 
            "                         COUNT(1) AS cnt    " + 
            "                     FROM                   " + 
-           "                         Word w             " + 
+           "                         word w             " + 
            "                     WHERE                  " + 
            "                         w.users_id =:userId" + 
            "                     GROUP BY               " + 
