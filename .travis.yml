@@ -41,7 +41,7 @@ deploy:
     bundle_type: zip
     application: wordbook-service # 웹 콘솔에서 등록한 CodeDeploy 어플리케이션
     deployment_group: wordbook-service-group # 웹 콘솔에서 등록한 CodeDeploy 배포 그룹
-    region: ap-northeast-2
+    region: us-east-2
     wait-until-deployed: true
 
 # CI 실행 완료시 메일로 알람
