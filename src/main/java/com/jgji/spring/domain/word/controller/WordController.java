@@ -20,6 +20,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.text.ParseException;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -30,16 +31,22 @@ public class WordController {
     @Autowired
     Environment env;
 
-    @GetMapping("/profile")
-    @ResponseBody
-    public String getProfile() throws JsonProcessingException {
-        return "test";
-    }
-
     @GetMapping("/")
-    public String home(Word word, Model model) {
+    @ResponseBody
+    public String home(Word word, Model model) throws JsonProcessingException {
+        List<String> profiles = Arrays.asList(env.getActiveProfiles());
+        List<String> prodProfiles = Arrays.asList("prod", "prod1", "prod2");
+        String defaultProfile = profiles.isEmpty() ? "default" : prodProfiles.get(0);
+// ㅁㄴㅇ
+        ObjectMapper objMapper = Utils.getObjectMapperConfig();
 
-        return "thymeleaf/index";
+        String jsonText = objMapper.writeValueAsString(profiles.stream()
+                .filter(prodProfiles::contains)
+                .findAny()
+                .orElse(defaultProfile));
+
+        return jsonText;
+//        return "thymeleaf/index";
     }
     
     @GetMapping("/word/test")
