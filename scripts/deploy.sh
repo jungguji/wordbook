@@ -25,7 +25,8 @@ fi
 
 echo "> 새 어플리케이션 배포"
 
-JAR_NAME=$(ls -tr $REPOSITORY/ | tail -n 1)
+#JAR_NAME=$(ls -tr $REPOSITORY/ | tail -n 1)
+JAR_NAME=EnglishWord-0.0.1-SNAPSHOT.jar
 
 echo "> Jar name: $JAR_NAME"
 
