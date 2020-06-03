@@ -31,7 +31,6 @@ public class WordController {
     Environment env;
 
     @GetMapping("/")
-    @ResponseBody
     public String home(Word word, Model model) throws JsonProcessingException {
         return "thymeleaf/index";
     }
