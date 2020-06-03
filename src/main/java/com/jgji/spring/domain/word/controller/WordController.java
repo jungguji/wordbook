@@ -33,8 +33,7 @@ public class WordController {
     @GetMapping("/")
     @ResponseBody
     public String home(Word word, Model model) throws JsonProcessingException {
-        return "test";
-//        return "thymeleaf/index";
+        return "thymeleaf/index";
     }
     
     @GetMapping("/word/test")

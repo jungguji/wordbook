@@ -1,13 +1,12 @@
 #1/bin/bash
 
-REPOSITORY=/home/ec2-user/app/webservice
-PROJECT_NAME=wordbook
+REPOSITORY=/home/ec2-user/app/travis/zip/
 
-cd $REPOSITORY/$PROJECT_NAME/
+cd $REPOSITORY/
 
 echo "> Build 파일복사"
 
-cp $REPOSITORY/$PROJECT_NAME/target/*.jar $REPOSITORY/
+cp $REPOSITORY/*.jar $REPOSITORY/
 
 echo "> 현재 구동중인 어플리케이션 pid 확인"
 
@@ -25,8 +24,8 @@ fi
 
 echo "> 새 어플리케이션 배포"
 
-#JAR_NAME=$(ls -tr $REPOSITORY/ | tail -n 1)
-JAR_NAME=EnglishWord-0.0.1-SNAPSHOT.jar
+JAR_NAME=$(ls -tr $REPOSITORY/ | tail -n 1)
+#JAR_NAME=EnglishWord-0.0.1-SNAPSHOT.jar
 
 echo "> Jar name: $JAR_NAME"
 
@@ -37,5 +36,5 @@ chmod +x $REPOSITORY/$JAR_NAME
 nohup java -jar \
   -Dspring.config.location=classpath:/application.properties,classpath:/application-prod.properties \
   -Dspring.profiles.active=prod \
-  $REPOSITORY/$JAR_NAME > $REPOSITORY/nohup.out 2>&1 &
+  $JAR_NAME > $REPOSITORY/nohup.out 2>&1 &
 
