@@ -24,7 +24,7 @@ else
 fi
 
 echo "> 새 어플리케이션 배포"
-
+##?
 JAR_NAME=$(ls -tr $REPOSITORY/ | tail -n 1)
 
 echo "> Jar name: $JAR_NAME"
