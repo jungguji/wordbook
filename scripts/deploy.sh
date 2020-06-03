@@ -11,7 +11,7 @@ cp $REPOSITORY/$PROJECT_NAME/target/*.jar $REPOSITORY/
 
 echo "> 현재 구동중인 어플리케이션 pid 확인"
 
-CURRENT_PID=$(pgrep -f EnglishWord-0.0.1-SNAPSHOT.jar | grep jar | awk '{print $1}')
+CURRENT_PID=$(pgrep -fl EnglishWord-0.0.1-SNAPSHOT | grep jar | awk '{print $1}')
 
 echo "현재 구동 중인 어플리케이션 pid: $CURRENT_PID"
 
@@ -34,7 +34,7 @@ echo "> $JAR_NAME 에 실행권한 추가"
 chmod +x $JAR_NAME
 
 nohup java -jar \
-  -Dspring.config.location=classpath:/application.properties, classpath:/application-prod.properties \
+  -Dspring.config.location=classpath:/application.properties,classpath:/application-prod.properties \
   -Dspring.profiles.active=prod \
   $JAR_NAME > nohup.out 2>&1 &
 
