@@ -1,12 +1,12 @@
 #1/bin/bash
 
-REPOSITORY=/home/ec2-user/app/travis/zip/
+REPOSITORY=/home/ec2-user/app/travis
 
 cd $REPOSITORY/
 
 echo "> Build 파일복사"
 
-cp $REPOSITORY/*.jar $REPOSITORY/
+cp $REPOSITORY/zip/*.jar $REPOSITORY/
 
 echo "> 현재 구동중인 어플리케이션 pid 확인"
 
