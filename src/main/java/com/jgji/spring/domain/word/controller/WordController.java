@@ -2,7 +2,6 @@ package com.jgji.spring.domain.word.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jgji.spring.domain.config.ProfileController;
 import com.jgji.spring.domain.util.Utils;
 import com.jgji.spring.domain.word.model.Row;
 import com.jgji.spring.domain.word.model.Word;
@@ -21,6 +20,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.text.ParseException;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -31,13 +31,24 @@ public class WordController {
     @Autowired
     Environment env;
 
+    @GetMapping("/profile")
+    public String getProfile() throws JsonProcessingException {
+        List<String> profiles = Arrays.asList(env.getActiveProfiles());
+        List<String> prodProfiles = Arrays.asList("prod", "prod1", "prod2");
+        String defaultProfile = profiles.isEmpty() ? "default" : prodProfiles.get(0);
+
+        ObjectMapper objMapper = Utils.getObjectMapperConfig();
+
+        String jsonText = objMapper.writeValueAsString(profiles.stream()
+                .filter(prodProfiles::contains)
+                .findAny()
+                .orElse(defaultProfile));
+
+        return jsonText;
+    }
+
     @GetMapping("/")
     public String home(Word word, Model model) {
-
-
-        ProfileController test = new ProfileController(env);
-        String ttt = test.getProfile();
-        System.out.println("@@@@@ " + ttt + "@@@@@@ ");
 
         return "thymeleaf/index";
     }
