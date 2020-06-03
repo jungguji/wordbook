@@ -37,7 +37,7 @@ public class WordController {
         List<String> profiles = Arrays.asList(env.getActiveProfiles());
         List<String> prodProfiles = Arrays.asList("prod", "prod1", "prod2");
         String defaultProfile = profiles.isEmpty() ? "default" : prodProfiles.get(0);
-
+// ㅁㄴㅇ
         ObjectMapper objMapper = Utils.getObjectMapperConfig();
 
         String jsonText = objMapper.writeValueAsString(profiles.stream()
