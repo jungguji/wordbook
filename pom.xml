@@ -9,8 +9,8 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.jgji.english.word</groupId>
-	<artifactId>EnglishWord</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<artifactId>wordbook</artifactId>
+	<version>1.0.2</version>
 	<name>demo-1</name>
 	<description>English word remember</description>
 
