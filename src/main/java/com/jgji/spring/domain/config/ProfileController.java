@@ -15,7 +15,7 @@ public class ProfileController {
         this.env = env;
     }
 
-    @GetMapping("profile")
+    @GetMapping("/profile")
     public String getProfile() {
         List<String> profiles = Arrays.asList(env.getActiveProfiles());
         List<String> prodProfiles = Arrays.asList("prod", "prod1", "prod2");
