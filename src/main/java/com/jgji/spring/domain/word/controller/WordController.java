@@ -32,6 +32,7 @@ public class WordController {
     Environment env;
 
     @GetMapping("/profile")
+    @ResponseBody
     public String getProfile() throws JsonProcessingException {
         List<String> profiles = Arrays.asList(env.getActiveProfiles());
         List<String> prodProfiles = Arrays.asList("prod", "prod1", "prod2");
