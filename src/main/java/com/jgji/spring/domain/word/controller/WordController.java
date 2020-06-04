@@ -8,7 +8,6 @@ import com.jgji.spring.domain.word.model.Word;
 import com.jgji.spring.domain.word.model.WordDTO.AddWord;
 import com.jgji.spring.domain.word.service.WordService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
@@ -27,16 +26,13 @@ public class WordController {
     @Autowired
     private WordService service;
 
-    @Autowired
-    Environment env;
-
     @GetMapping("/")
-    public String home(Word word, Model model) throws JsonProcessingException {
+    public String home(Word word, Model model) {
         return "thymeleaf/index";
     }
     
     @GetMapping("/word/test")
-    public String getToDayWordList(Word word, Model model) throws ParseException, JsonProcessingException {
+    public String getToDayWordList(Word word, Model model) throws JsonProcessingException {
         word.setNextDate(LocalDate.now());
         
         ObjectMapper objMapper = Utils.getObjectMapperConfig();
@@ -49,7 +45,7 @@ public class WordController {
     }
 
     @GetMapping("/word/test/random")
-    public String getRandomByUserWordList(Word word, Model model) throws ParseException, JsonProcessingException {
+    public String getRandomByUserWordList(Word word, Model model) throws JsonProcessingException {
         ObjectMapper objMapper = Utils.getObjectMapperConfig();
         
         List<Word> wordList = service.getRandomWordList();
@@ -68,7 +64,7 @@ public class WordController {
     }
     
     @GetMapping(value="/word/test/random", params= {"all"})
-    public String getRandomByAllWordList(Model model) throws ParseException, JsonProcessingException {
+    public String getRandomByAllWordList(Model model) throws JsonProcessingException {
         ObjectMapper objMapper = Utils.getObjectMapperConfig();
         
         String jsonText = objMapper.writeValueAsString(service.getRandomByAllWordList());
@@ -81,7 +77,7 @@ public class WordController {
     
     @PostMapping(path="/word/answers", produces = "application/json")
     @ResponseBody
-    public boolean updateNextDateAndInsert(@RequestBody String[] answerIds) throws ParseException, JsonProcessingException {
+    public boolean updateNextDateAndInsert(@RequestBody String[] answerIds) {
         boolean result = service.updateNextDateAndInsert(answerIds);
         
         return result;
@@ -159,5 +155,4 @@ public class WordController {
         service.delete(rowIds);
         return "good";
     }
-    
 }

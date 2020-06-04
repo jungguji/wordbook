@@ -4,10 +4,6 @@ public class Row {
 
     private String text = null;
     
-    public Row() {
-        super();
-    }
-
     public String getText() {
         return text;
     }

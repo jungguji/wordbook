@@ -5,10 +5,6 @@ public class Variety {
     private Integer id = null;
     private String name = null;
     
-    public Variety() {
-        super();
-    }
-
     public Integer getId() {
         return id;
     }

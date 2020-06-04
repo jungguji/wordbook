@@ -24,10 +24,10 @@ import java.util.Map;
 
 @Service("wordService")
 public class WordServiceImpl implements WordService{
-    final static String PASS_LIST = "pass";
-    final static String FAIL_LIST = "fail";
-    final static String WORD_FIELD = "words";
-    final static String MEANING_FIELD = "meanings";
+    private final static String PASS_LIST = "pass";
+    private final static String FAIL_LIST = "fail";
+    private final static String WORD_FIELD = "words";
+    private final static String MEANING_FIELD = "meanings";
     
     @Autowired
     private WordRepository repository;

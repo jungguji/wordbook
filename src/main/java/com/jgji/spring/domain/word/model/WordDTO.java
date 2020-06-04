@@ -5,8 +5,6 @@ import java.util.List;
 
 public class WordDTO {
     
-    AddWord addWord;
-    
     public AddWord getAddWord() {
         return new AddWord();
     }
