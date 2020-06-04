@@ -1,4 +1,7 @@
 # wordbook
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/c104eeb6c8fd43f7bde15834af5c0f39)](https://app.codacy.com/manual/jungguji/wordbook?utm_source=github.com&utm_medium=referral&utm_content=jungguji/wordbook&utm_campaign=Badge_Grade_Dashboard)
+
 자신이 외운 단어 저장하고 망각곡선 주기에 맞춰 시험을 보게합니다.
 
 https://wordbooks.herokuapp.com/
