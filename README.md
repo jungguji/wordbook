@@ -1,14 +1,13 @@
 # wordbook
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/c104eeb6c8fd43f7bde15834af5c0f39)](https://app.codacy.com/manual/jungguji/wordbook?utm_source=github.com&utm_medium=referral&utm_content=jungguji/wordbook&utm_campaign=Badge_Grade_Dashboard)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/c104eeb6c8fd43f7bde15834af5c0f39)](https://app.codacy.com/manual/jungguji/wordbook?utm_source=github.com&utm_medium=referral&utm_content=jungguji/wordbook&utm_campaign=Badge_Grade_Dashboard)
 ![GitHub](https://img.shields.io/github/license/jungguji/wordbook)
 [![Build Status](https://travis-ci.org/jungguji/wordbook.svg?branch=master)](https://travis-ci.org/jungguji/wordbook)
 
 
 자신이 외운 단어 저장하고 망각곡선 주기에 맞춰 시험을 보게합니다.
 
-https://wordbooks.herokuapp.com/
+[http://ec2-18-191-18-43.us-east-2.compute.amazonaws.com/](http://ec2-18-191-18-43.us-east-2.compute.amazonaws.com/)
 
 ## 사용 예제
 - 로그인 후 오늘 공부한 단어를 추가하여 시험봅니다.
