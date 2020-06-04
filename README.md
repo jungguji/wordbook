@@ -1,6 +1,7 @@
 # wordbook
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/c104eeb6c8fd43f7bde15834af5c0f39)](https://app.codacy.com/manual/jungguji/wordbook?utm_source=github.com&utm_medium=referral&utm_content=jungguji/wordbook&utm_campaign=Badge_Grade_Dashboard)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/c104eeb6c8fd43f7bde15834af5c0f39)](https://app.codacy.com/manual/jungguji/wordbook?utm_source=github.com&utm_medium=referral&utm_content=jungguji/wordbook&utm_campaign=Badge_Grade_Dashboard)
 ![GitHub](https://img.shields.io/github/license/jungguji/wordbook)
 [![Build Status](https://travis-ci.org/jungguji/wordbook.svg?branch=master)](https://travis-ci.org/jungguji/wordbook)
 
