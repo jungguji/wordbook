@@ -40,9 +40,9 @@ public class WordServiceImpl implements WordService{
         return repository.findByUserId(userId);
     }
     
-    public List<Word> findToDayWordList(Word word) {
+    public List<Word> findToDayWordList() {
         String userId = userService.getUserIdByUserName();
-        return repository.findByUserIdAndNextDateLessThanEqual(userId, word.getNextDate());
+        return repository.findByUserIdAndNextDateLessThanEqual(userId, LocalDate.now());
     }
     
     public List<Word> getRandomWordList() {

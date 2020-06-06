@@ -18,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.text.ParseException;
-import java.time.LocalDate;
 import java.util.List;
 
 @Controller
@@ -30,14 +29,13 @@ public class WordController {
     public String home(Word word, Model model) {
         return "thymeleaf/index";
     }
-    
+
     @GetMapping("/word/test")
-    public String getToDayWordList(Word word, Model model) throws JsonProcessingException {
-        word.setNextDate(LocalDate.now());
-        
+    public String getToDayWordList(Model model) throws JsonProcessingException {
         ObjectMapper objMapper = Utils.getObjectMapperConfig();
 
-        String jsonText = objMapper.writeValueAsString(service.findToDayWordList(word));
+        String jsonText = objMapper.writeValueAsString(this.service.findToDayWordList());
+
         model.addAttribute("wordList", jsonText);
         model.addAttribute("isExist", true);
         
@@ -45,16 +43,13 @@ public class WordController {
     }
 
     @GetMapping("/word/test/random")
-    public String getRandomByUserWordList(Word word, Model model) throws JsonProcessingException {
+    public String getRandomByUserWordList(Model model) throws JsonProcessingException {
         ObjectMapper objMapper = Utils.getObjectMapperConfig();
         
         List<Word> wordList = service.getRandomWordList();
         
-        boolean isExist = true;
-        if (ObjectUtils.isEmpty(wordList)) {
-            isExist = false;
-        }
-        
+        boolean isExist = !ObjectUtils.isEmpty(wordList);
+
         String jsonText = objMapper.writeValueAsString(wordList);
         
         model.addAttribute("wordList", jsonText);
@@ -68,7 +63,7 @@ public class WordController {
         ObjectMapper objMapper = Utils.getObjectMapperConfig();
         
         String jsonText = objMapper.writeValueAsString(service.getRandomByAllWordList());
-        
+
         model.addAttribute("wordList", jsonText);
         model.addAttribute("isExist", true);
         
