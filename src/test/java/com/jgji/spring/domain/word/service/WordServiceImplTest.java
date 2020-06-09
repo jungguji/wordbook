@@ -3,7 +3,6 @@ package com.jgji.spring.domain.word.service;
 import com.jgji.spring.domain.user.service.UserService;
 import com.jgji.spring.domain.word.model.Word;
 import com.jgji.spring.domain.word.repository.WordRepository;
-import com.jgji.spring.domain.word.repository.WordRepositoryCustomImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,6 +13,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -25,8 +25,6 @@ class WordServiceImplTest {
 
     @MockBean
     private UserService userService;
-
-    private static final String USER_NAME = "jgji";
 
     private WordService wordService;
 
@@ -59,45 +57,45 @@ class WordServiceImplTest {
     @Test
     void findAllByUserId() {
         //gvien
-        given(this.repository.findByUserId(USER_NAME)).willReturn(list);
+        given(this.repository.findByUserId(any())).willReturn(list);
 
         //when
         List<Word> wordList = wordService.findAllByUserId();
 
         //than
-        assertThat(list).extracting("word", String.class)
+        assertThat(wordList).extracting("word", String.class)
                 .contains("test","love");
-        assertThat(list).extracting("meaning", String.class)
+        assertThat(wordList).extracting("meaning", String.class)
                 .contains("테스트","사랑");
     }
 
     @Test
     void findToDayWordList() {
         //given
-        given(this.repository.findByUserIdAndNextDateLessThanEqual(USER_NAME, LocalDate.now())).willReturn(list);
+        given(this.repository.findByUserIdAndNextDateLessThanEqual(any(), any(LocalDate.class))).willReturn(list);
 
         //when
         List<Word> wordList = wordService.findToDayWordList();
 
         //than
-        assertThat(list).extracting("word", String.class)
+        assertThat(wordList).extracting("word", String.class)
                 .contains("test","love");
-        assertThat(list).extracting("meaning", String.class)
+        assertThat(wordList).extracting("meaning", String.class)
                 .contains("테스트","사랑");
     }
 
     @Test
     void getRandomWordList() {
         //given
-        given(this.repository.findByUserIdOrderByRandom(USER_NAME)).willReturn(list);
+        given(this.repository.findByUserIdOrderByRandom(any())).willReturn(list);
 
         //when
         List<Word> wordList = wordService.getRandomWordList();
 
         //than
-        assertThat(list).extracting("word", String.class)
+        assertThat(wordList).extracting("word", String.class)
                 .contains("test","love");
-        assertThat(list).extracting("meaning", String.class)
+        assertThat(wordList).extracting("meaning", String.class)
                 .contains("테스트","사랑");
     }
 
@@ -110,9 +108,9 @@ class WordServiceImplTest {
         List<Word> wordList = wordService.getRandomByAllWordList();
 
         //than
-        assertThat(list).extracting("word", String.class)
+        assertThat(wordList).extracting("word", String.class)
                 .contains("test","love");
-        assertThat(list).extracting("meaning", String.class)
+        assertThat(wordList).extracting("meaning", String.class)
                 .contains("테스트","사랑");
     }
 }
