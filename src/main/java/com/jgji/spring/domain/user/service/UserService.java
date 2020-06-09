@@ -60,11 +60,10 @@ public class UserService implements UserDetailsService {
     }
     
     public User getUserByUserName(String username) {
-        User user = userRepository.findByUserName(username);
-        return user;
+        return userRepository.findByUserName(username);
     }
     
-    public String getUserIdByUserName() {
+    public String getUserIdByLoginUserName() {
         User user = userRepository.findByUserName(getCurrentUserName());
         return user.getId();
     }
