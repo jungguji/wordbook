@@ -7,23 +7,31 @@ import com.jgji.spring.domain.word.model.Row;
 import com.jgji.spring.domain.word.model.Word;
 import com.jgji.spring.domain.word.model.WordDTO.AddWord;
 import com.jgji.spring.domain.word.service.WordService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.List;
 
 @Controller
 public class WordController {
-    @Autowired
     private WordService service;
+
+    private WordController(WordService service) {
+        this.service = service;
+    }
 
     @GetMapping("/")
     public String home(Word word, Model model) {
@@ -73,21 +81,17 @@ public class WordController {
     @PostMapping(path="/word/answers", produces = "application/json")
     @ResponseBody
     public boolean updateNextDateAndInsert(@RequestBody String[] answerIds) {
-        boolean result = service.updateNextDateAndInsert(answerIds);
-        
-        return result;
+        return service.updateNextDateAndInsert(answerIds);
     }
     
     @PostMapping(path="/word/answers/random", produces = "application/json")
     @ResponseBody
-    public boolean insertRandomFailWord(@RequestBody String[] answerIds) throws ParseException, JsonProcessingException {
-        boolean result = service.insertRandomFailWord(answerIds);
-        
-        return result;
+    public boolean insertRandomFailWord(@RequestBody String[] answerIds) {
+        return service.insertRandomFailWord(answerIds);
     }
     
     @GetMapping(value="/word/add")
-    public String getWordAdd(AddWord word, Model model) throws ParseException, JsonProcessingException {
+    public String getWordAdd(AddWord word, Model model) {
         word.getWords().add(new Row());
         word.getMeanings().add(new Row());
         
@@ -95,17 +99,16 @@ public class WordController {
     }
     
     @GetMapping(value="/word/add/file")
-    public String getWordAddByFileUpload(Word word, Model model) throws ParseException, JsonProcessingException {
+    public String getWordAddByFileUpload()  {
         return "thymeleaf/word/createWordFileUploadForm";
     }
     
     @RequestMapping(value="/word/add/upload", method=RequestMethod.POST, headers = "content-type=multipart/form-data")
     @ResponseBody
-    public String createWordByFileUpload(@RequestParam(value="file") MultipartFile files) throws ParseException, IOException {
+    public String createWordByFileUpload(@RequestParam(value="file") MultipartFile files) throws IOException {
         MultipartFile file = files;
-        String words = service.insertWordByFileUpload(file);
-        
-        return words;
+
+        return service.insertWordByFileUpload(file);
     }
     
     @PostMapping(value="/word/add", params={"addRow"})
@@ -129,7 +132,7 @@ public class WordController {
     @PostMapping(value="/word/add", params= {"save"})
     public String createWord(@Valid AddWord word, BindingResult bindingResult) {
         BindingResult result = service.getCreateWordBindingResult(word, bindingResult);
-        
+
         if (result.hasErrors()) {
             return "thymeleaf/word/createWordForm";
         }
