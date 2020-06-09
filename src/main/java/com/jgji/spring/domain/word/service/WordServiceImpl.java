@@ -6,7 +6,6 @@ import com.jgji.spring.domain.word.model.Row;
 import com.jgji.spring.domain.word.model.Word;
 import com.jgji.spring.domain.word.model.WordDTO.AddWord;
 import com.jgji.spring.domain.word.repository.WordRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -29,25 +28,32 @@ public class WordServiceImpl implements WordService{
     private final static String WORD_FIELD = "words";
     private final static String MEANING_FIELD = "meanings";
     
-    @Autowired
-    private WordRepository repository;
+    private final WordRepository repository;
     
-    @Autowired
-    private UserService userService;
-    
+    private final UserService userService;
+
+    public WordServiceImpl(WordRepository repository, UserService userService) {
+        this.repository = repository;
+        this.userService = userService;
+    }
+
     public List<Word> findAllByUserId() {
-        String userId = userService.getUserIdByUserName();
+        String userId = getUserId();
         return repository.findByUserId(userId);
     }
     
     public List<Word> findToDayWordList() {
-        String userId = userService.getUserIdByUserName();
+        String userId = getUserId();
         return repository.findByUserIdAndNextDateLessThanEqual(userId, LocalDate.now());
     }
     
     public List<Word> getRandomWordList() {
-        String userId = userService.getUserIdByUserName();
+        String userId = getUserId();
         return repository.findByUserIdOrderByRandom(userId);
+    }
+
+    private String getUserId() {
+        return this.userService.getUserIdByLoginUserName();
     }
     
     public List<Word> getRandomByAllWordList() {
@@ -109,7 +115,7 @@ public class WordServiceImpl implements WordService{
     
     @Transactional
     public String insertWordByFileUpload(MultipartFile file) throws IOException {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         InputStreamReader isr = null;
         BufferedReader br = null;
 
@@ -222,18 +228,16 @@ public class WordServiceImpl implements WordService{
     }
     
     public List<Map<String, Object>> getFrequentFailWord(String userId) {
-        List<Map<String, Object>> test = repository.findFrequentFailWord(userId);
-        
-        return test;
+        return repository.findFrequentFailWord(userId);
     }
     
     public BindingResult getCreateWordBindingResult(AddWord word, BindingResult bindingResult) {
         
         String wordRowErrorMsg = getRejectMessage(word, bindingResult, WORD_FIELD);
-        String meaingRowErrorMsg = getRejectMessage(word, bindingResult, MEANING_FIELD);
+        String meaningRowErrorMsg = getRejectMessage(word, bindingResult, MEANING_FIELD);
 
         BindingResult result = setRejectValue(bindingResult, wordRowErrorMsg, WORD_FIELD);
-        result = setRejectValue(result, meaingRowErrorMsg, MEANING_FIELD);
+        result = setRejectValue(result, meaningRowErrorMsg, MEANING_FIELD);
 
         return result;
     }
