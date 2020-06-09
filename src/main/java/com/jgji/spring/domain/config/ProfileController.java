@@ -21,7 +21,6 @@ public class ProfileController {
         List<String> prodProfiles = Arrays.asList("prod", "prod1", "prod2");
         String defaultProfile = profiles.isEmpty() ? "default" : prodProfiles.get(0);
 
-        System.out.println(" @@@@ getProfile() @@@@ ");
         return profiles.stream()
                 .filter(prodProfiles::contains)
                 .findAny()
