@@ -218,6 +218,7 @@ public class WordServiceImpl implements WordService{
         return true;
     }
 
+    @Transactional
     public void delete(String[] rowIds) {
         List<Integer> list = new ArrayList<Integer>();
         for (int i = 0 ; i < rowIds.length; i++) {
