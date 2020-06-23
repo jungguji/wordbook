@@ -128,7 +128,7 @@ class WordServiceImplTest {
         method.setAccessible(true);
 
         List<Integer> passWordList = Arrays.asList(6,4,5);
-        List<Integer> failWordList = Arrays.asList(1);
+        List<Integer> failWordList = Arrays.asList(9); // 이걸 실패하게 만들었음
 
         Object[] obj = new Object[] {answerIds};
 
