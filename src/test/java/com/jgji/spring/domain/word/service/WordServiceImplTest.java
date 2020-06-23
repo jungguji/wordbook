@@ -9,9 +9,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -112,5 +116,54 @@ class WordServiceImplTest {
                 .contains("test","love");
         assertThat(wordList).extracting("meaning", String.class)
                 .contains("테스트","사랑");
+    }
+
+    @Test
+    void getPassAndFailWordList_fail에_다른_값이_들어가서_실패()  throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        //given
+        String[] answerIds = new String[] {"6_1", "4_1", "5_1", "9_3"};
+        WordService w = new WordServiceImpl(repository, userService);
+
+        Method method = w.getClass().getDeclaredMethod("getPassAndFailWordList", String[].class);
+        method.setAccessible(true);
+
+        List<Integer> passWordList = Arrays.asList(6,4,5);
+        List<Integer> failWordList = Arrays.asList(1);
+
+        Object[] obj = new Object[] {answerIds};
+
+        //when
+        Map<String, List<Integer>> map = (Map<String, List<Integer>>) method.invoke(w, obj);
+
+        //than
+        assertThat(map).extracting("pass", String.class)
+                .contains(passWordList);
+        assertThat(map).extracting("fail", String.class)
+                .contains(failWordList);
+
+    }
+
+    @Test
+    void getPassAndFailWordList_성공()  throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        //given
+        String[] answerIds = new String[] {"6_1", "4_1", "5_1", "9_3"};
+        WordService w = new WordServiceImpl(repository, userService);
+
+        Method method = w.getClass().getDeclaredMethod("getPassAndFailWordList", String[].class);
+        method.setAccessible(true);
+
+        List<Integer> passWordList = Arrays.asList(6,4,5);
+        List<Integer> failWordList = Arrays.asList(9);
+
+        Object[] obj = new Object[] {answerIds};
+
+        //when
+        Map<String, List<Integer>> map = (Map<String, List<Integer>>) method.invoke(w, obj);
+
+        //than
+        assertThat(map).extracting("pass", String.class)
+                .contains(passWordList);
+        assertThat(map).extracting("fail", String.class)
+                .contains(failWordList);
     }
 }
