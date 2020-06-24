@@ -176,7 +176,7 @@ class WordServiceImplTest {
     void getFileEndcodeUTF8OREUCKR_성공() throws IOException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
 
         // given
-        String fileDir = "C:\\Users\\eleme\\Desktop";
+        String fileDir = "src/test/resources/";
         String fileName = "ttest.txt";
         String fileFullPath = fileDir + File.separator + fileName;
 
