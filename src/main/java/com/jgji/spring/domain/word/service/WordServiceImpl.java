@@ -27,7 +27,9 @@ public class WordServiceImpl implements WordService{
     private final static String FAIL_LIST = "fail";
     private final static String WORD_FIELD = "words";
     private final static String MEANING_FIELD = "meanings";
-    
+    private final static String ENCODE_UTF8 = "UTF-8";
+    private final static String ENCODE_EUCKR = "EUC-KR";
+
     private final WordRepository repository;
     
     private final UserService userService;
@@ -120,21 +122,17 @@ public class WordServiceImpl implements WordService{
         BufferedReader br = null;
 
         String encode = getFileEndcodeUTF8OREUCKR(file);
-        
-        User user = userService.getUserByUserName(userService.getCurrentUserName());
-        
+
         try {
             isr = new InputStreamReader(file.getInputStream(), encode);
             br = new BufferedReader(isr);
 
+            List<Word> newWordList = new ArrayList<Word>();
             int i = 0;
             String content;
+
             while ((content = br.readLine()) != null) {
                 String[] wordAndMeaning = content.split("/");
-                
-                Word insertNewWord = setWordAttribute(wordAndMeaning[0], wordAndMeaning[1], user);
-                
-                repository.save(insertNewWord);
                 
                 if (i != 0) {
                     result.append(", ");
@@ -142,7 +140,12 @@ public class WordServiceImpl implements WordService{
                 
                 result.append(wordAndMeaning[0]);
                 ++i;
+
+                Word insertNewWord = setWordAttribute(wordAndMeaning[0], wordAndMeaning[1]);
+                newWordList.add(insertNewWord);
             }
+
+            repository.saveAll(newWordList);
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -154,20 +157,21 @@ public class WordServiceImpl implements WordService{
     
     @Transactional
     public String insertWord(AddWord word) {
-        User user = userService.getUserByUserName(userService.getCurrentUserName());
-        
+        List<Word> newWordList = new ArrayList<Word>();
+
         int wordCount = word.getWords().size();
         for (int i = 0; i < wordCount; i++) {
-            Word insertNewWord = setWordAttribute(word.getWords().get(i).getText(), word.getMeanings().get(i).getText(), user);
-            
-            repository.save(insertNewWord);
+            Word insertNewWord = setWordAttribute(word.getWords().get(i).getText(), word.getMeanings().get(i).getText());
+            newWordList.add(insertNewWord);
         }
-        
+
+        repository.saveAll(newWordList);
+
         return "good";
     }
     
     private String getFileEndcodeUTF8OREUCKR(MultipartFile file) throws IOException {
-        String encode = "UTF-8";
+        String encode = ENCODE_UTF8;
         
         InputStreamReader isr = null;
         BufferedReader br = null;
@@ -177,7 +181,7 @@ public class WordServiceImpl implements WordService{
             br = new BufferedReader(isr);
             
             if (!br.readLine().matches(".*[ㄱ-힣]+.*")) {
-                encode = "EUC-KR";
+                encode = ENCODE_EUCKR;
             }
             
         } catch (IOException e) {
@@ -189,7 +193,9 @@ public class WordServiceImpl implements WordService{
         return encode;
     }
     
-    private Word setWordAttribute(String word, String meaning, User user) {
+    private Word setWordAttribute(String word, String meaning) {
+        User user = userService.getUserByUserName(userService.getCurrentUserName());
+
         Word insertNewWord = new Word();
         insertNewWord.setWord(word);
         insertNewWord.setMeaning(meaning);
