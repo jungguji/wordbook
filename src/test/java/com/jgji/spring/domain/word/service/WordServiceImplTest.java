@@ -7,8 +7,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.time.LocalDate;
@@ -17,9 +22,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)
 class WordServiceImplTest {
@@ -140,7 +146,6 @@ class WordServiceImplTest {
                 .contains(passWordList);
         assertThat(map).extracting("fail", String.class)
                 .contains(failWordList);
-
     }
 
     @Test
@@ -165,5 +170,29 @@ class WordServiceImplTest {
                 .contains(passWordList);
         assertThat(map).extracting("fail", String.class)
                 .contains(failWordList);
+    }
+
+    @Test
+    void getFileEndcodeUTF8OREUCKR_성공() throws IOException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+
+        // given
+        String fileDir = "C:\\Users\\eleme\\Desktop";
+        String fileName = "ttest.txt";
+        String fileFullPath = fileDir + File.separator + fileName;
+
+        MockMultipartFile mockFile = new MockMultipartFile(fileName, new FileInputStream(new File(fileFullPath)));
+
+        WordService w = new WordServiceImpl(repository, userService);
+
+        Method method = w.getClass().getDeclaredMethod("getFileEndcodeUTF8OREUCKR", MultipartFile.class);
+        method.setAccessible(true);
+
+        Object[] obj = new Object[] {mockFile};
+
+        //when
+        String encode = (String) method.invoke(w, obj);
+
+        //than
+        assertEquals("UTF-8", encode);
     }
 }
