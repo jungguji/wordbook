@@ -93,14 +93,14 @@ public class WordServiceImpl implements WordService{
     }
     
     private Map<String, List<Integer>> getPassAndFailWordList(String[] answerIds) {
-        List<Integer> passWordList = new ArrayList<Integer>();
-        List<Integer> failWordList = new ArrayList<Integer>();
+        List<Integer> passWordList = new ArrayList<>();
+        List<Integer> failWordList = new ArrayList<>();
         
-        for (int i = 0; i < answerIds.length; i++) {
-            if (answerIds[i].endsWith("_1")) {
-                passWordList.add(Integer.parseInt(answerIds[i].split("_")[0]));
+        for (String answerId : answerIds) {
+            if (answerId.endsWith("_1")) {
+                passWordList.add(Integer.parseInt(answerId.split("_")[0]));
             } else {
-                int id = Integer.parseInt(answerIds[i].split("_")[0]);
+                int id = Integer.parseInt(answerId.split("_")[0]);
                 
                 if (!failWordList.contains(id)) {
                     failWordList.add(id);
@@ -108,7 +108,7 @@ public class WordServiceImpl implements WordService{
             }
         }
         
-        Map<String, List<Integer>> map = new HashMap<String, List<Integer>>();
+        Map<String, List<Integer>> map = new HashMap<>();
         map.put(PASS_LIST, passWordList);
         map.put(FAIL_LIST, failWordList);
         
@@ -121,13 +121,13 @@ public class WordServiceImpl implements WordService{
         InputStreamReader isr = null;
         BufferedReader br = null;
 
-        String encode = getFileEndcodeUTF8OREUCKR(file);
+        String encode = getFileEncodeUTF8OREUCKR(file);
 
         try {
             isr = new InputStreamReader(file.getInputStream(), encode);
             br = new BufferedReader(isr);
 
-            List<Word> newWordList = new ArrayList<Word>();
+            List<Word> newWordList = new ArrayList<>();
             int i = 0;
             String content;
 
@@ -157,7 +157,7 @@ public class WordServiceImpl implements WordService{
     
     @Transactional
     public String insertWord(AddWord word) {
-        List<Word> newWordList = new ArrayList<Word>();
+        List<Word> newWordList = new ArrayList<>();
 
         int wordCount = word.getWords().size();
         for (int i = 0; i < wordCount; i++) {
@@ -170,7 +170,7 @@ public class WordServiceImpl implements WordService{
         return "good";
     }
     
-    private String getFileEndcodeUTF8OREUCKR(MultipartFile file) throws IOException {
+    private String getFileEncodeUTF8OREUCKR(MultipartFile file) throws IOException {
         String encode = ENCODE_UTF8;
         
         InputStreamReader isr = null;
@@ -226,9 +226,9 @@ public class WordServiceImpl implements WordService{
 
     @Transactional
     public void delete(String[] rowIds) {
-        List<Integer> list = new ArrayList<Integer>();
-        for (int i = 0 ; i < rowIds.length; i++) {
-            list.add(Integer.parseInt(rowIds[i]));
+        List<Integer> list = new ArrayList<>();
+        for (String rowId : rowIds) {
+            list.add(Integer.parseInt(rowId));
         }
         
         repository.deleteByIdIn(list);
@@ -240,51 +240,37 @@ public class WordServiceImpl implements WordService{
     
     public BindingResult getCreateWordBindingResult(AddWord word, BindingResult bindingResult) {
         
-        String wordRowErrorMsg = getRejectMessage(word, bindingResult, WORD_FIELD);
-        String meaningRowErrorMsg = getRejectMessage(word, bindingResult, MEANING_FIELD);
+        String wordRowErrorNumber = getErrorRowNumber(word.getWords());
+        String meaningRowErrorNumber = getErrorRowNumber(word.getMeanings());
 
-        BindingResult result = setRejectValue(bindingResult, wordRowErrorMsg, WORD_FIELD);
-        result = setRejectValue(result, meaningRowErrorMsg, MEANING_FIELD);
+        BindingResult result = setRejectValue(bindingResult, wordRowErrorNumber, WORD_FIELD, "단어가");
+        result = setRejectValue(result, meaningRowErrorNumber, MEANING_FIELD, "뜻이");
 
         return result;
     }
     
-    private String getRejectMessage(AddWord word, BindingResult bindingResult, String fieldName) {
+    private String getErrorRowNumber(List<Row> rows) {
         StringBuilder sb = new StringBuilder();
-        
-        int wordCount = word.getWords().size();
-        
-        List<Row> row;
-        if (WORD_FIELD.equals(fieldName)) {
-            row = word.getWords();
-        } else {
-            row = word.getMeanings();
-        }
-        
-        for (int i = 0; i < wordCount; i++) {
-            int wordsErrorCount = bindingResult.getFieldErrorCount(fieldName);
-            if (StringUtils.isEmpty(row.get(i).getText()) && wordsErrorCount == 0) {
-                
+
+        for (int i = 0; i < rows.size(); i++) {
+            if (StringUtils.isEmpty(rows.get(i).getText())) {
+
                 if (sb.length() != 0) {
                     sb.append(", ");
                 }
+
                 sb.append((i+1));
             }
         }
-        
+
         return sb.toString();
     }
-    
-    private BindingResult setRejectValue(BindingResult bindingResult, String errorMsg, String fieldName) {
-        if (!StringUtils.isEmpty(errorMsg)) {
-            StringBuilder errorMessage = new StringBuilder(errorMsg);
 
-            if (WORD_FIELD.equals(fieldName)) {
-                errorMessage.append("행에 단어가 비어 있습니다.");
-            } else {
-                errorMessage.append("행에 뜻이 비어 있습니다.");
-            }
-            
+    private BindingResult setRejectValue(BindingResult bindingResult, String errorMsg, String fieldName, String value) {
+        if (!StringUtils.isEmpty(errorMsg)) {
+            StringBuilder errorMessage = new StringBuilder(errorMsg)
+            .append("행에 " + value + " 비어 있습니다.");
+
             bindingResult.rejectValue(fieldName, fieldName, errorMessage.toString());
         }
         
