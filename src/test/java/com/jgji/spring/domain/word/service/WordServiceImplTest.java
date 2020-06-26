@@ -1,7 +1,9 @@
 package com.jgji.spring.domain.word.service;
 
 import com.jgji.spring.domain.user.service.UserService;
+import com.jgji.spring.domain.word.model.Row;
 import com.jgji.spring.domain.word.model.Word;
+import com.jgji.spring.domain.word.model.WordDTO;
 import com.jgji.spring.domain.word.repository.WordRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,6 +11,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.MapBindingResult;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -17,10 +21,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -173,7 +174,7 @@ class WordServiceImplTest {
     }
 
     @Test
-    void getFileEndcodeUTF8OREUCKR_성공() throws IOException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    void getFileEncodeUTF8OREUCKR_성공() throws IOException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
 
         // given
         String fileDir = "src/test/resources/";
@@ -184,7 +185,7 @@ class WordServiceImplTest {
 
         WordService w = new WordServiceImpl(repository, userService);
 
-        Method method = w.getClass().getDeclaredMethod("getFileEndcodeUTF8OREUCKR", MultipartFile.class);
+        Method method = w.getClass().getDeclaredMethod("getFileEncodeUTF8OREUCKR", MultipartFile.class);
         method.setAccessible(true);
 
         Object[] obj = new Object[] {mockFile};
@@ -194,5 +195,31 @@ class WordServiceImplTest {
 
         //than
         assertEquals("UTF-8", encode);
+    }
+
+    @Test
+    void getErrorRowNumber_성공() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        // given
+        WordService w = new WordServiceImpl(repository, userService);
+        Method method = w.getClass().getDeclaredMethod("getErrorRowNumber", List.class);
+        method.setAccessible(true);
+
+        Row row1 = new Row();
+        row1.setText("");
+        Row row2 = new Row();
+        row2.setText("");
+
+        List<Row> rows = Arrays.asList(
+                row1, row2
+        );
+
+        Object[] obj = new Object[] {rows};
+
+        //when
+        String str = (String) method.invoke(w, obj);
+
+        //than
+        assertEquals("1, 2", str);
+
     }
 }
