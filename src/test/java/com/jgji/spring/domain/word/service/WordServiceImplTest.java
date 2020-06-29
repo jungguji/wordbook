@@ -25,6 +25,7 @@ import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
@@ -220,6 +221,41 @@ class WordServiceImplTest {
 
         //than
         assertEquals("1, 2", str);
+    }
 
+    @Test
+    void getErrorRowNumbesetRejectValue_성공() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        // given
+        WordService w = new WordServiceImpl(repository, userService);
+        Method method = w.getClass().getDeclaredMethod("setRejectValue", BindingResult.class, String.class, String.class, String.class);
+        method.setAccessible(true);
+
+        BindingResult bindingResult = new MapBindingResult(new HashMap(), "");
+
+        Object[] obj = new Object[] {bindingResult, new String("1"), new String("word"), new String("단어가")};
+
+        //when
+        BindingResult bresult = (BindingResult) method.invoke(w, obj);
+
+        //than
+        assertTrue(bresult.hasErrors());
+        assertEquals(1, bresult.getErrorCount());
+        assertEquals("1행에 단어가 비어 있습니다.", bresult.getFieldError("word").getDefaultMessage());
+    }
+
+    @Test
+    void insertWordByFileUpload() throws IOException, NoSuchMethodException {
+        // given
+        String fileDir = "src/test/resources/";
+        String fileName = "ttest.txt";
+        String fileFullPath = fileDir + File.separator + fileName;
+
+        MockMultipartFile mockFile = new MockMultipartFile(fileName, new FileInputStream(new File(fileFullPath)));
+
+        // when
+        String result = wordService.insertWordByFileUpload(mockFile);
+
+        // than
+        assertEquals("I take off my hat, The dog walks near the horse", result);
     }
 }
