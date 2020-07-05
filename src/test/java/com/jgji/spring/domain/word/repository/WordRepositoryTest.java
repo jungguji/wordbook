@@ -1,17 +1,16 @@
 package com.jgji.spring.domain.word.repository;
 
 import com.jgji.spring.domain.user.model.User;
+import com.jgji.spring.domain.user.repository.UserRepository;
 import com.jgji.spring.domain.word.model.Word;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import javax.sql.DataSource;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -20,188 +19,147 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@TestPropertySource("classpath:application-test.properties")
 class WordRepositoryTest {
 
     @Autowired
     private WordRepository wordRepository;
 
-    @Autowired private DataSource dataSource;
+    @Autowired
+    private UserRepository userRepository;
 
     private static final String USER_ID = "1";
     private static User user;
     private static User user1;
 
+    private static Word word;
+    private static Word word1;
+
     @BeforeEach
     void setUp() {
         user = new User();
         user.setUsername("jgji");
-        user.setId(USER_ID);
         user.setPassword("qwe123");
 
-        user1 = new User();
-        user1.setId("2");
-    }
+        userRepository.save(this.user);
 
-    @Test
-    void test() {
-        assertThat(dataSource).isNotNull();
+        user1 = new User();
+        user.setUsername("haha");
+        user.setPassword("qwe123");
+
+        userRepository.save(this.user1);
+
+        List<Word> givenWordList = getWordGiven();
+        this.word = givenWordList.get(0);
+        this.word1 = givenWordList.get(1);
     }
 
     @Test
     void findByUserId() {
         //given
-        Word word = new Word();
-        word.setId(100);
-        word.setLevel(1);
-        word.setWord("test");
-        word.setMeaning("확인");
-        word.setNextDate(LocalDate.now());
-        word.setUser(user);
-
-        wordRepository.save(word);
-
         //when
-        List<Word> list = wordRepository.findByUserId(USER_ID);
+        List<Word> list = wordRepository.findByUserId(this.word.getUser().getId());
 
         //than
-        assertThat(list).extracting("word", String.class)
-                .contains("test");
-        assertThat(list).extracting("meaning", String.class)
-                .contains("확인");
+        assertThat(list).contains(word);
     }
 
     @Test
     void findByUserIdAndNextDateLessThanEqual() {
         //given
-        Word word = new Word();
-        word.setId(2324);
-        word.setLevel(1);
-        word.setWord("tttt");
-        word.setMeaning("확인");
-        word.setNextDate(LocalDate.now());
-        word.setUser(user);
-
-        Word word1 = new Word();
-        word1.setId(232);
-        word1.setLevel(1);
-        word1.setWord("하하호호");
-        word1.setMeaning("헤헤");
-        word1.setUser(user);
         LocalDate local = LocalDate.now();
         local = local.plusDays(5);
-
-        word1.setNextDate(local);
+        this.word1.setNextDate(local);
 
         wordRepository.save(word);
         wordRepository.save(word1);
 
         //when
-        List<Word> list = wordRepository.findByUserIdAndNextDateLessThanEqual(USER_ID, LocalDate.now().plusDays(5));
+        List<Word> list = wordRepository.findByUserIdAndNextDateLessThanEqual(this.word.getUser().getId(), LocalDate.now().plusDays(5));
 
         //than
-        assertThat(list).extracting("word", String.class)
-                .contains("tttt", "하하호호");
-        assertThat(list).extracting("meaning", String.class)
-                .contains("확인", "헤헤");
+        assertThat(list).contains(word);
+        assertThat(list).contains(word1);
     }
 
     @Test
     void findOrderByRandom() {
         //given
-        Word word = new Word();
-        word.setId(100);
-        word.setLevel(1);
-        word.setWord("test");
-        word.setMeaning("확인");
-        word.setNextDate(LocalDate.now());
-        word.setUser(user);
-
-        Word word1 = new Word();
-        word1.setId(102);
-        word1.setLevel(1);
-        word1.setWord("다른사람");
-        word1.setMeaning("것입니다");
-        word1.setUser(user1);
-
-        wordRepository.save(word);
-        wordRepository.save(word1);
-
         //when
         List<Word> list = wordRepository.findOrderByRandom();
 
         //than
-        assertThat(list).extracting("word", String.class)
-                .contains("test", "다른사람");
-        assertThat(list).extracting("meaning", String.class)
-                .contains("확인", "것입니다");
+        assertThat(list).contains(word);
+        assertThat(list).contains(word1);
     }
 
     @Test
     void findByUserIdOrderByRandom() {
         //given
-        Word word = new Word();
-        word.setId(84);
-        word.setLevel(1);
-        word.setWord("test");
-        word.setMeaning("확인");
-        word.setNextDate(LocalDate.now());
-        word.setUser(user);
-
-        Word word1 = new Word();
-        word1.setId(85);
-        word1.setLevel(1);
-        word1.setWord("같은사람");
-        word1.setMeaning("것입니다");
-        word1.setUser(user);
-
-        wordRepository.save(word);
-        wordRepository.save(word1);
-
         //when
-        List<Word> list = wordRepository.findByUserIdOrderByRandom(USER_ID);
+        List<Word> list = wordRepository.findByUserIdOrderByRandom(this.word.getUser().getId());
 
         //than
-        assertThat(list).extracting("word", String.class)
-                .contains("test", "같은사람");
-        assertThat(list).extracting("meaning", String.class)
-                .contains("확인", "것입니다");
-
+        assertThat(list).contains(word);
+        assertThat(list).contains(word1);
     }
 
     @Test
     void findByIdIn() {
         //given
-        Word word = new Word();
-        word.setId(5);
-        word.setLevel(1);
-        word.setWord("test");
-        word.setMeaning("확인");
-        word.setNextDate(LocalDate.now());
-        word.setUser(user);
+        Word word2 = new Word();
+        word2.setLevel(1);
+        word2.setWord("gaga");
+        word2.setMeaning("gaga");
+        word2.setUser(user);
 
-        Word word1 = new Word();
-        word1.setId(6);
-        word1.setLevel(1);
-        word1.setWord("같은사람");
-        word1.setMeaning("것입니다");
-        word1.setUser(user);
+        wordRepository.save(word2);
 
         List<Integer> createWordIdList = Arrays.asList(
-                5,6
+                word1.getId(), word2.getId()
         );
 
         //when
         List<Word> list = wordRepository.findByIdIn(createWordIdList);
 
         //than
-        assertThat(list).extracting("word", String.class)
-                .contains("like", "apple");
-        assertThat(list).extracting("meaning", String.class)
-                .contains("같은, 좋은, 와 비슷한", "사과,대도시");
+        assertThat(list).isNotIn(word);
+        assertThat(list).contains(word1);
+        assertThat(list).contains(word2);
     }
 
     @Test
     void deleteByIdIn() {
+        //given
+        List<Integer> ids = Arrays.asList( new Integer(1));
+
+        //when
+        wordRepository.deleteByIdIn(ids);
+
+        List<Word> list = wordRepository.findByUserId(USER_ID);
+
+        //than
+        assertThat(list).contains(word1)
+                .isNotIn(word);
+    }
+
+    private List<Word> getWordGiven() {
+        Word word = new Word();
+        word.setLevel(1);
+        word.setWord("test");
+        word.setMeaning("확인");
+        word.setNextDate(LocalDate.now());
+        word.setUser(user);
+
+        Word word1 = new Word();
+        word1.setLevel(1);
+        word1.setWord("test2");
+        word1.setMeaning("확인2");
+        word1.setUser(user);
+
+        Word answerWord = wordRepository.save(word);
+        Word answerWord1 = wordRepository.save(word1);
+
+        return Arrays.asList(answerWord, answerWord1);
     }
 }
