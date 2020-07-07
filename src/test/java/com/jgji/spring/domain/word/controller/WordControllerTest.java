@@ -29,9 +29,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(controllers = {WordController.class})
 @WithMockUser(username="jgji", password="qwe123", roles="USER")
@@ -188,5 +186,23 @@ class WordControllerTest {
         ObjectMapper objectMapper = new ObjectMapper();
 
         return objectMapper.writeValueAsString(addWord);
+    }
+
+    @Test
+    void updateNextDateAndInsert() throws Exception {
+        // gvien
+        String[] pass = new String[] {"pass"};
+        String[] fail = new String[] {"fail"};
+
+        //when
+        ResultActions action = mockMvc.perform(post("/word/answers")
+                .param("pass", pass)
+                .param("fail", fail)
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(csrf()))
+                .andDo(print());
+
+        //then
+        action.andExpect(status().isOk());
     }
 }
