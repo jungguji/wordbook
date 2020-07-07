@@ -80,8 +80,9 @@ public class WordController {
     
     @PostMapping(path="/word/answers", produces = "application/json")
     @ResponseBody
-    public boolean updateNextDateAndInsert(@RequestBody String[] answerIds) {
-        return service.updateNextDateAndInsert(answerIds);
+    public boolean updateNextDateAndInsert(@RequestParam("pass") String pass, @RequestParam("fail") String fail) {
+        System.out.println("test");
+        return true;
     }
     
     @PostMapping(path="/word/answers/random", produces = "application/json")

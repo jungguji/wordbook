@@ -26,6 +26,8 @@
             /* <![CDATA[ */   
             var wordList =  [(${wordList})];
             const answerList = [];
+            const passList = [];
+            const failList = [];
             const progressPercent = (1 / wordList.length) * 100;
             
             window.onload = () => {
@@ -112,12 +114,16 @@
                 const meanArray = stringToArray(wordList[currentIndex].meaning);
                 
                 if (meanArray.includes(answerTag.value)) {
-                    setCheckResult("green", "정답", currentIndex, 1);
-                    
+                    setCheckResult("green", "정답", currentIndex);
+                    passList.push(wordList[currentIndex].id);
+
                     progressSetting();
+
                     wordList.splice(currentIndex, 1);
+
                 } else {
-                    setCheckResult("red", "오답", currentIndex, 0);
+                    setCheckResult("red", "오답", currentIndex);
+                    failList.push(wordList[currentIndex].id);
                 }
                 
                 if (wordList.length == 0) {
@@ -131,10 +137,9 @@
                 }
             }
             
-            const setCheckResult = (tagColor, result, currentIndex, trueOrFalse) => {
+            const setCheckResult = (tagColor, result, currentIndex) => {
                 setWordAndResultTag(tagColor, result);
-                setAnswerList(currentIndex, trueOrFalse);
-                setDiffrentMeaning(currentIndex);
+                setDifferentMeaning(currentIndex);
             }
             
             const setWordAndResultTag = (wordInput, resultInput) => {
@@ -145,11 +150,7 @@
                 resultTag.innerHTML = resultInput;
             };
             
-            const setAnswerList = (currentIndex, value) => {
-                answerList.push(wordList[currentIndex].id+"_" + value);
-            };
-            
-            const setDiffrentMeaning = (currentIndex) => {
+            const setDifferentMeaning = (currentIndex) => {
                 document.querySelector("#different").innerHTML = "(" + wordList[currentIndex].meaning + ")";
             }
             
@@ -191,14 +192,16 @@
             };
             
             function answersUpdate() {
-                let dataa = JSON.stringify(answerList);
-                
+                const answer = {
+                			 "pass" : "a"
+                			 , "fail" : "b"
+                			}
+                let data = JSON.stringify(answer);
+
                 $.ajax({
                     type:"POST"
-                    , contentType: "application/json"
                     , url: "/word/answers"
-                    , data: dataa
-                    , dataType : 'json'
+                    , data: data
                     , cache: false
                     , success: function(data) {
                         alert("테스트가 종료되었습니다.");
@@ -209,13 +212,17 @@
             }
             
             function answersUpdateForRandom() {
-                let dataa = JSON.stringify(answerList);
+                const answer = {
+                			 pass : passList
+                			 , fail : failList
+                			}
+                let data = JSON.stringify(answer);
                 
                 $.ajax({
                     type:"POST"
                     , contentType: "application/json"
                     , url: "/word/answers/random"
-                    , data: dataa
+                    , data: data
                     , dataType : 'json'
                     , cache: false
                     , success: function(data) {
