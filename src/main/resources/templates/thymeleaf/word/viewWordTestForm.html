@@ -193,15 +193,15 @@
             
             function answersUpdate() {
                 const answer = {
-                			 "pass" : "a"
-                			 , "fail" : "b"
+                			 pass : passList
+                			 , fail : failList
                 			}
-                let data = JSON.stringify(answer);
 
                 $.ajax({
                     type:"POST"
                     , url: "/word/answers"
-                    , data: data
+                    , traditional: true
+                    , data: answer
                     , cache: false
                     , success: function(data) {
                         alert("테스트가 종료되었습니다.");

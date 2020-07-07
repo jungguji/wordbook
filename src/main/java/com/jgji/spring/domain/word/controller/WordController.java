@@ -78,10 +78,10 @@ public class WordController {
         return "thymeleaf/word/viewWordTestForm";
     }
     
-    @PostMapping(path="/word/answers", produces = "application/json")
+    @PostMapping(path="/word/answers")
     @ResponseBody
-    public boolean updateNextDateAndInsert(@RequestParam("pass") String pass, @RequestParam("fail") String fail) {
-        System.out.println("test");
+    public boolean updateNextDateAndInsert(@RequestParam("pass") int[] pass, @RequestParam("fail") int[] fail) {
+        System.out.println("@@@@@@@@@@@@@@@@@");
         return true;
     }
     

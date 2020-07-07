@@ -16,10 +16,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service("wordService")
 public class WordServiceImpl implements WordService{
@@ -77,6 +75,22 @@ public class WordServiceImpl implements WordService{
         repository.insertFailWord(failList, user);
         
         return true;
+    }
+
+    public void updatePassWord(int[] passIds) {
+        List<Word> passList = repository.findByIdIn(Arrays.stream(passIds).boxed().collect(Collectors.toList()));
+        User user = userService.getUserByUserName(userService.getCurrentUserName());
+
+        repository.updateSuccessWord(passList, user.getId());
+    }
+
+    public List<String> insertFailWord(int[] failIds) {
+        List<Word> failList = repository.findByIdIn(Arrays.stream(failIds).boxed().collect(Collectors.toList()));
+
+        User user = userService.getUserByUserName(userService.getCurrentUserName());
+        repository.insertFailWord(failList, user);
+
+        return new ArrayList<>();
     }
     
     @Transactional
