@@ -14,15 +14,18 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.MapBindingResult;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -191,18 +194,25 @@ class WordControllerTest {
     @Test
     void updateNextDateAndInsert() throws Exception {
         // gvien
-        String[] pass = new String[] {"pass"};
-        String[] fail = new String[] {"fail"};
+        String[] pass = new String[] {"1","2","3","4"};
+        String[] fail = new String[] {"100","101"};
+
+        List<String> failIds = Arrays.asList("틀란단어", "틀렸");
+
+        given(this.service.insertFailWord(any())).willReturn(failIds);
 
         //when
         ResultActions action = mockMvc.perform(post("/word/answers")
                 .param("pass", pass)
                 .param("fail", fail)
-                .contentType(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                 .with(csrf()))
                 .andDo(print());
 
         //then
-        action.andExpect(status().isOk());
+        MvcResult result = action.andExpect(status().isOk())
+        .andReturn();
+
+        assertEquals("[\"틀란단어\",\"틀렸\"]", (result.getResponse().getContentAsString()));
     }
 }
