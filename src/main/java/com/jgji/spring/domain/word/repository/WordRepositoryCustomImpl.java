@@ -1,17 +1,16 @@
 package com.jgji.spring.domain.word.repository;
 
+import com.jgji.spring.domain.user.model.User;
+import com.jgji.spring.domain.word.model.Word;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
-import com.jgji.spring.domain.user.model.User;
-import com.jgji.spring.domain.word.model.Word;
 
 public class WordRepositoryCustomImpl implements WordRepositoryCustom {
     @PersistenceContext
@@ -31,21 +30,25 @@ public class WordRepositoryCustomImpl implements WordRepositoryCustom {
         em.flush();
     }
     
-    public void insertFailWord(List<Word> list, User user) {
+    public List<String> insertFailWord(List<Word> list, User user) {
         final int PLUS_DAY = 1;
         LocalDate nextDate = LocalDate.now().plusDays(PLUS_DAY);
-        
+
+        List<String> failWordList = new ArrayList<>();
         for (Word word : list) {
             Word insertNewWord = new Word();
             insertNewWord.setWord(word.getWord());
             insertNewWord.setMeaning(word.getMeaning());
             insertNewWord.setNextDate(nextDate);
             insertNewWord.setUser(user);
-            
+
+            failWordList.add(insertNewWord.getWord());
             em.persist(insertNewWord);
         }
         
         em.flush();
+
+        return failWordList;
     }
     
     private int addDate(int level) {

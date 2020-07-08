@@ -203,8 +203,9 @@
                     , traditional: true
                     , data: answer
                     , cache: false
+                    , contentType: "application/x-www-form-urlencoded"
                     , success: function(data) {
-                        alert("테스트가 종료되었습니다.");
+                        alert("테스트가 종료되었습니다. \n 틀린 단어는 내일 시험에 추가됩니다. \n 틀린 단어 : " + data);
                         
                         document.location.href = "/";
                     }
