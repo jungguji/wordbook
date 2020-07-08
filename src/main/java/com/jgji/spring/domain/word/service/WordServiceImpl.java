@@ -61,22 +61,6 @@ public class WordServiceImpl implements WordService{
     }
     
     @Transactional
-    public boolean updateNextDateAndInsert(String[] answerIds) {
-        Map<String, List<Integer>> passAndFail = getPassAndFailWordList(answerIds);
-        List<Integer> passWordList = passAndFail.get(PASS_LIST);
-        List<Integer> failWordList = passAndFail.get(FAIL_LIST);
-        
-        List<Word> passList = repository.findByIdIn(passWordList);
-        List<Word> failList = repository.findByIdIn(failWordList);
-        
-        User user = userService.getUserByUserName(userService.getCurrentUserName());
-        
-        repository.updateSuccessWord(passList, user.getId());
-        repository.insertFailWord(failList, user);
-        
-        return true;
-    }
-
     public void updatePassWord(int[] passIds) {
         List<Word> passList = repository.findByIdIn(Arrays.stream(passIds).boxed().collect(Collectors.toList()));
         User user = userService.getUserByUserName(userService.getCurrentUserName());
@@ -84,13 +68,12 @@ public class WordServiceImpl implements WordService{
         repository.updateSuccessWord(passList, user.getId());
     }
 
+    @Transactional
     public List<String> insertFailWord(int[] failIds) {
         List<Word> failList = repository.findByIdIn(Arrays.stream(failIds).boxed().collect(Collectors.toList()));
 
         User user = userService.getUserByUserName(userService.getCurrentUserName());
-        repository.insertFailWord(failList, user);
-
-        return new ArrayList<>();
+        return repository.insertFailWord(failList, user);
     }
     
     @Transactional
@@ -130,7 +113,7 @@ public class WordServiceImpl implements WordService{
     }
     
     @Transactional
-    public String insertWordByFileUpload(MultipartFile file) throws IOException {
+    public String insertWordByFileUpload(MultipartFile file) {
         StringBuilder result = new StringBuilder();
         InputStreamReader isr = null;
         BufferedReader br = null;
@@ -184,7 +167,7 @@ public class WordServiceImpl implements WordService{
         return "good";
     }
     
-    private String getFileEncodeUTF8OREUCKR(MultipartFile file) throws IOException {
+    private String getFileEncodeUTF8OREUCKR(MultipartFile file) {
         String encode = ENCODE_UTF8;
         
         InputStreamReader isr = null;

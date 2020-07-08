@@ -19,8 +19,6 @@ public interface WordService {
     
     List<Word> getRandomByAllWordList();
 
-    boolean updateNextDateAndInsert(String[] answerIds);
-
     void updatePassWord(int[] passIds);
 
     List<String> insertFailWord(int[] failIds);
