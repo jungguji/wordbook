@@ -2,6 +2,11 @@ package com.jgji.spring.domain;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
+
+import java.nio.charset.Charset;
 
 @SpringBootApplication
 public class Demo1Application {
@@ -10,4 +15,8 @@ public class Demo1Application {
 		SpringApplication.run(Demo1Application.class, args);
 	}
 
+	@Bean
+	public HttpMessageConverter<String> responseBodyConverter() {
+		return new StringHttpMessageConverter(Charset.forName("UTF-8"));
+	}
 }
