@@ -12,7 +12,7 @@ cache:
     - $HOME/.m2
 
 before_install:
-  - chmod +x ./API/task/mvnw
+  - chmod +x mvnw
 
 # MAVEN 프로젝트는 필요 없음
 #script: "./mvnw package"
