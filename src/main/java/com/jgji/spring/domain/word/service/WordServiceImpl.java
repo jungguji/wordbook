@@ -193,13 +193,12 @@ public class WordServiceImpl implements WordService{
     private Word setWordAttribute(String word, String meaning) {
         User user = userService.getUserByUserName(userService.getCurrentUserName());
 
-        Word insertNewWord = new Word();
-        insertNewWord.setWord(word);
-        insertNewWord.setMeaning(meaning);
-        insertNewWord.setNextDate(LocalDate.now());
-        insertNewWord.setUser(user);
-        
-        return insertNewWord;
+        return  Word.builder()
+                .word(word)
+                .meaning(meaning)
+                .nextDate(LocalDate.now())
+                .user(user)
+                .build();
     }
     
     private void closeBufferReaderAndInputStreamReader(BufferedReader br, InputStreamReader isr) {

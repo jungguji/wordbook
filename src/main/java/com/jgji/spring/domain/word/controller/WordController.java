@@ -34,7 +34,7 @@ public class WordController {
     }
 
     @GetMapping("/")
-    public String home(Word word, Model model) {
+    public String home() {
         return "thymeleaf/index";
     }
 

@@ -22,8 +22,8 @@ public class WordRepositoryCustomImpl implements WordRepositoryCustom {
         for (Word word : list) {
             int currentLevel = word.getLevel();
             
-            word.setNextDate(nextDate.plusDays(addDate(currentLevel)));
-            word.setLevel(++currentLevel);
+            word.updateDate(nextDate.plusDays(addDate(currentLevel)));
+            word.updateLevel(++currentLevel);
             
             em.merge(word);
         }
@@ -36,13 +36,15 @@ public class WordRepositoryCustomImpl implements WordRepositoryCustom {
 
         List<String> failWordList = new ArrayList<>();
         for (Word word : list) {
-            Word insertNewWord = new Word();
-            insertNewWord.setWord(word.getWord());
-            insertNewWord.setMeaning(word.getMeaning());
-            insertNewWord.setNextDate(nextDate);
-            insertNewWord.setUser(user);
+            Word insertNewWord = Word.builder()
+                    .word(word.getWord())
+                    .meaning(word.getMeaning())
+                    .nextDate(nextDate)
+                    .user(user)
+                    .build();
 
             failWordList.add(insertNewWord.getWord());
+
             em.persist(insertNewWord);
         }
         
@@ -98,7 +100,7 @@ public class WordRepositoryCustomImpl implements WordRepositoryCustom {
         .setParameter("userId", userId)
         .getResultList();
         
-        List<String> columns = new ArrayList<String>();
+        List<String> columns = new ArrayList<>();
         columns.add("word");
         columns.add("qty");
         
@@ -106,14 +108,14 @@ public class WordRepositoryCustomImpl implements WordRepositoryCustom {
     }
     
     public List<Map<String, Object>> convertMapList(List<Object[]> resultList, List<String> columns) {
-        List<Map<String,Object>> mapList = new ArrayList<Map<String,Object>>();
+        List<Map<String,Object>> mapList = new ArrayList<>();
         Map<String, Object> itemMap;
         
         Iterator<Object[]> it = resultList.iterator();
         while(it.hasNext()) {
             Object[] item = it.next();
             
-            itemMap = new HashMap<String, Object>();
+            itemMap = new HashMap<>();
             int idx = 0;
             
             for(String key : columns) {

@@ -1,16 +1,16 @@
 package com.jgji.spring.domain.word.model;
 
 import com.jgji.spring.domain.user.model.User;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDate;
 
+
+@NoArgsConstructor
+@Getter
 @Entity
 @Table(name = "word")
 public class Word {
@@ -22,54 +22,29 @@ public class Word {
     private LocalDate nextDate;
     private int level;
     
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "users_id")
     private User user;
-    
-    public int getId() {
-        return id;
-    }
-    public void setId(int id) {
-        this.id = id;
-    }
-    
-    public String getWord() {
-        return word;
-    }
-    public void setWord(String word) {
+
+    @Builder
+    public Word(String word, String meaning, LocalDate nextDate, int level, User user) {
         this.word = word;
-    }
-    
-    public String getMeaning() {
-        return meaning;
-    }
-    public void setMeaning(String meaning) {
         this.meaning = meaning;
-    }
-    
-    public LocalDate getNextDate() {
-        return nextDate;
-    }
-    public void setNextDate(LocalDate nextDate) {
         this.nextDate = nextDate;
-    }
-    
-    public int getLevel() {
-        return level;
-    }
-    public void setLevel(int level) {
         this.level = level;
-    }
-    
-    public User getUser() {
-        return user;
-    }
-    public void setUser(User user) {
         this.user = user;
     }
-    
+
     public String toString() {
         return "id = " + this.id + " word = " + this.word + " meaning = " + meaning + " next_date = " + this.nextDate;
+    }
+
+    public void updateDate(LocalDate nextDate) {
+        this.nextDate = nextDate;
+    }
+
+    public void updateLevel(int level) {
+        this.level = level;
     }
     
 }
