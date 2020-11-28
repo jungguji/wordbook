@@ -69,7 +69,7 @@ class WordRepositoryTest {
         //given
         LocalDate local = LocalDate.now();
         local = local.plusDays(5);
-        this.word1.setNextDate(local);
+        this.word1.updateDate(local);
 
         wordRepository.save(word);
         wordRepository.save(word1);
@@ -107,11 +107,12 @@ class WordRepositoryTest {
     @Test
     void findByIdIn() {
         //given
-        Word word2 = new Word();
-        word2.setLevel(1);
-        word2.setWord("gaga");
-        word2.setMeaning("gaga");
-        word2.setUser(user);
+        Word word2 = Word.builder()
+                .word("gaga")
+                .meaning("gaga")
+                .level(1)
+                .user(user)
+                .build();
 
         wordRepository.save(word2);
 
@@ -144,18 +145,21 @@ class WordRepositoryTest {
     }
 
     private List<Word> getWordGiven() {
-        Word word = new Word();
-        word.setLevel(1);
-        word.setWord("test");
-        word.setMeaning("확인");
-        word.setNextDate(LocalDate.now());
-        word.setUser(user);
+        Word word = Word.builder()
+                .word("test")
+                .meaning("확인")
+                .level(1)
+                .nextDate(LocalDate.now())
+                .user(user)
+                .build();
 
-        Word word1 = new Word();
-        word1.setLevel(1);
-        word1.setWord("test2");
-        word1.setMeaning("확인2");
-        word1.setUser(user);
+        Word word1 =Word.builder()
+                .word("test2")
+                .meaning("확인2")
+                .level(1)
+                .nextDate(LocalDate.now())
+                .user(user)
+                .build();
 
         Word answerWord = wordRepository.save(word);
         Word answerWord1 = wordRepository.save(word1);

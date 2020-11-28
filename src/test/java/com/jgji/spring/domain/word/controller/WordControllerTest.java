@@ -52,19 +52,19 @@ class WordControllerTest {
     @BeforeEach
     public void setUp() {
         list = new ArrayList<Word>();
-        Word word0 = new Word();
-        word0.setId(1);
-        word0.setLevel(3);
-        word0.setMeaning("테스트");
-        word0.setWord("test");
-        word0.setNextDate(LocalDate.of(2020, 6, 5));
+        Word word0 = Word.builder()
+                .word("test")
+                .meaning("테스트")
+                .level(3)
+                .nextDate(LocalDate.of(2020, 6, 5))
+                .build();
 
-        Word word1 = new Word();
-        word1.setId(2);
-        word1.setLevel(1);
-        word1.setMeaning("사랑");
-        word1.setWord("love");
-        word1.setNextDate(LocalDate.of(2020, 6, 5));
+        Word word1 = Word.builder()
+                .word("love")
+                .meaning("사랑")
+                .level(1)
+                .nextDate(LocalDate.of(2020, 6, 5))
+                .build();
 
         list.add(word0);
         list.add(word1);
@@ -133,7 +133,7 @@ class WordControllerTest {
     }
 
     private String getWordList() {
-        return "[{\"id\":1,\"word\":\"test\",\"meaning\":\"테스트\",\"nextDate\":\"2020-06-05\",\"level\":3,\"user\":null},{\"id\":2,\"word\":\"love\",\"meaning\":\"사랑\",\"nextDate\":\"2020-06-05\",\"level\":1,\"user\":null}]";
+        return "[{\"id\":0,\"word\":\"test\",\"meaning\":\"테스트\",\"nextDate\":\"2020-06-05\",\"level\":3,\"user\":null},{\"id\":0,\"word\":\"love\",\"meaning\":\"사랑\",\"nextDate\":\"2020-06-05\",\"level\":1,\"user\":null}]";
     }
 
     @Test
