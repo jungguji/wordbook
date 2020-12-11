@@ -11,9 +11,8 @@ import com.jgji.spring.domain.user.model.User;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
     
-    @Query("SELECT user FROM User user WHERE username =:username")
     @Transactional(readOnly = true)
-    User findByUserName(@Param("username") String username);
+    User findByUsername(@Param("username") String username);
     
     @Query(value =
            " SELECT                                     " + 
