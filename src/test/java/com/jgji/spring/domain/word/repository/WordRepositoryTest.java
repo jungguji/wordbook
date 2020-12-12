@@ -132,12 +132,12 @@ class WordRepositoryTest {
     @Test
     void deleteByIdIn() {
         //given
-        List<Integer> ids = Arrays.asList( new Integer(user.getId()));
+        List<Integer> ids = Arrays.asList( new Integer(word.getId()));
 
         //when
         wordRepository.deleteByIdIn(ids);
 
-        List<Word> list = wordRepository.findByUserId(USER_ID);
+        List<Word> list = wordRepository.findByUserId(user.getId());
 
         //than
         assertThat(list).contains(word1)
