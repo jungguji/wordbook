@@ -132,7 +132,7 @@ class WordRepositoryTest {
     @Test
     void deleteByIdIn() {
         //given
-        List<Integer> ids = Arrays.asList( new Integer(1));
+        List<Integer> ids = Arrays.asList( new Integer(user.getId()));
 
         //when
         wordRepository.deleteByIdIn(ids);
