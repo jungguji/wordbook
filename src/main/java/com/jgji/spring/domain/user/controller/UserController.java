@@ -2,6 +2,7 @@ package com.jgji.spring.domain.user.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jgji.spring.domain.global.util.PropertiesUtil;
 import com.jgji.spring.domain.user.model.User;
 import com.jgji.spring.domain.user.model.UserDTO.CreateUser;
 import com.jgji.spring.domain.user.model.UserDTO.UserProfile;
@@ -48,17 +49,18 @@ public class UserController {
     @PostMapping("/user/create")
     public String processCreationForm(@Valid CreateUser createUser, BindingResult result) {
         if (userService.isExistName(createUser.getUsername())) {
-            result.rejectValue("username", "username", "이미 존재하는 아이디 입니다.");
+            result.rejectValue("username", "username", PropertiesUtil.getMessage("message.user.exist.name"));
         }
         
         if (result.hasErrors()) {
             return "thymeleaf/user/createUserForm";
         }
         
-        User user = new User();
-        user.setUsername(createUser.getUsername());
-        user.setPassword(createUser.getPassword());
-        
+        User user = User.builder()
+                .username(createUser.getUsername())
+                .password(createUser.getPassword())
+                .build();
+
         this.userService.save(user);
         
         return "redirect:/";
@@ -105,8 +107,7 @@ public class UserController {
         String msg = "";
         String replaceUserName = userName.replace("\"", "");
         if (!userService.isExistName(replaceUserName)) {
-            
-            msg = "존재하지 않는 아이디 입니다.";
+            msg = PropertiesUtil.getMessage("message.user.not.exist.id");
         }
         
         return Utils.returnJsonMsg(msg);
@@ -116,7 +117,7 @@ public class UserController {
     @ResponseBody
     public String processResetPasswordForm(@RequestBody User user) throws JsonProcessingException {
         String tempPassword = userService.setTempPassWord(user);
-        String msg = "임시 비밀번호 : " + tempPassword;
+        String msg = PropertiesUtil.getMessage("message.user.temp.password") + tempPassword;
         
         return Utils.returnJsonMsg(msg);
     }
