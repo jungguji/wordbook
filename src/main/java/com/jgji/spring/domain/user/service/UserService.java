@@ -45,7 +45,7 @@ public class UserService implements UserDetailsService {
     }
     
     public User save(User user) {
-        user.setPassword(bcryptPasswordEncoder.encode(user.getPassword()));
+        user.update(bcryptPasswordEncoder.encode(user.getPassword()));
         
         return userRepository.save(user);
     }
@@ -75,7 +75,7 @@ public class UserService implements UserDetailsService {
         User updateUser = getUserByUserName(user.getUsername());
         String tempPassword = getTempPassword();
         
-        updateUser.setPassword(tempPassword);
+        updateUser.update(tempPassword);
         save(updateUser);
         
         return tempPassword;
@@ -106,7 +106,7 @@ public class UserService implements UserDetailsService {
         }
         
         User user = getCurrentUser();
-        user.setPassword(changePassword.getNewPassword());
+        user.update(changePassword.getNewPassword());
         
         save(user);
         

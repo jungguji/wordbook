@@ -1,5 +1,9 @@
 package com.jgji.spring.domain.user.model;
 
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 
+@NoArgsConstructor
+@Getter
 @Entity
 @Table(name = "users")
 public class User {
@@ -23,27 +29,13 @@ public class User {
     @Column(name = "password")
     private String password;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
+    @Builder
+    public User(String username, String password) {
         this.username = username;
+        this.password = password;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
+    public void update(String password) {
         this.password = password;
     }
 
