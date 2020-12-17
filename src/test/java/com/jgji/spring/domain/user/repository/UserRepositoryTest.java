@@ -21,9 +21,10 @@ class UserRepositoryTest {
     @Test
     void findByUserName() {
         //given
-        User user = new User();
-        user.setUsername("jgji");
-        user.setPassword("qwe123");
+        User user = User.builder()
+                .username("jgji")
+                .password("qwe123")
+                .build();
 
         userRepository.save(user);
 

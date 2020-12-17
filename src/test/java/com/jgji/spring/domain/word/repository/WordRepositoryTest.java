@@ -37,15 +37,17 @@ class WordRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        user = new User();
-        user.setUsername("jgji");
-        user.setPassword("qwe123");
+        user = User.builder()
+                .username("jgji")
+                .password("qwe123")
+                .build();
 
         userRepository.save(this.user);
 
-        user1 = new User();
-        user.setUsername("haha");
-        user.setPassword("qwe123");
+        user1 = User.builder()
+                .username("haha")
+                .password("qwe123")
+                .build();
 
         userRepository.save(this.user1);
 
