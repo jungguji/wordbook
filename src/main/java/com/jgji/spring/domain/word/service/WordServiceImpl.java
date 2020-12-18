@@ -4,8 +4,10 @@ import com.jgji.spring.domain.user.model.User;
 import com.jgji.spring.domain.user.service.UserService;
 import com.jgji.spring.domain.word.model.Row;
 import com.jgji.spring.domain.word.model.Word;
+import com.jgji.spring.domain.word.model.WordDTO;
 import com.jgji.spring.domain.word.model.WordDTO.AddWord;
 import com.jgji.spring.domain.word.repository.WordRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -16,7 +18,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service("wordService")
@@ -45,6 +51,37 @@ public class WordServiceImpl implements WordService{
     public List<Word> findToDayWordList() {
         String userId = getUserId();
         return repository.findByUserIdAndNextDateLessThanEqual(userId, LocalDate.now());
+    }
+
+    public List<WordDTO.ResponseWord> findToDayTestWordList() {
+        String userId = getUserId();
+
+        List<Word> todayList = repository.findByUserIdAndNextDateLessThanEqual(userId, LocalDate.now());
+        if (todayList.isEmpty()) {
+            todayList = repository.findByUserIdOrderByRandom(userId);
+        }
+
+        if (todayList.isEmpty()) {
+            todayList = repository.findOrderByRandom();
+        }
+
+//        List<Word> todayList = Optional.ofNullable(repository.findByUserIdAndNextDateLessThanEqual(userId, LocalDate.now()))
+//                .or(() -> Optional.ofNullable(repository.findByUserIdOrderByRandom(userId)))
+//                .orElse(repository.findOrderByRandom());
+
+        List<WordDTO.ResponseWord> dtoList = new ArrayList<>();
+        ModelMapper modelMapper = new ModelMapper();
+        int count = 0;
+        for (Word word : todayList) {
+            if (count == 15) {
+                break;
+            }
+            WordDTO.ResponseWord dto = modelMapper.map(word, WordDTO.ResponseWord.class);
+            dtoList.add(dto);
+            count++;
+        }
+
+        return dtoList;
     }
     
     public List<Word> getRandomWordList() {

@@ -1,6 +1,7 @@
 package com.jgji.spring.domain.word.service;
 
 import com.jgji.spring.domain.word.model.Word;
+import com.jgji.spring.domain.word.model.WordDTO;
 import com.jgji.spring.domain.word.model.WordDTO.AddWord;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,7 +15,9 @@ public interface WordService {
     List<Word> findAllByUserId();
 
     List<Word> findToDayWordList();
-    
+
+    List<WordDTO.ResponseWord> findToDayTestWordList();
+
     List<Word> getRandomWordList();
     
     List<Word> getRandomByAllWordList();

@@ -1,5 +1,9 @@
 package com.jgji.spring.domain.word.model;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +37,21 @@ public class WordDTO {
         }
         public List<Row> getMeanings() {
             return meanings;
+        }
+    }
+
+    @NoArgsConstructor
+    @Getter
+    @Setter
+    public static class ResponseWord {
+        private int id;
+        private String word;
+        private String meaning;
+
+        public ResponseWord(int id, String word, String meaning) {
+            this.id = id;
+            this.word = word;
+            this.meaning = meaning;
         }
     }
 }

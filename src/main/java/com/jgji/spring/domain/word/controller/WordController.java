@@ -5,11 +5,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jgji.spring.domain.util.Utils;
 import com.jgji.spring.domain.word.model.Row;
 import com.jgji.spring.domain.word.model.Word;
+import com.jgji.spring.domain.word.model.WordDTO;
 import com.jgji.spring.domain.word.model.WordDTO.AddWord;
 import com.jgji.spring.domain.word.service.WordService;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.ObjectUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,9 +21,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -39,43 +42,33 @@ public class WordController {
     }
 
     @GetMapping("/word/test")
-    public String getToDayWordList(Model model) throws JsonProcessingException {
+    public ModelAndView getToDayWordList(Model model) throws JsonProcessingException {
+        ModelAndView mav = new ModelAndView("thymeleaf/word/viewWordTestForm");
+
+        List<WordDTO.ResponseWord> list = service.findToDayTestWordList();
+
         ObjectMapper objMapper = Utils.getObjectMapperConfig();
+        String jsonText = objMapper.writeValueAsString(list);
 
-        String jsonText = objMapper.writeValueAsString(this.service.findToDayWordList());
+        mav.addObject("wordList", jsonText);
 
-        model.addAttribute("wordList", jsonText);
-        model.addAttribute("isExist", true);
-        
-        return "thymeleaf/word/viewWordTestForm";
+        return mav;
     }
 
-    @GetMapping("/word/test/random")
-    public String getRandomByUserWordList(Model model) throws JsonProcessingException {
-        ObjectMapper objMapper = Utils.getObjectMapperConfig();
-        
-        List<Word> wordList = service.getRandomWordList();
-        
-        boolean isExist = !ObjectUtils.isEmpty(wordList);
+    @GetMapping(value="/word/test/random", params= {"all"},  produces = "application/json")
+    @ResponseBody
+    public List<WordDTO.ResponseWord> getRandomByAllWordList() {
+        List<WordDTO.ResponseWord> dtoList = new ArrayList<>();
 
-        String jsonText = objMapper.writeValueAsString(wordList);
-        
-        model.addAttribute("wordList", jsonText);
-        model.addAttribute("isExist", isExist);
-        
-        return "thymeleaf/word/viewWordTestForm";
-    }
-    
-    @GetMapping(value="/word/test/random", params= {"all"})
-    public String getRandomByAllWordList(Model model) throws JsonProcessingException {
-        ObjectMapper objMapper = Utils.getObjectMapperConfig();
-        
-        String jsonText = objMapper.writeValueAsString(service.getRandomByAllWordList());
+        ModelMapper modelMapper = new ModelMapper();
 
-        model.addAttribute("wordList", jsonText);
-        model.addAttribute("isExist", true);
-        
-        return "thymeleaf/word/viewWordTestForm";
+        List<Word> list = service.getRandomByAllWordList();
+        for (Word word : list) {
+            WordDTO.ResponseWord dto = modelMapper.map(word, WordDTO.ResponseWord.class);
+            dtoList.add(dto);
+        }
+
+        return dtoList;
     }
     
     @PostMapping(path="/word/answers")
