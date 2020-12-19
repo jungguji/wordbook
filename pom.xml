@@ -176,22 +176,13 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-            
-            <plugin> <groupId>org.springframework.boot</groupId> 
-                <artifactId>spring-boot-maven-plugin</artifactId> 
-                <configuration> 
-                    <executable>true</executable> 
-                </configuration> 
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
+
+            <plugin> <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <source>9</source>
-                    <target>9</target>
+                    <executable>true</executable>
                 </configuration>
             </plugin>
-
         </plugins>
 	</build>
 </project>
