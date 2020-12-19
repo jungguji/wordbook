@@ -3,6 +3,7 @@ package com.jgji.spring.domain.word.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jgji.spring.domain.user.service.UserService;
+import com.jgji.spring.domain.util.Utils;
 import com.jgji.spring.domain.word.model.Word;
 import com.jgji.spring.domain.word.model.WordDTO;
 import com.jgji.spring.domain.word.service.WordService;
@@ -32,7 +33,9 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 @WebMvcTest(controllers = {WordController.class})
 @WithMockUser(username="jgji", password="qwe123", roles="USER")
@@ -51,7 +54,7 @@ class WordControllerTest {
 
     @BeforeEach
     public void setUp() {
-        list = new ArrayList<Word>();
+        list = new ArrayList<>();
         Word word0 = Word.builder()
                 .word("test")
                 .meaning("테스트")
@@ -78,12 +81,26 @@ class WordControllerTest {
     }
 
     @Test
-    void getToDayWordList() throws Exception {
+    void findToDayTestWordList() throws Exception {
+        WordDTO.ResponseWord given = new WordDTO.ResponseWord();
+        given.setId(1);
+        given.setWord("test");
+        given.setWord("테스트");
+        WordDTO.ResponseWord given1 = new WordDTO.ResponseWord();
+        given1.setId(2);
+        given1.setWord("love");
+        given1.setWord("사랑");
 
         //given
-        String wordList = getWordList();
+        List<WordDTO.ResponseWord> givenList = Arrays.asList(
+            given,
+            given1
+        );
 
-        given(this.service.findToDayWordList()).willReturn(this.list);
+        given(this.service.findToDayTestWordList()).willReturn(givenList);
+
+        ObjectMapper objMapper = Utils.getObjectMapperConfig();
+        String jsonText = objMapper.writeValueAsString(givenList);
 
         // when
         final ResultActions action = mockMvc.perform(get("/word/test"))
@@ -91,49 +108,8 @@ class WordControllerTest {
 
         //then
         action.andExpect(status().isOk())
-                .andExpect(model().attribute("wordList", wordList))
-                .andExpect(model().attribute("isExist", true))
+                .andExpect(model().attribute("wordList", jsonText))
                 .andExpect(view().name("thymeleaf/word/viewWordTestForm"));
-    }
-
-    @Test
-    void testGetRandomByUserWordList() throws Exception {
-        //gvien
-        given(this.service.getRandomWordList()).willReturn(this.list);
-        String wordList = getWordList();
-
-        //when
-        final ResultActions action = mockMvc.perform(get("/word/test/random"))
-                .andDo(print());
-
-        //then
-        action.andExpect(status().isOk())
-                .andExpect(model().attribute("wordList", wordList))
-                .andExpect(model().attribute("isExist", true))
-                .andExpect(view().name("thymeleaf/word/viewWordTestForm"));
-
-    }
-
-    @Test
-    void testGetRandomByAllWordList() throws Exception {
-        //gvien
-        given(this.service.getRandomByAllWordList()).willReturn(this.list);
-        String wordList = getWordList();
-
-        //when
-        final ResultActions action = mockMvc.perform(get("/word/test/random")
-                .param("all", "aa"))
-                .andDo(print());
-
-        //then
-        action.andExpect(status().isOk())
-                .andExpect(model().attribute("wordList", wordList))
-                .andExpect(model().attribute("isExist", true))
-                .andExpect(view().name("thymeleaf/word/viewWordTestForm"));
-    }
-
-    private String getWordList() {
-        return "[{\"id\":0,\"word\":\"test\",\"meaning\":\"테스트\",\"nextDate\":\"2020-06-05\",\"level\":3,\"user\":null},{\"id\":0,\"word\":\"love\",\"meaning\":\"사랑\",\"nextDate\":\"2020-06-05\",\"level\":1,\"user\":null}]";
     }
 
     @Test
