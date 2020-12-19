@@ -55,22 +55,6 @@ public class WordController {
         return mav;
     }
 
-    @GetMapping(value="/word/test/random", params= {"all"},  produces = "application/json")
-    @ResponseBody
-    public List<WordDTO.ResponseWord> getRandomByAllWordList() {
-        List<WordDTO.ResponseWord> dtoList = new ArrayList<>();
-
-        ModelMapper modelMapper = new ModelMapper();
-
-        List<Word> list = service.getRandomByAllWordList();
-        for (Word word : list) {
-            WordDTO.ResponseWord dto = modelMapper.map(word, WordDTO.ResponseWord.class);
-            dtoList.add(dto);
-        }
-
-        return dtoList;
-    }
-    
     @PostMapping(path="/word/answers")
     @ResponseBody
     public List<String> updateNextDateAndInsert(@RequestParam("pass") int[] passIds, @RequestParam("fail") int[] failIds) {
