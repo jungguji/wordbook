@@ -83,6 +83,7 @@ class WordServiceImplTest {
                 .contains("테스트","사랑");
     }
 
+    @DisplayName("오늘 시험일인 단어 검색")
     @Test
     void findToDayWordList() {
         //given
