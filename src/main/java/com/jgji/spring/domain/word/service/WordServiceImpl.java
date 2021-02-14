@@ -33,6 +33,7 @@ public class WordServiceImpl implements WordService{
     private final static String MEANING_FIELD = "meanings";
     private final static String ENCODE_UTF8 = "UTF-8";
     private final static String ENCODE_EUCKR = "EUC-KR";
+    private final static int LIMIT_WORD = 15;
 
     private final WordRepository repository;
     
@@ -73,9 +74,10 @@ public class WordServiceImpl implements WordService{
         ModelMapper modelMapper = new ModelMapper();
         int count = 0;
         for (Word word : todayList) {
-            if (count == 15) {
+            if (count == LIMIT_WORD) {
                 break;
             }
+
             WordDTO.ResponseWord dto = modelMapper.map(word, WordDTO.ResponseWord.class);
             dtoList.add(dto);
             count++;
