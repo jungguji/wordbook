@@ -6,6 +6,7 @@ import com.jgji.spring.domain.word.model.Word;
 import com.jgji.spring.domain.word.model.WordDTO;
 import com.jgji.spring.domain.word.repository.WordRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -66,6 +67,7 @@ class WordServiceImplTest {
         wordService = new WordServiceImpl(repository, userService);
     }
 
+    @DisplayName("유저와 연결된 단어 검색")
     @Test
     void findAllByUserId() {
         //gvien
