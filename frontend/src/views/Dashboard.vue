@@ -7,7 +7,7 @@
         <b-col xl="3" md="6">
           <stats-card title="Total traffic"
                       type="gradient-red"
-                      sub-title="350,897"
+                      :sub-title="test"
                       icon="ni ni-active-40"
                       class="mb-4">
 
@@ -160,6 +160,7 @@
     },
     data() {
       return {
+        test: '123124124124214,897',
         bigLineChart: {
           allData: [
             [0, 20, 10, 30, 15, 40, 20, 60, 60],
