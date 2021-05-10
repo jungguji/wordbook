@@ -691,36 +691,6 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@fullcalendar/core@^4.0.2", "@fullcalendar/core@~4.3.0":
-  version "4.3.1"
-  resolved "https://registry.yarnpkg.com/@fullcalendar/core/-/core-4.3.1.tgz#a061c6d2e998d4155439dbc8aefdfe01cdf648d8"
-  integrity sha512-Eh+p/wpMkWGu26f8NpfQK9ecQMoZxX/aopv+0+4/CH+Ip0paP6iEc40JYgTz7RFl0bFqV1dvwyGyUZ4+9ZeySA==
-
-"@fullcalendar/daygrid@^4.0.1", "@fullcalendar/daygrid@~4.3.0":
-  version "4.3.0"
-  resolved "https://registry.yarnpkg.com/@fullcalendar/daygrid/-/daygrid-4.3.0.tgz#1b4ab9fdc238dba77921cb7c5bd2d813c834e905"
-  integrity sha512-OrGaRIGbELESOXOCXtoQVY4cOxnxmN7OrjDGbMoVITdoXWuIZ6sFNO84WcBQoRaIbkmqVM0SAU2MENwy+eEwqQ==
-
-"@fullcalendar/interaction@^4.0.2":
-  version "4.3.0"
-  resolved "https://registry.yarnpkg.com/@fullcalendar/interaction/-/interaction-4.3.0.tgz#a52d22e4fa2666d5032c77afde75ecfad95c0f3b"
-  integrity sha512-kaKV+tdgH/oIrwTSMGYFec989L5r+KMYJ9ybwLc8G3LbMVcebo8fAlN9VizmGQAuopKfyvOw8yzJdjfmVCCRYQ==
-
-"@fullcalendar/timegrid@^4.0.1":
-  version "4.3.0"
-  resolved "https://registry.yarnpkg.com/@fullcalendar/timegrid/-/timegrid-4.3.0.tgz#bf003499319e5e66135bb7b8d8ed274b1a62ca91"
-  integrity sha512-9JCSZbzw2Hi+X893l5X9ViZaWjxh+sDy59o6nKx0gYKwSfs/vKpmk73GBQfKyUv8orkjpnTdPFfeLDZqlzBP4Q==
-  dependencies:
-    "@fullcalendar/daygrid" "~4.3.0"
-
-"@fullcalendar/vue@^4.0.2-beta":
-  version "4.3.1"
-  resolved "https://registry.yarnpkg.com/@fullcalendar/vue/-/vue-4.3.1.tgz#7a2fab995c46aefb27394eadc24afb23d56edf42"
-  integrity sha512-yrQfYJErh/K5+Ud0rsUjMHxZz6iWuYcJvpE9QgjfQOdzUhN4CKjrqO8ivNuawGD3+mQSV4jPlJ+HJ5Qy/nfSYA==
-  dependencies:
-    "@fullcalendar/core" "~4.3.0"
-    fast-deep-equal "^2.0.1"
-
 "@hapi/address@2.x.x":
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/@hapi/address/-/address-2.1.2.tgz#1c794cd6dbf2354d1eb1ef10e0303f573e1c7222"
@@ -7237,9 +7207,9 @@ querystring@0.2.0:
   integrity sha1-sgmEkgO7Jd+CDadW50cAWHhSFiA=
 
 querystringify@^2.1.1:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/querystringify/-/querystringify-2.1.1.tgz#60e5a5fd64a7f8bfa4d2ab2ed6fdf4c85bad154e"
-  integrity sha512-w7fLxIRCRT7U8Qu53jQnJyPkYZIaR4n5151KMfcJlO/A9397Wxb1amJvROTK6TOnp7PfoAmg/qXiNHI+08jRfA==
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/querystringify/-/querystringify-2.2.0.tgz#3345941b4153cb9d082d8eee4cda2016a9aef7f6"
+  integrity sha512-FIqgj2EUvTa7R50u0rGsyTftzjYmv/a3hO345bZNrqabNqjtgiDMgmo4mkUjd+nzU5oF3dClKqFIPUKybUyqoQ==
 
 quill-delta@^3.6.2:
   version "3.6.3"
@@ -8840,9 +8810,9 @@ url-loader@^1.1.2:
     schema-utils "^1.0.0"
 
 url-parse@^1.4.3:
-  version "1.4.7"
-  resolved "https://registry.yarnpkg.com/url-parse/-/url-parse-1.4.7.tgz#a8a83535e8c00a316e403a5db4ac1b9b853ae278"
-  integrity sha512-d3uaVyzDB9tQoSXFvuSUNFibTd9zxd2bkVrDRvF5TmvWWQwqE4lgYJ5m+x1DbecWkw+LK4RNl2CU1hHuOKPVlg==
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/url-parse/-/url-parse-1.5.1.tgz#d5fa9890af8a5e1f274a2c98376510f6425f6e3b"
+  integrity sha512-HOfCOUJt7iSYzEx/UqgtwKRMC6EU91NFhsCHMv9oM03VJcVo2Qrp8T8kI9D7amFf1cu+/3CEhgb3rF9zL7k85Q==
   dependencies:
     querystringify "^2.1.1"
     requires-port "^1.0.0"
