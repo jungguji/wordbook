@@ -3,7 +3,7 @@ package com.jgji.spring.domain.word.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jgji.spring.domain.user.service.UserService;
-import com.jgji.spring.domain.util.Utils;
+import com.jgji.spring.global.util.Utils;
 import com.jgji.spring.domain.word.model.Word;
 import com.jgji.spring.domain.word.model.WordDTO;
 import com.jgji.spring.domain.word.service.WordService;

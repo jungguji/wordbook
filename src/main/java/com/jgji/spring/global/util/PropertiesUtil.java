@@ -1,4 +1,4 @@
-package com.jgji.spring.domain.global.util;
+package com.jgji.spring.global.util;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;

@@ -1,4 +1,4 @@
-package com.jgji.spring.domain.config;
+package com.jgji.spring.global.config;
 
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.GetMapping;

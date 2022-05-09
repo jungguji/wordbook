@@ -3,7 +3,7 @@ package com.jgji.spring.domain.user.service;
 import com.jgji.spring.domain.user.model.User;
 import com.jgji.spring.domain.user.model.UserDTO.UserProfile;
 import com.jgji.spring.domain.user.repository.UserRepository;
-import com.jgji.spring.domain.util.Utils;
+import com.jgji.spring.global.util.Utils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;

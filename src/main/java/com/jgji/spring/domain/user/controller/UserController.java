@@ -2,12 +2,12 @@ package com.jgji.spring.domain.user.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jgji.spring.domain.global.util.PropertiesUtil;
+import com.jgji.spring.global.util.PropertiesUtil;
 import com.jgji.spring.domain.user.model.User;
 import com.jgji.spring.domain.user.model.UserDTO.CreateUser;
 import com.jgji.spring.domain.user.model.UserDTO.UserProfile;
 import com.jgji.spring.domain.user.service.UserService;
-import com.jgji.spring.domain.util.Utils;
+import com.jgji.spring.global.util.Utils;
 import com.jgji.spring.domain.word.service.WordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

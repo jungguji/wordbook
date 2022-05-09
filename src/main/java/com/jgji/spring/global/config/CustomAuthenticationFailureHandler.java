@@ -1,4 +1,4 @@
-package com.jgji.spring.domain.config;
+package com.jgji.spring.global.config;
 
 import java.io.IOException;
 

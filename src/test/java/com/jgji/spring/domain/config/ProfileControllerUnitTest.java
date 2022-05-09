@@ -1,5 +1,6 @@
 package com.jgji.spring.domain.config;
 
+import com.jgji.spring.global.config.ProfileController;
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.env.MockEnvironment;
 
