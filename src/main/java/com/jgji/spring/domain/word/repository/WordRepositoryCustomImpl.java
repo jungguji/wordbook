@@ -1,7 +1,7 @@
 package com.jgji.spring.domain.word.repository;
 
-import com.jgji.spring.domain.user.model.User;
-import com.jgji.spring.domain.word.model.Word;
+import com.jgji.spring.domain.user.domain.User;
+import com.jgji.spring.domain.word.domain.Word;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -16,7 +16,7 @@ public class WordRepositoryCustomImpl implements WordRepositoryCustom {
     @PersistenceContext
     private EntityManager em;
     
-    public void updateSuccessWord(List<Word> list, String userId) {
+    public void updateSuccessWord(List<Word> list, int userId) {
         LocalDate nextDate = LocalDate.now();
         
         for (Word word : list) {
@@ -80,9 +80,9 @@ public class WordRepositoryCustomImpl implements WordRepositoryCustom {
         
         return addDate;
     }
-    
+
     @SuppressWarnings("unchecked")
-    public List<Map<String, Object>> findFrequentFailWord(String userId) {
+    public List<Map<String, Object>> findFrequentFailWord(int userId) {
         StringBuilder sb = new StringBuilder();
         sb.append("    SELECT                    ");
         sb.append("        word AS word          ");

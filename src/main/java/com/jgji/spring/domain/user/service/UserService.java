@@ -1,14 +1,13 @@
 package com.jgji.spring.domain.user.service;
 
-import com.jgji.spring.domain.user.model.User;
-import com.jgji.spring.domain.user.model.UserDTO.UserProfile;
+import com.jgji.spring.domain.user.domain.User;
+import com.jgji.spring.domain.user.domain.UserDTO.UserProfile;
 import com.jgji.spring.domain.user.repository.UserRepository;
 import com.jgji.spring.global.util.Utils;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -26,9 +25,9 @@ import java.util.Map;
 public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
-    private final BCryptPasswordEncoder bcryptPasswordEncoder;
 
-    private User currentUser = null;
+    @Autowired
+    private BCryptPasswordEncoder bcryptPasswordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -49,30 +48,13 @@ public class UserService implements UserDetailsService {
         
         return userRepository.save(user);
     }
-    
-    public String getCurrentUserName() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        return auth.getName();
-    }
-    
-    public User getCurrentUser() {
-        return this.currentUser == null ? getUserByUserName(getCurrentUserName()) : this.currentUser;
-    }
-    
-    public User getUserByUserName(String username) {
-        return userRepository.findByUsername(username);
-    }
-    
-    public String getUserIdByLoginUserName() {
-        return getCurrentUser().getId();
-    }
-    
+
     public boolean isExistName(String userName) {
         return !ObjectUtils.isEmpty(userRepository.findByUsername(userName));
     }
     
     public String setTempPassWord(User user) {
-        User updateUser = getUserByUserName(user.getUsername());
+        User updateUser = this.userRepository.findByUsername(user.getUsername());
         String tempPassword = getTempPassword();
         
         updateUser.update(tempPassword);
@@ -98,14 +80,13 @@ public class UserService implements UserDetailsService {
       return ranPw.toString();
     }
     
-    public String changePassword(UserProfile changePassword) {
-        String validationmsg = getMessageChangePasswordValidation(changePassword);
+    public String changePassword(User user, UserProfile changePassword) {
+        String validationmsg = getMessageChangePasswordValidation(user.getPassword(), changePassword);
         
         if (!StringUtils.isEmpty(validationmsg)) {
             return validationmsg;
         }
-        
-        User user = getCurrentUser();
+
         user.update(changePassword.getNewPassword());
         
         save(user);
@@ -113,14 +94,14 @@ public class UserService implements UserDetailsService {
         return "성공";
     }
     
-    private String getMessageChangePasswordValidation(UserProfile changePassword) {
+    private String getMessageChangePasswordValidation(String currentPassword, UserProfile changePassword) {
         String oldPassword = changePassword.getOldPassword();
         
         if (isNullPassword(changePassword)) {
             return "비밀번호를 입력 해주십시오.";
         }
         
-        if (isFailOldPasswordCompare(oldPassword)) {
+        if (isFailOldPasswordCompare(currentPassword, oldPassword)) {
             return "입력한 비밀번호와 현재 비밀번호가 일치하지 않습니다.";
         }
         
@@ -142,12 +123,10 @@ public class UserService implements UserDetailsService {
                 || StringUtils.isEmpty(changePassword.getNewPasswordConfrim()));
     }
     
-    private boolean isFailOldPasswordCompare(String oldPassword) {
+    private boolean isFailOldPasswordCompare(String currentPassword, String oldPassword) {
         boolean result = false;
         
-        User user = getCurrentUser();
-        
-        if (!bcryptPasswordEncoder.matches(oldPassword, user.getPassword())) {
+        if (!bcryptPasswordEncoder.matches(oldPassword, currentPassword)) {
             result = true;
         }
         
@@ -173,10 +152,10 @@ public class UserService implements UserDetailsService {
         return result;
     }
     
-    public List<Map<String, Object>> getMostWrongWord(String userId) {
+    public List<Map<String, Object>> getMostWrongWord(int userId) {
         List<Object[]> findList = userRepository.findMostWrongWord(userId);
         
-        List<String> columns = new ArrayList<String>();
+        List<String> columns = new ArrayList<>();
         columns.add("mostWrongWord");
         columns.add("mostWrongCount");
         

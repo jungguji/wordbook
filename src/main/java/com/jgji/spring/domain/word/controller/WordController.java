@@ -2,12 +2,16 @@ package com.jgji.spring.domain.word.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jgji.spring.domain.user.domain.User;
+import com.jgji.spring.domain.word.service.WordFindService;
+import com.jgji.spring.domain.word.service.WordSaveService;
 import com.jgji.spring.global.util.Utils;
-import com.jgji.spring.domain.word.model.Row;
-import com.jgji.spring.domain.word.model.Word;
-import com.jgji.spring.domain.word.model.WordDTO;
-import com.jgji.spring.domain.word.model.WordDTO.AddWord;
-import com.jgji.spring.domain.word.service.WordService;
+import com.jgji.spring.domain.word.domain.Row;
+import com.jgji.spring.domain.word.domain.Word;
+import com.jgji.spring.domain.word.domain.WordDTO;
+import com.jgji.spring.domain.word.domain.WordDTO.AddWord;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,13 +30,12 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 
+@RequiredArgsConstructor
 @Controller
 public class WordController {
-    private WordService service;
 
-    private WordController(WordService service) {
-        this.service = service;
-    }
+    private final WordFindService wordFindService;
+    private final WordSaveService wordSaveService;
 
     @GetMapping("/")
     public String home() {
@@ -40,31 +43,33 @@ public class WordController {
     }
 
     @GetMapping("/word/test")
-    public ModelAndView getToDayWordList(Model model) throws JsonProcessingException {
-        ModelAndView mav = new ModelAndView("thymeleaf/word/viewWordTestForm");
+    public String getToDayWordList(@AuthenticationPrincipal User user, Model model) throws JsonProcessingException {
+        ModelAndView mav = new ModelAndView();
 
-        List<WordDTO.ResponseWord> list = service.findToDayTestWordList();
+        List<WordDTO.ResponseWord> list = this.wordFindService.findToDayTestWordList(user.getId());
 
         ObjectMapper objMapper = Utils.getObjectMapperConfig();
         String jsonText = objMapper.writeValueAsString(list);
 
-        mav.addObject("wordList", jsonText);
+        model.addAttribute("wordList", jsonText);
 
-        return mav;
+        return "thymeleaf/word/viewWordTestForm";
     }
 
     @PostMapping(path="/word/answers")
     @ResponseBody
-    public List<String> updateNextDateAndInsert(@RequestParam("pass") int[] passIds, @RequestParam("fail") int[] failIds) {
-        service.updatePassWord(passIds);
-        List<String> failList = service.insertFailWord(failIds);
+    public List<String> updateNextDateAndInsert(@AuthenticationPrincipal User user
+            , @RequestParam("pass") int[] passIds, @RequestParam("fail") int[] failIds) {
+        this.wordSaveService.updatePassWord(user, passIds);
+        List<String> failList = this.wordSaveService.insertFailWord(user, failIds);
         return failList;
     }
     
     @PostMapping(path="/word/answers/random", produces = "application/json")
     @ResponseBody
-    public boolean insertRandomFailWord(@RequestBody String[] answerIds) {
-        return service.insertRandomFailWord(answerIds);
+    public boolean insertRandomFailWord(@AuthenticationPrincipal User user
+            , @RequestBody String[] answerIds) {
+        return this.wordSaveService.insertRandomFailWord(user, answerIds);
     }
     
     @GetMapping(value="/word/add")
@@ -82,10 +87,11 @@ public class WordController {
     
     @RequestMapping(value="/word/add/upload", method=RequestMethod.POST, headers = "content-type=multipart/form-data")
     @ResponseBody
-    public String createWordByFileUpload(@RequestParam(value="file") MultipartFile files) throws IOException {
+    public String createWordByFileUpload(@AuthenticationPrincipal User user
+            , @RequestParam(value="file") MultipartFile files) throws IOException {
         MultipartFile file = files;
 
-        return service.insertWordByFileUpload(file);
+        return this.wordSaveService.insertWordByFileUpload(user, file);
     }
     
     @PostMapping(value="/word/add", params={"addRow"})
@@ -107,27 +113,29 @@ public class WordController {
     }
     
     @PostMapping(value="/word/add", params= {"save"})
-    public String createWord(@Valid AddWord word, BindingResult bindingResult) {
-        BindingResult result = service.getCreateWordBindingResult(word, bindingResult);
+    public String createWord(@AuthenticationPrincipal User user
+            , @Valid AddWord word, BindingResult bindingResult) {
+        BindingResult result = this.wordSaveService.getCreateWordBindingResult(word, bindingResult);
 
         if (result.hasErrors()) {
             return "thymeleaf/word/createWordForm";
         }
         
-        service.insertWord(word);
+        this.wordSaveService.insertWord(user, word);
         return "thymeleaf/index";
     }
     
     @PostMapping(value="/word/update", produces = "application/json")
     @ResponseBody
     public boolean updateMeaning(@RequestBody Word word) {
-        return service.updateMeaning(word);
+        return this.wordSaveService.updateMeaning(word);
     }
     
     @DeleteMapping(value="/word/delete", produces = "application/json")
     @ResponseBody
     public String delete(@RequestBody String[] rowIds) {
-        service.delete(rowIds);
+        this.wordSaveService.delete(rowIds);
+
         return "good";
     }
 }

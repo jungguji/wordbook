@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.jgji.spring.domain.user.model.User;
+import com.jgji.spring.domain.user.domain.User;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
     
@@ -39,6 +39,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
            "                  ) AS maxfrom              " + 
            "             )                              "
            , nativeQuery = true)
+
     @Transactional(readOnly = true)
-    List<Object[]> findMostWrongWord(@Param("userId") String userId);
+    List<Object[]> findMostWrongWord(@Param("userId") int userId);
 }

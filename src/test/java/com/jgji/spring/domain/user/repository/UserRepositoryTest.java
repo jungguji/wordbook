@@ -1,6 +1,6 @@
 package com.jgji.spring.domain.user.repository;
 
-import com.jgji.spring.domain.user.model.User;
+import com.jgji.spring.domain.user.domain.User;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,8 +1,8 @@
 package com.jgji.spring.domain.word.repository;
 
-import com.jgji.spring.domain.user.model.User;
+import com.jgji.spring.domain.user.domain.User;
 import com.jgji.spring.domain.user.repository.UserRepository;
-import com.jgji.spring.domain.word.model.Word;
+import com.jgji.spring.domain.word.domain.Word;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
