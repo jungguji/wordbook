@@ -21,10 +21,9 @@
                 <h1 class="cover-heading" id="result"> </h1> 
             <p class="lead" id="different"> </p>
         </div>
-        
+
         <script th:inline="javascript">
-            /* <![CDATA[ */   
-            var wordList =  [(${wordList})];
+            const wordList = [[${wordList}]];
             const answerList = [];
             const passList = [];
             const failList = [];
@@ -217,7 +216,6 @@
                     }
                 });
             }
-            /* ]]> */
         </script>
     </th:block>
 </html>

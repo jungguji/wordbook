@@ -1,5 +1,6 @@
 package com.jgji.spring.domain.user.service;
 
+import com.jgji.spring.domain.user.domain.AccountAdapter;
 import com.jgji.spring.domain.user.domain.User;
 import com.jgji.spring.domain.user.domain.UserDTO.UserProfile;
 import com.jgji.spring.domain.user.repository.UserRepository;
@@ -19,28 +20,25 @@ import org.springframework.util.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
 public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
-
-    @Autowired
-    private BCryptPasswordEncoder bcryptPasswordEncoder;
+    private final BCryptPasswordEncoder bcryptPasswordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username);
-        
-        if (user == null) {
-            return null;
-          }
+        User user = Optional.ofNullable(userRepository.findByUsername(username))
+                .orElseThrow(() -> new IllegalArgumentException());
         
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
 
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), authorities);
+        AccountAdapter adapter = AccountAdapter.from(user);
+        return adapter;
     }
     
     public User save(User user) {

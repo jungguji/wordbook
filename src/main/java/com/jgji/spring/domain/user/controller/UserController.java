@@ -2,19 +2,17 @@ package com.jgji.spring.domain.user.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jgji.spring.domain.word.service.WordFindService;
-import com.jgji.spring.global.util.PropertiesUtil;
 import com.jgji.spring.domain.user.domain.User;
 import com.jgji.spring.domain.user.domain.UserDTO.CreateUser;
 import com.jgji.spring.domain.user.domain.UserDTO.UserProfile;
 import com.jgji.spring.domain.user.service.UserService;
-import com.jgji.spring.global.util.Utils;
+import com.jgji.spring.domain.word.service.WordFindService;
 import com.jgji.spring.domain.word.service.WordSaveService;
+import com.jgji.spring.global.annotation.CurrentUser;
+import com.jgji.spring.global.util.PropertiesUtil;
+import com.jgji.spring.global.util.Utils;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,7 +34,7 @@ public class UserController {
     private final WordFindService wordFindService;
 
     @GetMapping("/login")
-    public String initLoginForm(Model model) {
+    public String initLoginForm() {
         return "thymeleaf/user/viewLoginForm";
     }
 
@@ -69,7 +67,7 @@ public class UserController {
     }
 
     @GetMapping("/user/profile")
-    public ModelAndView showUserProfileForm(@AuthenticationPrincipal User user) throws JsonProcessingException {
+    public ModelAndView showUserProfileForm(@CurrentUser User user) throws JsonProcessingException {
         ModelAndView mav = new ModelAndView("thymeleaf/user/viewUserProfileForm");
 
         mav.addObject("user", user);
@@ -125,7 +123,7 @@ public class UserController {
 
     @PostMapping(value = "/change/password", produces = "application/json")
     @ResponseBody
-    public String processChangePassword(@AuthenticationPrincipal User user
+    public String processChangePassword(@CurrentUser User user
             , @RequestBody UserProfile changPassword) throws JsonProcessingException {
         String msg = userService.changePassword(user, changPassword);
 
