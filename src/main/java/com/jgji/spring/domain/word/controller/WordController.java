@@ -2,30 +2,20 @@ package com.jgji.spring.domain.word.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jgji.spring.domain.user.domain.AccountAdapter;
 import com.jgji.spring.domain.user.domain.User;
-import com.jgji.spring.domain.word.service.WordFindService;
-import com.jgji.spring.domain.word.service.WordSaveService;
-import com.jgji.spring.global.util.Utils;
 import com.jgji.spring.domain.word.domain.Row;
 import com.jgji.spring.domain.word.domain.Word;
 import com.jgji.spring.domain.word.domain.WordDTO;
 import com.jgji.spring.domain.word.domain.WordDTO.AddWord;
+import com.jgji.spring.domain.word.service.WordFindService;
+import com.jgji.spring.domain.word.service.WordSaveService;
+import com.jgji.spring.global.annotation.CurrentUser;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.io.IOException;
@@ -45,7 +35,7 @@ public class WordController {
     }
 
     @GetMapping("/word/test")
-    public String getToDayWordList(@AuthenticationPrincipal(expression = "account") User user, Model model) throws JsonProcessingException {
+    public String getToDayWordList(@CurrentUser User user, Model model) throws JsonProcessingException {
         List<WordDTO.ResponseWord> list = this.wordFindService.findToDayTestWordList(user.getId());
 
         String jsonText = objectMapper.writeValueAsString(list);
@@ -57,7 +47,7 @@ public class WordController {
 
     @PostMapping(path="/word/answers")
     @ResponseBody
-    public List<String> updateNextDateAndInsert(@AuthenticationPrincipal User user
+    public List<String> updateNextDateAndInsert(@CurrentUser User user
             , @RequestParam("pass") int[] passIds, @RequestParam("fail") int[] failIds) {
         this.wordSaveService.updatePassWord(user, passIds);
         List<String> failList = this.wordSaveService.insertFailWord(user, failIds);
@@ -66,7 +56,7 @@ public class WordController {
 
     @PostMapping(path="/word/answers/random", produces = "application/json")
     @ResponseBody
-    public boolean insertRandomFailWord(@AuthenticationPrincipal User user
+    public boolean insertRandomFailWord(@CurrentUser User user
             , @RequestBody String[] answerIds) {
         return this.wordSaveService.insertRandomFailWord(user, answerIds);
     }
@@ -86,7 +76,7 @@ public class WordController {
 
     @RequestMapping(value="/word/add/upload", method=RequestMethod.POST, headers = "content-type=multipart/form-data")
     @ResponseBody
-    public String createWordByFileUpload(@AuthenticationPrincipal User user
+    public String createWordByFileUpload(@CurrentUser User user
             , @RequestParam(value="file") MultipartFile files) throws IOException {
         MultipartFile file = files;
 
@@ -112,7 +102,7 @@ public class WordController {
     }
 
     @PostMapping(value="/word/add", params= {"save"})
-    public String createWord(@AuthenticationPrincipal User user
+    public String createWord(@CurrentUser User user
             , @Valid AddWord word, BindingResult bindingResult) {
         BindingResult result = this.wordSaveService.getCreateWordBindingResult(word, bindingResult);
 
