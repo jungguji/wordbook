@@ -37,20 +37,38 @@ public class WordSaveService {
     private final static String ENCODE_EUCKR = "EUC-KR";
 
     private final WordRepository wordRepository;
-    private final UserService userService;
 
     @Transactional
-    public void updatePassWord(User user, int[] passIds) {
-        List<Word> passList = wordRepository.findByIdIn(Arrays.stream(passIds).boxed().collect(Collectors.toList()));
+    public void updatePassWord(User user, List<Integer> passIds) {
+        List<Word> passList = wordRepository.findByIdIn(passIds);
 
         wordRepository.updateSuccessWord(passList, user.getId());
     }
 
     @Transactional
-    public List<String> insertFailWord(User user, int[] failIds) {
-        List<Word> failList = wordRepository.findByIdIn(Arrays.stream(failIds).boxed().collect(Collectors.toList()));
+    public List<String> insertFailWord(User user, List<Integer> failIds) {
+        List<Word> failList = wordRepository.findByIdIn(failIds);
 
-        return wordRepository.insertFailWord(failList, user);
+        final int PLUS_DAY = 1;
+        LocalDate nextDate = LocalDate.now().plusDays(PLUS_DAY);
+
+        List<Word> newWords = new ArrayList<>();
+        for (Word word : failList) {
+            Word newWord = Word.builder()
+                    .word(word.getWord())
+                    .meaning(word.getMeaning())
+                    .nextDate(nextDate)
+                    .user(user)
+                    .build();
+
+            newWords.add(newWord);
+        }
+
+        List<Word> words = this.wordRepository.saveAll(newWords);
+
+        return words.stream()
+                .map(Word::getWord)
+                .collect(Collectors.toList());
     }
 
     @Transactional

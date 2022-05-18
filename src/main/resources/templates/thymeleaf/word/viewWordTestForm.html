@@ -183,10 +183,10 @@
                 $.ajax({
                     type:"POST"
                     , url: "/word/answers"
-                    , traditional: true
-                    , data: answer
+                    , data: JSON.stringify(answer)
                     , cache: false
-                    , contentType: "application/x-www-form-urlencoded"
+                    , contentType: "application/json"
+                    , dataType : 'json'
                     , success: function(data) {
                         alert("테스트가 종료되었습니다. \n 틀린 단어는 내일 시험에 추가됩니다. \n 틀린 단어 : " + data);
                         

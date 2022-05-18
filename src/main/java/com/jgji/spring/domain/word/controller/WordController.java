@@ -1,20 +1,27 @@
 package com.jgji.spring.domain.word.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jgji.spring.domain.user.domain.User;
 import com.jgji.spring.domain.word.domain.Row;
 import com.jgji.spring.domain.word.domain.Word;
 import com.jgji.spring.domain.word.domain.WordDTO;
 import com.jgji.spring.domain.word.domain.WordDTO.AddWord;
+import com.jgji.spring.domain.word.dto.WordRequest;
 import com.jgji.spring.domain.word.service.WordFindService;
 import com.jgji.spring.domain.word.service.WordSaveService;
 import com.jgji.spring.global.annotation.CurrentUser;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
@@ -27,7 +34,6 @@ public class WordController {
 
     private final WordFindService wordFindService;
     private final WordSaveService wordSaveService;
-    private final ObjectMapper objectMapper;
 
     @GetMapping("/")
     public String home() {
@@ -35,34 +41,33 @@ public class WordController {
     }
 
     @GetMapping("/word/test")
-    public String getToDayWordList(@CurrentUser User user, Model model) throws JsonProcessingException {
+    public String getToDayWordList(@CurrentUser User user, Model model) {
         List<WordDTO.ResponseWord> list = this.wordFindService.findToDayTestWordList(user.getId());
-
-        String jsonText = objectMapper.writeValueAsString(list);
 
         model.addAttribute("wordList", list);
 
         return "thymeleaf/word/viewWordTestForm";
     }
 
-    @PostMapping(path="/word/answers")
+    @PostMapping(path="/word/answers", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public List<String> updateNextDateAndInsert(@CurrentUser User user
-            , @RequestParam("pass") int[] passIds, @RequestParam("fail") int[] failIds) {
-        this.wordSaveService.updatePassWord(user, passIds);
-        List<String> failList = this.wordSaveService.insertFailWord(user, failIds);
-        return failList;
+            , @RequestBody WordRequest.TestWord testWord) {
+        this.wordSaveService.updatePassWord(user, testWord.getPass());
+        return this.wordSaveService.insertFailWord(user, testWord.getFail());
     }
 
-    @PostMapping(path="/word/answers/random", produces = "application/json")
+    @PostMapping(path="/word/answers/random", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @ResponseBody
-    public boolean insertRandomFailWord(@CurrentUser User user
+    public void insertRandomFailWord(@CurrentUser User user
             , @RequestBody String[] answerIds) {
-        return this.wordSaveService.insertRandomFailWord(user, answerIds);
+        this.wordSaveService.insertRandomFailWord(user, answerIds);
     }
 
     @GetMapping(value="/word/add")
-    public String getWordAdd(AddWord word, Model model) {
+    public String getWordAdd(AddWord word) {
         word.getWords().add(new Row());
         word.getMeanings().add(new Row());
 
@@ -74,7 +79,8 @@ public class WordController {
         return "thymeleaf/word/createWordFileUploadForm";
     }
 
-    @RequestMapping(value="/word/add/upload", method=RequestMethod.POST, headers = "content-type=multipart/form-data")
+    @PostMapping(value="/word/add/upload", headers = "content-type=multipart/form-data")
+    @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public String createWordByFileUpload(@CurrentUser User user
             , @RequestParam(value="file") MultipartFile files) throws IOException {
@@ -84,7 +90,7 @@ public class WordController {
     }
 
     @PostMapping(value="/word/add", params={"addRow"})
-    public String addRow(final AddWord word, final BindingResult bindingResult) {
+    public String addRow(final AddWord word) {
         word.getWords().add(new Row());
         word.getMeanings().add(new Row());
 
@@ -92,7 +98,7 @@ public class WordController {
     }
 
     @PostMapping(value="/word/add", params={"removeRow"})
-    public String removeRow(final AddWord word, final BindingResult bindingResult) {
+    public String removeRow(final AddWord word) {
         if (word.getWords().size() > 1) {
             word.getWords().remove(word.getWords().size()-1);
             word.getMeanings().remove(word.getMeanings().size()-1);
@@ -114,17 +120,17 @@ public class WordController {
         return "thymeleaf/index";
     }
 
-    @PostMapping(value="/word/update", produces = "application/json")
+    @PostMapping(value="/word/update", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @ResponseBody
-    public boolean updateMeaning(@RequestBody Word word) {
-        return this.wordSaveService.updateMeaning(word);
+    public void updateMeaning(@RequestBody Word word) {
+        this.wordSaveService.updateMeaning(word);
     }
 
-    @DeleteMapping(value="/word/delete", produces = "application/json")
+    @DeleteMapping(value="/word/delete", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @ResponseBody
-    public String delete(@RequestBody String[] rowIds) {
+    public void delete(@RequestBody String[] rowIds) {
         this.wordSaveService.delete(rowIds);
-
-        return "good";
     }
 }
