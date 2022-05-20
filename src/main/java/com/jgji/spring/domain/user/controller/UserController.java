@@ -2,6 +2,7 @@ package com.jgji.spring.domain.user.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jgji.spring.domain.user.UserResponse;
 import com.jgji.spring.domain.user.domain.User;
 import com.jgji.spring.domain.user.domain.UserDTO.CreateUser;
 import com.jgji.spring.domain.user.domain.UserDTO.UserProfile;
@@ -12,13 +13,12 @@ import com.jgji.spring.global.annotation.CurrentUser;
 import com.jgji.spring.global.util.PropertiesUtil;
 import com.jgji.spring.global.util.Utils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.math.BigInteger;
@@ -46,6 +46,7 @@ public class UserController {
         return "thymeleaf/user/createUserForm";
     }
 
+    @ResponseStatus(HttpStatus.OK)
     @PostMapping("/user/create")
     public String processCreationForm(@Valid CreateUser createUser, BindingResult result) {
         if (userService.isExistName(createUser.getUsername())) {
@@ -67,18 +68,17 @@ public class UserController {
     }
 
     @GetMapping("/user/profile")
-    public ModelAndView showUserProfileForm(@CurrentUser User user) throws JsonProcessingException {
-        ModelAndView mav = new ModelAndView("thymeleaf/user/viewUserProfileForm");
+    public String showUserProfileForm(@CurrentUser User user, Model model) throws JsonProcessingException {
 
-        mav.addObject("user", user);
+        model.addAttribute("user", UserResponse.DefaultUserInfo.of(user));
 
         ObjectMapper objMapper = Utils.getObjectMapperConfig();
         String jsonText = objMapper.writeValueAsString(this.wordFindService.findAllByUserId(user.getId()));
-        mav.addObject("data", jsonText);
+        model.addAttribute("data", jsonText);
 
         int userId = user.getId();
         String graphData = objMapper.writeValueAsString(wordSaveService.getFrequentFailWord(userId));
-        mav.addObject("graphData", graphData);
+        model.addAttribute("graphData", graphData);
 
         UserProfile userProfile = new UserProfile();
         List<Map<String, Object>> wrongWordList = userService.getMostWrongWord(userId);
@@ -90,9 +90,9 @@ public class UserController {
             userProfile.setMostWrongCount((BigInteger) map.get("mostWrongCount"));
         }
 
-        mav.addObject("userProfile", userProfile);
+        model.addAttribute("userProfile", userProfile);
 
-        return mav;
+        return "thymeleaf/user/viewUserProfileForm";
     }
 
     @GetMapping("/reset/password")
@@ -100,7 +100,8 @@ public class UserController {
         return "thymeleaf/user/viewForgotPasswordForm";
     }
 
-    @PostMapping(value = "/reset/password/check", produces = "application/json")
+    @PostMapping(value = "/reset/password/check", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public String checkUserId(@RequestBody String userName) throws JsonProcessingException {
         String msg = "";
@@ -112,7 +113,8 @@ public class UserController {
         return Utils.returnJsonMsg(msg);
     }
 
-    @PostMapping(value = "/reset/password", produces = "application/json")
+    @PostMapping(value = "/reset/password", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public String processResetPasswordForm(@RequestBody User user) throws JsonProcessingException {
         String tempPassword = userService.setTempPassWord(user);
@@ -121,7 +123,8 @@ public class UserController {
         return Utils.returnJsonMsg(msg);
     }
 
-    @PostMapping(value = "/change/password", produces = "application/json")
+    @PostMapping(value = "/change/password", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public String processChangePassword(@CurrentUser User user
             , @RequestBody UserProfile changPassword) throws JsonProcessingException {
