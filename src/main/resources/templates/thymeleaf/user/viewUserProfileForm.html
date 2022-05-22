@@ -6,10 +6,10 @@
     
     <th:block layout:fragment="content">
         <h1> 유저 정보 Form </h1>
-        <table class="table table-striped" th:object="${user}">
+        <table class="table table-striped">
           <tr>
             <th th:text="#{word.profile.name}">Name</th>
-            <td><b th:text="*{username}"></b></td>
+            <td><b th:text="${profile.user.username}"></b></td>
           </tr>
         </table>
         
@@ -117,7 +117,6 @@
          </script>
          
          <script th:inline="javascript">
-            /* <![CDATA[ */
             	window.onload = () => {
                     clearliTagClass();
                     addClassliTag(3);
@@ -157,7 +156,7 @@
                 jui.ready([ "grid.table" ], function(table) {
                     table_8 = table("#table_8", {
                         fields: [ null, "word", "meaning", "nextDate", "id"],
-                        data: [(${data})],
+                        data: [[${profile.word}]],
                         editRow: [ "meaning" ],
                         resize: true,
                         sort: true,
@@ -211,7 +210,7 @@
                 });
                 
                 graph.ready([ "chart.builder" ], function(builder) {
-                	var data = [(${graphData})];
+                	var data = [[${profile.graph}]];
 
                 	builder("#result", {
                 		width: 1000,
@@ -277,7 +276,6 @@
                          }
                      });
                 }
-           /* ]]> */
     </script>
     
     </th:block>

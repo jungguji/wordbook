@@ -1,12 +1,12 @@
 package com.jgji.spring.domain.user.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jgji.spring.domain.user.UserResponse;
+import com.jgji.spring.domain.user.dto.UserResponse;
 import com.jgji.spring.domain.user.domain.User;
 import com.jgji.spring.domain.user.domain.UserDTO.CreateUser;
 import com.jgji.spring.domain.user.domain.UserDTO.UserProfile;
 import com.jgji.spring.domain.user.service.UserService;
+import com.jgji.spring.domain.word.domain.Word;
 import com.jgji.spring.domain.word.service.WordFindService;
 import com.jgji.spring.domain.word.service.WordSaveService;
 import com.jgji.spring.global.annotation.CurrentUser;
@@ -68,17 +68,25 @@ public class UserController {
     }
 
     @GetMapping("/user/profile")
-    public String showUserProfileForm(@CurrentUser User user, Model model) throws JsonProcessingException {
+    public String showUserProfileForm(@CurrentUser User user, Model model) {
 
-        model.addAttribute("user", UserResponse.DefaultUserInfo.of(user));
+        UserResponse.DefaultUserInfo userInfo = UserResponse.DefaultUserInfo.of(user);
 
-        ObjectMapper objMapper = Utils.getObjectMapperConfig();
-        String jsonText = objMapper.writeValueAsString(this.wordFindService.findAllByUserId(user.getId()));
-        model.addAttribute("data", jsonText);
+
+        List<Word> words = this.wordFindService.findAllByUserId(user.getId());
+        List<UserResponse.MyWord> myWords = UserResponse.MyWord.ofList(words);
 
         int userId = user.getId();
-        String graphData = objMapper.writeValueAsString(wordSaveService.getFrequentFailWord(userId));
-        model.addAttribute("graphData", graphData);
+        List<Map<String, Object>> graphData = wordSaveService.getFrequentFailWord(userId);
+        List<UserResponse.Graph> graphs = UserResponse.Graph.ofList(graphData);
+
+        UserResponse.Profile profile = UserResponse.Profile.builder()
+                .user(userInfo)
+                .word(myWords)
+                .graph(graphs)
+                .build();
+
+        model.addAttribute("profile", profile);
 
         UserProfile userProfile = new UserProfile();
         List<Map<String, Object>> wrongWordList = userService.getMostWrongWord(userId);
