@@ -1,12 +1,12 @@
 package com.jgji.spring.domain.user.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jgji.spring.domain.user.UserResponse;
 import com.jgji.spring.domain.user.domain.User;
 import com.jgji.spring.domain.user.domain.UserDTO.CreateUser;
 import com.jgji.spring.domain.user.domain.UserDTO.UserProfile;
+import com.jgji.spring.domain.user.dto.UserResponse;
 import com.jgji.spring.domain.user.service.UserService;
+import com.jgji.spring.domain.word.domain.Word;
 import com.jgji.spring.domain.word.service.WordFindService;
 import com.jgji.spring.domain.word.service.WordSaveService;
 import com.jgji.spring.global.annotation.CurrentUser;
@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -68,31 +69,56 @@ public class UserController {
     }
 
     @GetMapping("/user/profile")
-    public String showUserProfileForm(@CurrentUser User user, Model model) throws JsonProcessingException {
+    public String showUserProfileForm(@CurrentUser User user, Model model) {
 
-        model.addAttribute("user", UserResponse.DefaultUserInfo.of(user));
+        UserResponse.DefaultUserInfo userInfo = UserResponse.DefaultUserInfo.of(user);
 
-        ObjectMapper objMapper = Utils.getObjectMapperConfig();
-        String jsonText = objMapper.writeValueAsString(this.wordFindService.findAllByUserId(user.getId()));
-        model.addAttribute("data", jsonText);
+        List<UserResponse.MyWord> myWords = getMyWords(user);
 
         int userId = user.getId();
-        String graphData = objMapper.writeValueAsString(wordSaveService.getFrequentFailWord(userId));
-        model.addAttribute("graphData", graphData);
+        List<UserResponse.Graph> graphs = getGraphs(userId);
 
-        UserProfile userProfile = new UserProfile();
-        List<Map<String, Object>> wrongWordList = userService.getMostWrongWord(userId);
+        UserResponse.MostWrongWord mostWrongWord = getMostWrongWord(userId);
 
-        userProfile.setUserName(user.getUsername());
+        UserResponse.Profile profile = UserResponse.Profile.builder()
+                .user(userInfo)
+                .word(myWords)
+                .graph(graphs)
+                .mostWrongWord(mostWrongWord)
+                .build();
 
-        for (Map<String, Object> map : wrongWordList) {
-            userProfile.setMostWrongWord((String) map.get("mostWrongWord"));
-            userProfile.setMostWrongCount((BigInteger) map.get("mostWrongCount"));
-        }
-
-        model.addAttribute("userProfile", userProfile);
+        model.addAttribute("profile", profile);
 
         return "thymeleaf/user/viewUserProfileForm";
+    }
+
+    private List<UserResponse.Graph> getGraphs(int userId) {
+        List<Map<String, Object>> graphData = wordSaveService.getFrequentFailWord(userId);
+        List<UserResponse.Graph> graphs = UserResponse.Graph.ofList(graphData);
+        return graphs;
+    }
+
+    private List<UserResponse.MyWord> getMyWords(User user) {
+        List<Word> words = this.wordFindService.findAllByUserId(user.getId());
+        List<UserResponse.MyWord> myWords = UserResponse.MyWord.ofList(words);
+        return myWords;
+    }
+
+    private UserResponse.MostWrongWord getMostWrongWord(int userId) {
+        List<Map<String, Object>> wrongWordList = userService.getMostWrongWord(userId);
+
+        List<String> mostWrongWords = new ArrayList<>();
+        List<BigInteger> mostWrongCount = new ArrayList<>();
+        for (Map<String, Object> map : wrongWordList) {
+            mostWrongWords.add((String) map.get("mostWrongWord"));
+            mostWrongCount.add((BigInteger) map.get("mostWrongCount"));
+        }
+
+        UserResponse.MostWrongWord mostWrongWord = UserResponse.MostWrongWord.builder()
+                .word(mostWrongWords)
+                .count(mostWrongCount)
+                .build();
+        return mostWrongWord;
     }
 
     @GetMapping("/reset/password")

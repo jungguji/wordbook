@@ -6,10 +6,10 @@
     
     <th:block layout:fragment="content">
         <h1> 유저 정보 Form </h1>
-        <table class="table table-striped" th:object="${user}">
+        <table class="table table-striped">
           <tr>
             <th th:text="#{word.profile.name}">Name</th>
-            <td><b th:text="*{username}"></b></td>
+            <td><b th:text="${profile.user.username}"></b></td>
           </tr>
         </table>
         
@@ -21,15 +21,15 @@
         
         <div id="tab_contents_1">
             <div id="change">
-                <form id="changeFrm" th:object="${userProfile}" th:action="@{/change/password}" method="post">
+                <form id="changeFrm" th:object="${profile.mostWrongWord}" th:action="@{/change/password}" method="post">
                 <div class="alert alert-danger" role="alert" style="display:none; margin-right:1rem;" ></div>
                     <table class="table table-striped" >
                         <tr>
                              <th>가장 많이 틀린 단어</th>
                              <td >
-                                <div th:each="row,rowStat : *{mostWrongWord}">
-                                    <b th:text="*{mostWrongWord[__${rowStat.index}__]}"></b>
-                                    (<span th:text="*{mostWrongCount[__${rowStat.index}__]}"></span> 회)
+                                <div th:each="row,rowStat : *{word}">
+                                    <b th:text="*{word[__${rowStat.index}__]}"></b>
+                                    (<span th:text="*{count[__${rowStat.index}__]}"></span> 회)
                                 </div>
                              </td>
                          </tr>
@@ -117,7 +117,6 @@
          </script>
          
          <script th:inline="javascript">
-            /* <![CDATA[ */
             	window.onload = () => {
                     clearliTagClass();
                     addClassliTag(3);
@@ -157,7 +156,7 @@
                 jui.ready([ "grid.table" ], function(table) {
                     table_8 = table("#table_8", {
                         fields: [ null, "word", "meaning", "nextDate", "id"],
-                        data: [(${data})],
+                        data: [[${profile.word}]],
                         editRow: [ "meaning" ],
                         resize: true,
                         sort: true,
@@ -211,7 +210,7 @@
                 });
                 
                 graph.ready([ "chart.builder" ], function(builder) {
-                	var data = [(${graphData})];
+                	var data = [[${profile.graph}]];
 
                 	builder("#result", {
                 		width: 1000,
@@ -219,7 +218,7 @@
                 	    axis : [{
                 	        x : {
                 	            type : "range",
-                	            domain : "qty",
+                	            domain : "count",
                 	            step : 7,
                 	            line : true
                 	        },
@@ -232,7 +231,7 @@
                 	    }],
                 	    brush : [{
                 	        type : "bar",
-                	        target : "qty",
+                	        target : "count",
                 	        display : "max",
                 	        activeEvent : "mouseover",
                 	        animate : true
@@ -277,7 +276,6 @@
                          }
                      });
                 }
-           /* ]]> */
     </script>
     
     </th:block>

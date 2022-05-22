@@ -208,9 +208,8 @@ public class WordSaveService {
         }
     }
 
-    public boolean updateMeaning(Word word) {
+    public void updateMeaning(Word word) {
         this.wordRepository.save(word);
-        return true;
     }
 
     @Transactional
