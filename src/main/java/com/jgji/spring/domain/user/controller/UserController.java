@@ -1,10 +1,10 @@
 package com.jgji.spring.domain.user.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.jgji.spring.domain.user.dto.UserResponse;
 import com.jgji.spring.domain.user.domain.User;
 import com.jgji.spring.domain.user.domain.UserDTO.CreateUser;
 import com.jgji.spring.domain.user.domain.UserDTO.UserProfile;
+import com.jgji.spring.domain.user.dto.UserResponse;
 import com.jgji.spring.domain.user.service.UserService;
 import com.jgji.spring.domain.word.domain.Word;
 import com.jgji.spring.domain.word.service.WordFindService;
@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -72,35 +73,52 @@ public class UserController {
 
         UserResponse.DefaultUserInfo userInfo = UserResponse.DefaultUserInfo.of(user);
 
-
-        List<Word> words = this.wordFindService.findAllByUserId(user.getId());
-        List<UserResponse.MyWord> myWords = UserResponse.MyWord.ofList(words);
+        List<UserResponse.MyWord> myWords = getMyWords(user);
 
         int userId = user.getId();
-        List<Map<String, Object>> graphData = wordSaveService.getFrequentFailWord(userId);
-        List<UserResponse.Graph> graphs = UserResponse.Graph.ofList(graphData);
+        List<UserResponse.Graph> graphs = getGraphs(userId);
+
+        UserResponse.MostWrongWord mostWrongWord = getMostWrongWord(userId);
 
         UserResponse.Profile profile = UserResponse.Profile.builder()
                 .user(userInfo)
                 .word(myWords)
                 .graph(graphs)
+                .mostWrongWord(mostWrongWord)
                 .build();
 
         model.addAttribute("profile", profile);
 
-        UserProfile userProfile = new UserProfile();
+        return "thymeleaf/user/viewUserProfileForm";
+    }
+
+    private List<UserResponse.Graph> getGraphs(int userId) {
+        List<Map<String, Object>> graphData = wordSaveService.getFrequentFailWord(userId);
+        List<UserResponse.Graph> graphs = UserResponse.Graph.ofList(graphData);
+        return graphs;
+    }
+
+    private List<UserResponse.MyWord> getMyWords(User user) {
+        List<Word> words = this.wordFindService.findAllByUserId(user.getId());
+        List<UserResponse.MyWord> myWords = UserResponse.MyWord.ofList(words);
+        return myWords;
+    }
+
+    private UserResponse.MostWrongWord getMostWrongWord(int userId) {
         List<Map<String, Object>> wrongWordList = userService.getMostWrongWord(userId);
 
-        userProfile.setUserName(user.getUsername());
-
+        List<String> mostWrongWords = new ArrayList<>();
+        List<BigInteger> mostWrongCount = new ArrayList<>();
         for (Map<String, Object> map : wrongWordList) {
-            userProfile.setMostWrongWord((String) map.get("mostWrongWord"));
-            userProfile.setMostWrongCount((BigInteger) map.get("mostWrongCount"));
+            mostWrongWords.add((String) map.get("mostWrongWord"));
+            mostWrongCount.add((BigInteger) map.get("mostWrongCount"));
         }
 
-        model.addAttribute("userProfile", userProfile);
-
-        return "thymeleaf/user/viewUserProfileForm";
+        UserResponse.MostWrongWord mostWrongWord = UserResponse.MostWrongWord.builder()
+                .word(mostWrongWords)
+                .count(mostWrongCount)
+                .build();
+        return mostWrongWord;
     }
 
     @GetMapping("/reset/password")

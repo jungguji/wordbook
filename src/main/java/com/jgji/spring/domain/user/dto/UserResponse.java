@@ -22,12 +22,14 @@ public class UserResponse {
         private DefaultUserInfo user;
         private List<MyWord> word = new ArrayList<>();
         private List<Graph> graph = new ArrayList<>();
+        private MostWrongWord mostWrongWord;
 
         @Builder
-        public Profile(DefaultUserInfo user, List<MyWord> word, List<Graph> graph) {
+        public Profile(DefaultUserInfo user, List<MyWord> word, List<Graph> graph, MostWrongWord mostWrongWord) {
             this.user = user;
             this.word = word;
             this.graph = graph;
+            this.mostWrongWord = mostWrongWord;
         }
     }
 
@@ -117,6 +119,19 @@ public class UserResponse {
             }
 
             return list;
+        }
+    }
+
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class MostWrongWord {
+        private List<String> word = new ArrayList<>();
+        private List<BigInteger> count = new ArrayList<>();
+
+        @Builder
+        public MostWrongWord(List<String> word, List<BigInteger> count) {
+            this.word = word;
+            this.count = count;
         }
     }
 }

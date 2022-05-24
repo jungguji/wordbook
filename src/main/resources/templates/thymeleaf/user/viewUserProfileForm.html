@@ -21,15 +21,15 @@
         
         <div id="tab_contents_1">
             <div id="change">
-                <form id="changeFrm" th:object="${userProfile}" th:action="@{/change/password}" method="post">
+                <form id="changeFrm" th:object="${profile.mostWrongWord}" th:action="@{/change/password}" method="post">
                 <div class="alert alert-danger" role="alert" style="display:none; margin-right:1rem;" ></div>
                     <table class="table table-striped" >
                         <tr>
                              <th>가장 많이 틀린 단어</th>
                              <td >
-                                <div th:each="row,rowStat : *{mostWrongWord}">
-                                    <b th:text="*{mostWrongWord[__${rowStat.index}__]}"></b>
-                                    (<span th:text="*{mostWrongCount[__${rowStat.index}__]}"></span> 회)
+                                <div th:each="row,rowStat : *{word}">
+                                    <b th:text="*{word[__${rowStat.index}__]}"></b>
+                                    (<span th:text="*{count[__${rowStat.index}__]}"></span> 회)
                                 </div>
                              </td>
                          </tr>
@@ -218,7 +218,7 @@
                 	    axis : [{
                 	        x : {
                 	            type : "range",
-                	            domain : "qty",
+                	            domain : "count",
                 	            step : 7,
                 	            line : true
                 	        },
@@ -231,7 +231,7 @@
                 	    }],
                 	    brush : [{
                 	        type : "bar",
-                	        target : "qty",
+                	        target : "count",
                 	        display : "max",
                 	        activeEvent : "mouseover",
                 	        animate : true
