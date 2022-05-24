@@ -3,9 +3,9 @@ package com.jgji.spring.domain.word.controller;
 import com.jgji.spring.domain.user.domain.User;
 import com.jgji.spring.domain.word.domain.Row;
 import com.jgji.spring.domain.word.domain.Word;
-import com.jgji.spring.domain.word.domain.WordDTO;
 import com.jgji.spring.domain.word.domain.WordDTO.AddWord;
 import com.jgji.spring.domain.word.dto.WordRequest;
+import com.jgji.spring.domain.word.dto.WordResponse;
 import com.jgji.spring.domain.word.service.WordFindService;
 import com.jgji.spring.domain.word.service.WordSaveService;
 import com.jgji.spring.global.annotation.CurrentUser;
@@ -42,9 +42,9 @@ public class WordController {
 
     @GetMapping("/word/test")
     public String getToDayWordList(@CurrentUser User user, Model model) {
-        List<WordDTO.ResponseWord> list = this.wordFindService.findToDayTestWordList(user.getId());
+        List<WordResponse.TodayWord> todayWords = this.wordFindService.findToDayTestWordList(user.getId());
 
-        model.addAttribute("wordList", list);
+        model.addAttribute("testWords", todayWords);
 
         return "thymeleaf/word/viewWordTestForm";
     }
