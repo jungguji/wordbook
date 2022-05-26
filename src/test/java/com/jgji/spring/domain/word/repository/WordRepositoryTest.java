@@ -66,23 +66,23 @@ class WordRepositoryTest {
         assertThat(list).contains(word);
     }
 
-    @Test
-    void findByUserIdAndNextDateLessThanEqual() {
-        //given
-        LocalDate local = LocalDate.now();
-        local = local.plusDays(5);
-        this.word1.updateDate(local);
-
-        wordRepository.save(word);
-        wordRepository.save(word1);
-
-        //when
-        List<Word> list = wordRepository.findByUserIdAndNextDateLessThanEqual(this.word.getUser().getId(), LocalDate.now().plusDays(5));
-
-        //than
-        assertThat(list).contains(word);
-        assertThat(list).contains(word1);
-    }
+//    @Test
+//    void findByUserIdAndNextDateLessThanEqual() {
+//        //given
+//        LocalDate local = LocalDate.now();
+//        local = local.plusDays(5);
+//        this.word1.updateDate(local);
+//
+//        wordRepository.save(word);
+//        wordRepository.save(word1);
+//
+//        //when
+//        List<Word> list = wordRepository.findByUserIdAndNextDateLessThanEqual(this.word.getUser().getId(), LocalDate.now().plusDays(5));
+//
+//        //than
+//        assertThat(list).contains(word);
+//        assertThat(list).contains(word1);
+//    }
 
     @Test
     void findOrderByRandom() {

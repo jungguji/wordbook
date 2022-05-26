@@ -9,11 +9,12 @@ import javax.persistence.*;
 import java.time.LocalDate;
 
 
-@NoArgsConstructor
 @Getter
-@Entity
+@NoArgsConstructor
 @Table(name = "word")
+@Entity
 public class Word {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -35,16 +36,37 @@ public class Word {
         this.user = user;
     }
 
-    public String toString() {
-        return "id = " + this.id + " word = " + this.word + " meaning = " + meaning + " next_date = " + this.nextDate;
+    public void levelUp() {
+        this.nextDate = this.nextDate.plusDays(getAddDate());
+        this.level += 1;
     }
 
-    public void updateDate(LocalDate nextDate) {
-        this.nextDate = nextDate;
-    }
+    private int getAddDate() {
+        int addDate;
 
-    public void updateLevel(int level) {
-        this.level = level;
+        switch (this.level) {
+            case 0:
+            case 1:
+                addDate = 1;
+                break;
+            case 2:
+                addDate = 3;
+                break;
+            case 3:
+                addDate = 7;
+                break;
+            case 4:
+                addDate = 15;
+                break;
+            case 5:
+                addDate = 30;
+                break;
+            default:
+                addDate = 60;
+                break;
+        }
+
+        return addDate;
     }
     
 }
