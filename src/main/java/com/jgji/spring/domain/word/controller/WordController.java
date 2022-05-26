@@ -54,7 +54,7 @@ public class WordController {
     @ResponseBody
     public List<String> updateNextDateAndInsert(@CurrentUser User user
             , @RequestBody WordRequest.TestWord testWord) {
-        this.wordSaveService.updatePassWord(user, testWord.getPass());
+        this.wordSaveService.updatePassWord(testWord.getPass());
         return this.wordSaveService.insertFailWord(user, testWord.getFail());
     }
 
@@ -82,7 +82,7 @@ public class WordController {
     @PostMapping(value="/word/add/upload", headers = "content-type=multipart/form-data")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public String createWordByFileUpload(@CurrentUser User user
+    public List<String> createWordByFileUpload(@CurrentUser User user
             , @RequestParam(value="file") MultipartFile files) throws IOException {
         MultipartFile file = files;
 

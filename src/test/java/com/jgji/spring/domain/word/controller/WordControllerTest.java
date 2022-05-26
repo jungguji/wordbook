@@ -158,9 +158,11 @@ class WordControllerTest {
     }
 
     private String getAddWordToJson() throws JsonProcessingException {
-        WordDTO.AddWord addWord = new WordDTO.AddWord();
-        addWord.setWord("haha");
-        addWord.setMeaning("하하");
+        WordDTO.AddWord addWord = WordDTO.AddWord
+                .builder()
+                .word("haha")
+                .meaning("하하")
+                .build();
 
         ObjectMapper objectMapper = new ObjectMapper();
 

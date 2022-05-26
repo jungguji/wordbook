@@ -93,7 +93,7 @@ public class UserController {
     }
 
     private List<UserResponse.Graph> getGraphs(int userId) {
-        List<Map<String, Object>> graphData = wordSaveService.getFrequentFailWord(userId);
+        List<Map<String, Object>> graphData = wordSaveService.findFrequentFailWord(userId);
         List<UserResponse.Graph> graphs = UserResponse.Graph.ofList(graphData);
         return graphs;
     }

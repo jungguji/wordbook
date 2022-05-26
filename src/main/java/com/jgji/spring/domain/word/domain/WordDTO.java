@@ -1,42 +1,28 @@
 package com.jgji.spring.domain.word.domain;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class WordDTO {
-    
+
     public AddWord getAddWord() {
         return new AddWord();
     }
 
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class AddWord {
         private String word;
         private String meaning;
-        private List<Row> words = new ArrayList<Row>();
-        private List<Row> meanings = new ArrayList<Row>();
-        
-        public String getWord() {
-            return word;
-        }
-        public void setWord(String word) {
+        private List<Row> words = new ArrayList<>();
+        private List<Row> meanings = new ArrayList<>();
+
+        @Builder
+        public AddWord(String word, String meaning) {
             this.word = word;
-        }
-        public String getMeaning() {
-            return meaning;
-        }
-        public void setMeaning(String meaning) {
             this.meaning = meaning;
-        }
-        
-        public List<Row> getWords() {
-            return words;
-        }
-        public List<Row> getMeanings() {
-            return meanings;
         }
     }
 
