@@ -56,8 +56,7 @@ public class UserService implements UserDetailsService {
         String tempPassword = getTempPassword();
         
         updateUser.update(tempPassword);
-        save(updateUser);
-        
+
         return tempPassword;
     }
     
