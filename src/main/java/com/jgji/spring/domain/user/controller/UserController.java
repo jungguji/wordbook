@@ -5,6 +5,7 @@ import com.jgji.spring.domain.user.domain.User;
 import com.jgji.spring.domain.user.domain.UserDTO.CreateUser;
 import com.jgji.spring.domain.user.domain.UserDTO.UserProfile;
 import com.jgji.spring.domain.user.dto.UserResponse;
+import com.jgji.spring.domain.user.service.UserSaveService;
 import com.jgji.spring.domain.user.service.UserService;
 import com.jgji.spring.domain.word.domain.Word;
 import com.jgji.spring.domain.word.service.WordFindService;
@@ -31,6 +32,7 @@ import java.util.Map;
 public class UserController {
 
     private final UserService userService;
+    private final UserSaveService userSaveService;
     private final WordSaveService wordSaveService;
     private final WordFindService wordFindService;
 
@@ -40,14 +42,12 @@ public class UserController {
     }
 
     @GetMapping("/user/create")
-    public String initCreationForm(Map<String, Object> model) {
-        CreateUser user = new CreateUser();
-        model.put("createUser", user);
+    public String initCreationForm(Model model) {
+        model.addAttribute("createUser", new CreateUser());
 
         return "thymeleaf/user/createUserForm";
     }
 
-    @ResponseStatus(HttpStatus.OK)
     @PostMapping("/user/create")
     public String processCreationForm(@Valid CreateUser createUser, BindingResult result) {
         if (userService.isExistName(createUser.getUsername())) {
@@ -63,7 +63,7 @@ public class UserController {
                 .password(createUser.getPassword())
                 .build();
 
-        this.userService.save(user);
+        this.userSaveService.save(user);
 
         return "redirect:/";
     }
@@ -94,14 +94,12 @@ public class UserController {
 
     private List<UserResponse.Graph> getGraphs(int userId) {
         List<Map<String, Object>> graphData = wordSaveService.findFrequentFailWord(userId);
-        List<UserResponse.Graph> graphs = UserResponse.Graph.ofList(graphData);
-        return graphs;
+        return UserResponse.Graph.ofList(graphData);
     }
 
     private List<UserResponse.MyWord> getMyWords(User user) {
         List<Word> words = this.wordFindService.findAllByUserId(user.getId());
-        List<UserResponse.MyWord> myWords = UserResponse.MyWord.ofList(words);
-        return myWords;
+        return UserResponse.MyWord.ofList(words);
     }
 
     private UserResponse.MostWrongWord getMostWrongWord(int userId) {
@@ -114,11 +112,10 @@ public class UserController {
             mostWrongCount.add((BigInteger) map.get("mostWrongCount"));
         }
 
-        UserResponse.MostWrongWord mostWrongWord = UserResponse.MostWrongWord.builder()
+        return UserResponse.MostWrongWord.builder()
                 .word(mostWrongWords)
                 .count(mostWrongCount)
                 .build();
-        return mostWrongWord;
     }
 
     @GetMapping("/reset/password")
@@ -143,7 +140,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public String processResetPasswordForm(@RequestBody User user) throws JsonProcessingException {
-        String tempPassword = userService.setTempPassWord(user);
+        String tempPassword = this.userSaveService.changeRandomPassword(user);
         String msg = PropertiesUtil.getMessage("message.user.temp.password") + tempPassword;
 
         return Utils.returnJsonMsg(msg);
@@ -153,7 +150,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public String processChangePassword(@CurrentUser User user
-            , @RequestBody UserProfile changPassword) throws JsonProcessingException {
+            , @RequestBody UserProfile changPassword) {
         String msg = userService.changePassword(user, changPassword);
 
         return Utils.returnJsonMsg(msg);

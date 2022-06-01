@@ -36,9 +36,16 @@ public class Utils {
         return objMapper;
     }
     
-    public static String returnJsonMsg(String msg) throws JsonProcessingException {
-        ObjectMapper objMapper = getObjectMapperConfig();
-        return objMapper.writeValueAsString(msg);
+    public static String returnJsonMsg(String msg) {
+        String message = "";
+        try {
+            ObjectMapper objMapper = getObjectMapperConfig();
+            message = objMapper.writeValueAsString(msg);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        return message;
     }
     
     
