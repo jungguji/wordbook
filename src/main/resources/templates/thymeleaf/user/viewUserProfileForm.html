@@ -48,7 +48,7 @@
                          <tr>
                              <th>새 비밀번호 확인</th>
                              <td>
-                                <input type="password" class="form-control input-text" name="newPasswordConfrim" placeholder="새 비밀번호 확인">
+                                <input type="password" class="form-control input-text" name="newPasswordConfirm" placeholder="새 비밀번호 확인">
                             </td>
                          </tr>
                     </table>
@@ -252,27 +252,22 @@
                 
                 function changePassword() {
                 	
-                	 var fromdata = {
+                	 var formData = {
                 			 oldPassword : document.querySelector("input[name=oldPassword]").value
                 			 , newPassword : document.querySelector("input[name=newPassword]").value
-                			 , newPasswordConfrim : document.querySelector("input[name=newPasswordConfrim]").value
+                			 , newPasswordConfirm : document.querySelector("input[name=newPasswordConfirm]").value
                 			}
-                     const data = JSON.stringify(fromdata);
+                     const data = JSON.stringify(formData);
                      
                      $.ajax({
-                         type:"post"
+                         type:"put"
                          , url: "/change/password"
                          , contentType: 'application/json'
                          , data: data
                          , dataType : 'json'
                          , cache: false
                          , success: function(data) {
-                             if ("성공" !== data) {
-                            	 document.querySelector(".alert.alert-danger").style.display = "block";
-                            	 document.querySelector(".alert.alert-danger").innerHTML = data;
-                             } else {
-                            	 window.location.href = "/user/profile";
-                             }
+                             window.location.href = "/user/profile";
                          }
                      });
                 }
