@@ -1,7 +1,7 @@
 package com.jgji.spring.domain.user.service;
 
 import com.jgji.spring.domain.user.domain.User;
-import com.jgji.spring.domain.user.domain.UserDTO;
+import com.jgji.spring.domain.user.dto.UserRequest;
 import com.jgji.spring.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -26,8 +26,8 @@ public class UserSaveService {
         return updateUser.changeRandomPassword();
     }
 
-    public void changePassword(User user, UserDTO.UserProfile changePassword) {
-        user.changePassword(changePassword.getNewPassword());
+    public void changePassword(User user, UserRequest.UserProfile changePassword) {
+        user.changePassword(changePassword.getChangePassword().getNewPassword());
     }
 
 }

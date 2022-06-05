@@ -2,8 +2,7 @@ package com.jgji.spring.domain.user.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.jgji.spring.domain.user.domain.User;
-import com.jgji.spring.domain.user.domain.UserDTO.CreateUser;
-import com.jgji.spring.domain.user.domain.UserDTO.UserProfile;
+import com.jgji.spring.domain.user.dto.UserRequest;
 import com.jgji.spring.domain.user.dto.UserResponse;
 import com.jgji.spring.domain.user.service.UserSaveService;
 import com.jgji.spring.domain.user.service.UserService;
@@ -43,13 +42,13 @@ public class UserController {
 
     @GetMapping("/user/create")
     public String initCreationForm(Model model) {
-        model.addAttribute("createUser", new CreateUser());
+        model.addAttribute("createUser", new UserRequest.CreateUser());
 
         return "thymeleaf/user/createUserForm";
     }
 
     @PostMapping("/user/create")
-    public String processCreationForm(@Valid CreateUser createUser, BindingResult result) {
+    public String processCreationForm(@Valid UserRequest.CreateUser createUser, BindingResult result) {
         if (userService.isExistName(createUser.getUsername())) {
             result.rejectValue("username", "username", PropertiesUtil.getMessage("message.user.exist.name"));
         }
@@ -146,13 +145,11 @@ public class UserController {
         return Utils.returnJsonMsg(msg);
     }
 
-    @PostMapping(value = "/change/password", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.OK)
+    @PutMapping(value = "/change/password", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @ResponseBody
-    public String processChangePassword(@CurrentUser User user
-            , @RequestBody UserProfile changPassword) {
-        String msg = userService.changePassword(user, changPassword);
-
-        return Utils.returnJsonMsg(msg);
+    public void processChangePassword(@CurrentUser User user
+            , @RequestBody UserRequest.ChangePassword changPassword) {
+        user.changePassword(changPassword.getNewPassword());
     }
 }

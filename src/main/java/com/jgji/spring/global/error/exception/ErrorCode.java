@@ -14,9 +14,10 @@ public enum ErrorCode {
     HANDLE_ACCESS_DENIED(403, "C006", "Access is Denied"),
 
 
-    // Member
-    EMAIL_DUPLICATION(400, "M001", "Email is Duplication"),
-    LOGIN_INPUT_INVALID(400, "M002", "Login input is invalid"),
+    // User
+    PASSWORD_EMPTY(400, "U001", "Password is empty"),
+    PASSWORD_NOT_SAME_PREVIOUS(400, "U001", "Password is empty"),
+    LOGIN_INPUT_INVALID(400, "U002", "Login input is invalid"),
 
     // Coupon
     COUPON_ALREADY_USE(400, "CO001", "Coupon was already used"),
