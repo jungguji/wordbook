@@ -1,6 +1,9 @@
 package com.jgji.spring.domain.user.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.jgji.spring.domain.user.domain.User;
+import com.jgji.spring.global.error.exception.BusinessException;
+import com.jgji.spring.global.error.exception.ErrorCode;
 import com.mysema.commons.lang.Assert;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -22,7 +25,7 @@ public class UserRequest {
         @NotEmpty
         private String username;
 
-        @Size(min=6, message="비밀번호는 6 자 이상이어야 합니다." )
+        @Size(min = 6, message = "비밀번호는 6 자 이상이어야 합니다.")
         private String password;
     }
 
@@ -39,23 +42,21 @@ public class UserRequest {
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class ChangePassword {
         private String oldPassword;
-
-        @Size(min=6, message="비밀번호는 6 자 이상이어야 합니다." )
+        @Size(min = 6, message = "Password must be at least 6 characters")
         private String newPassword;
-
-        @Size(min=6, message="비밀번호는 6 자 이상이어야 합니다." )
+        @Size(min = 6, message = "Password must be at least 6 characters")
         private String newPasswordConfirm;
 
-        @JsonCreator
-        public ChangePassword(String oldPassword, String newPassword, String newPasswordConfirm) {
+        public void validation(User user) {
+            if (!newPassword.equals(newPasswordConfirm)) {
+                throw new BusinessException(ErrorCode.CHANGED_DOES_NOT_MATCH);
+            }
+
             BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
-            Assert.isTrue(newPassword.equals(newPasswordConfirm), "The password to be changed does not match.");
-            Assert.isTrue(bCryptPasswordEncoder.matches(bCryptPasswordEncoder.encode(oldPassword), oldPassword), "Not the same as previous password.");
-
-            this.oldPassword = oldPassword;
-            this.newPassword = newPassword;
-            this.newPasswordConfirm = newPasswordConfirm;
+            if (!bCryptPasswordEncoder.matches(this.oldPassword, user.getPassword())) {
+                throw new BusinessException(ErrorCode.NOT_SAME_PREVIOUS_PASSWORD);
+            }
         }
     }
 }

@@ -6,7 +6,9 @@ import com.jgji.spring.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 @RequiredArgsConstructor
 @Service
 public class UserSaveService {
@@ -26,8 +28,8 @@ public class UserSaveService {
         return updateUser.changeRandomPassword();
     }
 
-    public void changePassword(User user, UserRequest.UserProfile changePassword) {
-        user.changePassword(changePassword.getChangePassword().getNewPassword());
+    public void changePassword(User user, UserRequest.ChangePassword changePassword) {
+        user.changePassword(changePassword.getNewPassword());
     }
 
 }
