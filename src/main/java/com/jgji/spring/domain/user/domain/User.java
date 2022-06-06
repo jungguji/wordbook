@@ -1,8 +1,10 @@
 package com.jgji.spring.domain.user.domain;
 
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,9 +13,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-
-@NoArgsConstructor
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "users")
 public class User {
@@ -36,12 +37,13 @@ public class User {
     }
 
     public void changePassword(String password) {
-        this.password = password;
+        this.password = encode(password);
     }
 
     public String changeRandomPassword() {
-        this.password = getRandomPassword();
-        return this.password;
+        String tempPassword = getRandomPassword();
+        changePassword(tempPassword);
+        return tempPassword;
     }
 
     private String getRandomPassword() {
@@ -59,6 +61,11 @@ public class User {
         }
 
         return ranPw.toString();
+    }
+
+    private String encode(String password) {
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        return bCryptPasswordEncoder.encode(password);
     }
 
     @Override

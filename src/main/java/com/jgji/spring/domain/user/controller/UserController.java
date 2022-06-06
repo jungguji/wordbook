@@ -149,7 +149,10 @@ public class UserController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ResponseBody
     public void processChangePassword(@CurrentUser User user
-            , @RequestBody UserRequest.ChangePassword changPassword) {
-        user.changePassword(changPassword.getNewPassword());
+            , @RequestBody @Valid UserRequest.ChangePassword changPassword) {
+
+        changPassword.validation(user);
+
+        this.userSaveService.changePassword(user, changPassword);
     }
 }

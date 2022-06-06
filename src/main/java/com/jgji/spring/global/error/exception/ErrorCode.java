@@ -18,6 +18,8 @@ public enum ErrorCode {
     PASSWORD_EMPTY(400, "U001", "Password is empty"),
     PASSWORD_NOT_SAME_PREVIOUS(400, "U001", "Password is empty"),
     LOGIN_INPUT_INVALID(400, "U002", "Login input is invalid"),
+    CHANGED_DOES_NOT_MATCH(400, "U003", "The password to be changed does not match"),
+    NOT_SAME_PREVIOUS_PASSWORD(400, "U003", "Not the same as previous password"),
 
     // Coupon
     COUPON_ALREADY_USE(400, "CO001", "Coupon was already used"),

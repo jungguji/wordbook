@@ -1,85 +1,90 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" 
-    xmlns:th="http://www.thymeleaf.org" 
-    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
-    layout:decorator="layout/default">
-    
-    <th:block layout:fragment="content">
-        <h1> 유저 정보 Form </h1>
-        <table class="table table-striped">
-          <tr>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout/default">
+
+<th:block layout:fragment="content">
+    <h1> 유저 정보 Form </h1>
+    <table class="table table-striped">
+        <tr>
             <th th:text="#{word.profile.name}">Name</th>
             <td><b th:text="${profile.user.username}"></b></td>
-          </tr>
-        </table>
-        
-        <ul id="tab_1" class="tab top">
-            <li><a href="#change">개인정보</a></li>
-            <li><a href="#list">단어 목록</a> </li>
-            <li><a href="#graph">그래프</a></li>
-        </ul>
-        
-        <div id="tab_contents_1">
-            <div id="change">
-                <form id="changeFrm" th:object="${profile.mostWrongWord}" th:action="@{/change/password}" method="post">
-                <div class="alert alert-danger" role="alert" style="display:none; margin-right:1rem;" ></div>
-                    <table class="table table-striped" >
-                        <tr>
-                             <th>가장 많이 틀린 단어</th>
-                             <td >
-                                <div th:each="row,rowStat : *{word}">
-                                    <b th:text="*{word[__${rowStat.index}__]}"></b>
-                                    (<span th:text="*{count[__${rowStat.index}__]}"></span> 회)
-                                </div>
-                             </td>
-                         </tr>
-                         <tr>
-                             <th>현재 비밀번호</th>
-                             <td>
-                                <input type="password" class="form-control input-text" name="oldPassword" placeholder="현재 비밀번호" />
-                            </td>
-                         </tr>
-                         <tr>
-                             <th>새 비밀번호</th>
-                             <td>
-                                <input type="password" class="form-control input-text" name="newPassword" placeholder="새 비밀번호">
-                            </td>
-                         </tr>
-                         <tr>
-                             <th>새 비밀번호 확인</th>
-                             <td>
-                                <input type="password" class="form-control input-text" name="newPasswordConfirm" placeholder="새 비밀번호 확인">
-                            </td>
-                         </tr>
-                    </table>
-                    
-                    <button class="btn btn-success" style="float:right" >Change</button>
-                </form>
-            </div>
-            <div id="list">
-                <button type="button" id="delete" class="btn btn-danger" onclick="rowDelete()" style="float:right" disabled >Delete</button>
-                <br />
-                <br />
-                <table id="table_8" class="table classic">
-                    <thead>
+        </tr>
+    </table>
+
+    <ul id="tab_1" class="tab top">
+        <li><a href="#change">개인정보</a></li>
+        <li><a href="#list">단어 목록</a></li>
+        <li><a href="#graph">그래프</a></li>
+    </ul>
+
+    <div id="tab_contents_1">
+        <div id="change">
+            <form id="changeFrm" th:object="${profile.mostWrongWord}" th:action="@{/change/password}" method="post">
+                <div class="alert alert-danger" role="alert" style="display:none; margin-right:1rem;"></div>
+                <table class="table table-striped">
                     <tr>
-                        <th width="50px">No</th>
-                        <th th:text="#{word.profile.word}"> 단어</th>
-                        <th th:text="#{word.profile.meaning}">뜻</th>
-                        <th th:text="#{word.profile.nextdate}">다음 시험 일자</th>
-                        <th style="display: none"> ID </th>
+                        <th>가장 많이 틀린 단어</th>
+                        <td>
+                            <div th:each="row,rowStat : *{word}">
+                                <b th:text="*{word[__${rowStat.index}__]}"></b>
+                                (<span th:text="*{count[__${rowStat.index}__]}"></span> 회)
+                            </div>
+                        </td>
                     </tr>
-                    </thead>
-                    <tbody></tbody>
+                    <tr>
+                        <th>현재 비밀번호</th>
+                        <td>
+                            <input type="password" class="form-control input-text" name="oldPassword"
+                                   placeholder="현재 비밀번호"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>새 비밀번호</th>
+                        <td>
+                            <input type="password" class="form-control input-text" name="newPassword"
+                                   placeholder="새 비밀번호">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>새 비밀번호 확인</th>
+                        <td>
+                            <input type="password" class="form-control input-text" name="newPasswordConfirm"
+                                   placeholder="새 비밀번호 확인">
+                        </td>
+                    </tr>
                 </table>
-            </div>
-            <div id="graph">
-                <div id="result" style="position: relative; user-select: none;" unselectable="on">
-                </div>
+
+                <button class="btn btn-success" style="float:right">Change</button>
+            </form>
+        </div>
+        <div id="list">
+            <button type="button" id="delete" class="btn btn-danger" onclick="rowDelete()" style="float:right" disabled>
+                Delete
+            </button>
+            <br/>
+            <br/>
+            <table id="table_8" class="table classic">
+                <thead>
+                <tr>
+                    <th width="50px">No</th>
+                    <th th:text="#{word.profile.word}"> 단어</th>
+                    <th th:text="#{word.profile.meaning}">뜻</th>
+                    <th th:text="#{word.profile.nextdate}">다음 시험 일자</th>
+                    <th style="display: none"> ID</th>
+                </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        <div id="graph">
+            <div id="result" style="position: relative; user-select: none;" unselectable="on">
             </div>
         </div>
-    
-        <style>
+    </div>
+
+    <style>
             #tab_1 a {
                 padding: 10px 25px;
             }
@@ -90,33 +95,34 @@
                 width: auto;
                 height: auto
             }
-        </style>
-        <link th:href="@{/css/tab.css}" rel="stylesheet" type="text/css">
-        <link rel="stylesheet" th:href="@{/lib/jui/dist/ui-jennifer.min.css}" />
-        <!-- Grid style components -->
-        <link rel="stylesheet" th:href="@{/lib/jui-grid/dist/grid-jennifer.css}" />
-        
-        <!-- Required script files -->
-        <script th:src="@{/lib/jui-core/dist/core.min.js}"></script>
-        
-        <!-- Basic script components -->
-        <script th:src="@{/lib/jui/dist/ui.min.js}"></script>
-                
-        <!-- Grid script components -->
-        <script th:src="@{/lib/jui-grid/dist/grid.js}"></script>
-        <script th:src="@{/lib/juijs-chart/dist/jui-chart.js}"></script>
 
-         <script id="tpl_row" data-jui="#table_8" data-tpl="row" type="text/template">
-             <tr style="cursor: pointer;">
-                 <td><!= row.index !></td>
-                 <td><!= word !></td>
-                 <td><!= meaning !></td>
-                 <td><!= nextDate !></td>
-                 <td style="display: none"><!= id !></td>
-             </tr>
-         </script>
-         
-         <script th:inline="javascript">
+    </style>
+    <link th:href="@{/css/tab.css}" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" th:href="@{/lib/jui/dist/ui-jennifer.min.css}"/>
+    <!-- Grid style components -->
+    <link rel="stylesheet" th:href="@{/lib/jui-grid/dist/grid-jennifer.css}"/>
+
+    <!-- Required script files -->
+    <script th:src="@{/lib/jui-core/dist/core.min.js}"></script>
+
+    <!-- Basic script components -->
+    <script th:src="@{/lib/jui/dist/ui.min.js}"></script>
+
+    <!-- Grid script components -->
+    <script th:src="@{/lib/jui-grid/dist/grid.js}"></script>
+    <script th:src="@{/lib/juijs-chart/dist/jui-chart.js}"></script>
+
+    <script id="tpl_row" data-jui="#table_8" data-tpl="row" type="text/template">
+        <tr style="cursor: pointer;">
+            <td><!= row.index !></td>
+            <td><!= word !></td>
+            <td><!= meaning !></td>
+            <td><!= nextDate !></td>
+            <td style="display: none"><!= id !></td>
+        </tr>
+    </script>
+
+    <script th:inline="javascript">
             	window.onload = () => {
                     clearliTagClass();
                     addClassliTag(3);
@@ -267,12 +273,14 @@
                          , dataType : 'json'
                          , cache: false
                          , success: function(data) {
-                             window.location.href = "/user/profile";
+                            alert("성공적으로 변경되었습니다.");
+                            window.location.href = "/user/profile";
                          }
                      });
                 }
+
     </script>
-    
-    </th:block>
-    
+
+</th:block>
+
 </html>
