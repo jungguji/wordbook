@@ -135,17 +135,15 @@ public class UserController {
         return Utils.returnJsonMsg(msg);
     }
 
-    @PostMapping(value = "/reset/password", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/reset/password", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public String processResetPasswordForm(@RequestBody User user) throws JsonProcessingException {
-        String tempPassword = this.userSaveService.changeRandomPassword(user);
-        String msg = PropertiesUtil.getMessage("message.user.temp.password") + tempPassword;
-
-        return Utils.returnJsonMsg(msg);
+    public String processResetPasswordForm(@RequestBody String username) {
+        String tempPassword = this.userSaveService.changeRandomPassword(username);
+        return PropertiesUtil.getMessage("message.user.temp.password") + tempPassword;
     }
 
-    @PutMapping(value = "/change/password", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/change/password", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ResponseBody
     public void processChangePassword(@CurrentUser User user

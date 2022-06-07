@@ -14,22 +14,21 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserSaveService {
 
     private final UserRepository userRepository;
-    private final BCryptPasswordEncoder bcryptPasswordEncoder;
 
     public User save(User user) {
-        user.changePassword(bcryptPasswordEncoder.encode(user.getPassword()));
+        user.changePassword(user.getPassword());
 
         return this.userRepository.save(user);
     }
 
-    public String changeRandomPassword(User user) {
-        User updateUser = this.userRepository.findByUsername(user.getUsername());
-
-        return updateUser.changeRandomPassword();
+    public String changeRandomPassword(String username) {
+        User user = this.userRepository.findByUsername(username);
+        return user.changeRandomPassword();
     }
 
     public void changePassword(User user, UserRequest.ChangePassword changePassword) {
         user.changePassword(changePassword.getNewPassword());
+        this.userRepository.save(user);
     }
 
 }
