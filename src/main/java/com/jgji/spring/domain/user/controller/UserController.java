@@ -125,10 +125,9 @@ public class UserController {
     @PostMapping(value = "/reset/password/check", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public String checkUserId(@RequestBody String userName) throws JsonProcessingException {
+    public String checkUserId(@RequestBody String userName) {
         String msg = "";
-        String replaceUserName = userName.replace("\"", "");
-        if (!userService.isExistName(replaceUserName)) {
+        if (!userService.isExistName(userName)) {
             msg = PropertiesUtil.getMessage("message.user.not.exist.id");
         }
 
