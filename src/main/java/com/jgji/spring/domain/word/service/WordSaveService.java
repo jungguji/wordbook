@@ -173,10 +173,6 @@ public class WordSaveService {
         this.wordRepository.deleteByIdIn(list);
     }
 
-    public List<Map<String, Object>> findFrequentFailWord(int userId) {
-        return this.wordRepository.findFrequentFailWord(userId);
-    }
-
     public BindingResult getCreateWordBindingResult(AddWord word, BindingResult bindingResult) {
 
         String wordRowErrorNumber = getErrorRowNumber(word.getWords());
