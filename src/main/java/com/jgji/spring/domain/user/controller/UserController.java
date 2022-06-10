@@ -1,14 +1,13 @@
 package com.jgji.spring.domain.user.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.jgji.spring.domain.user.domain.User;
 import com.jgji.spring.domain.user.dto.UserRequest;
 import com.jgji.spring.domain.user.dto.UserResponse;
+import com.jgji.spring.domain.user.service.UserFindService;
 import com.jgji.spring.domain.user.service.UserSaveService;
 import com.jgji.spring.domain.user.service.UserService;
 import com.jgji.spring.domain.word.domain.Word;
 import com.jgji.spring.domain.word.service.WordFindService;
-import com.jgji.spring.domain.word.service.WordSaveService;
 import com.jgji.spring.global.annotation.CurrentUser;
 import com.jgji.spring.global.util.PropertiesUtil;
 import com.jgji.spring.global.util.Utils;
@@ -18,7 +17,12 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import javax.validation.Valid;
 import java.math.BigInteger;
@@ -32,7 +36,7 @@ public class UserController {
 
     private final UserService userService;
     private final UserSaveService userSaveService;
-    private final WordSaveService wordSaveService;
+    private final UserFindService userFindService;
     private final WordFindService wordFindService;
 
     @GetMapping("/login")
@@ -92,7 +96,7 @@ public class UserController {
     }
 
     private List<UserResponse.Graph> getGraphs(int userId) {
-        List<Map<String, Object>> graphData = wordSaveService.findFrequentFailWord(userId);
+        List<Map<String, Object>> graphData = this.wordFindService.findFrequentFailWord(userId);
         return UserResponse.Graph.ofList(graphData);
     }
 
@@ -102,7 +106,7 @@ public class UserController {
     }
 
     private UserResponse.MostWrongWord getMostWrongWord(int userId) {
-        List<Map<String, Object>> wrongWordList = userService.getMostWrongWord(userId);
+        List<Map<String, Object>> wrongWordList = this.userFindService.findMostWrongWord(userId);
 
         List<String> mostWrongWords = new ArrayList<>();
         List<BigInteger> mostWrongCount = new ArrayList<>();

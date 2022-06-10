@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -35,5 +36,9 @@ public class WordFindService {
 
     public List<Word> findRandomWordList(int userId) {
         return this.wordRepository.findByUserIdOrderByRandom(userId);
+    }
+
+    public List<Map<String, Object>> findFrequentFailWord(int userId) {
+        return this.wordRepository.findFrequentFailWord(userId);
     }
 }
