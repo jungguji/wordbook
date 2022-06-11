@@ -3,7 +3,7 @@ package com.jgji.spring.domain.word.service;
 import com.jgji.spring.domain.user.domain.User;
 import com.jgji.spring.domain.word.domain.Row;
 import com.jgji.spring.domain.word.domain.Word;
-import com.jgji.spring.domain.word.domain.WordDTO.AddWord;
+import com.jgji.spring.domain.word.dto.WordRequest;
 import com.jgji.spring.domain.word.repository.WordRepository;
 import com.jgji.spring.global.util.FileUtils;
 import lombok.RequiredArgsConstructor;
@@ -137,7 +137,7 @@ public class WordSaveService {
         return wordAndMeanings;
     }
 
-    public void insertWord(User user, AddWord word) {
+    public void insertWord(User user, WordRequest.AddWord word) {
         List<Word> newWordList = new ArrayList<>();
 
         int wordCount = word.getWords().size();
@@ -173,7 +173,7 @@ public class WordSaveService {
         this.wordRepository.deleteByIdIn(list);
     }
 
-    public BindingResult getCreateWordBindingResult(AddWord word, BindingResult bindingResult) {
+    public BindingResult getCreateWordBindingResult(WordRequest.AddWord word, BindingResult bindingResult) {
 
         String wordRowErrorNumber = getErrorRowNumber(word.getWords());
         String meaningRowErrorNumber = getErrorRowNumber(word.getMeanings());

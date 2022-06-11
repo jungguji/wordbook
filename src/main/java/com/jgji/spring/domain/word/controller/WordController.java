@@ -3,8 +3,8 @@ package com.jgji.spring.domain.word.controller;
 import com.jgji.spring.domain.user.domain.User;
 import com.jgji.spring.domain.word.domain.Row;
 import com.jgji.spring.domain.word.domain.Word;
-import com.jgji.spring.domain.word.domain.WordDTO.AddWord;
 import com.jgji.spring.domain.word.dto.WordRequest;
+import com.jgji.spring.domain.word.dto.WordRequest.AddWord;
 import com.jgji.spring.domain.word.dto.WordResponse;
 import com.jgji.spring.domain.word.service.WordFindService;
 import com.jgji.spring.domain.word.service.WordSaveService;
@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.io.IOException;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -83,10 +82,9 @@ public class WordController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public List<String> createWordByFileUpload(@CurrentUser User user
-            , @RequestParam(value="file") MultipartFile files) throws IOException {
-        MultipartFile file = files;
+            , @RequestParam(value="file") MultipartFile files) {
 
-        return this.wordSaveService.insertWordByFileUpload(user, file);
+        return this.wordSaveService.insertWordByFileUpload(user, files);
     }
 
     @PostMapping(value="/word/add", params={"addRow"})
@@ -120,14 +118,14 @@ public class WordController {
         return "thymeleaf/index";
     }
 
-    @PostMapping(value="/word/update", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value="/word/update", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ResponseBody
     public void updateMeaning(@RequestBody Word word) {
         this.wordSaveService.updateMeaning(word);
     }
 
-    @DeleteMapping(value="/word/delete", produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value="/word/delete", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ResponseBody
     public void delete(@RequestBody String[] rowIds) {
