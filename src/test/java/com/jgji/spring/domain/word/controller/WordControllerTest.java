@@ -3,9 +3,9 @@ package com.jgji.spring.domain.word.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jgji.spring.domain.user.service.UserService;
-import com.jgji.spring.global.util.Utils;
 import com.jgji.spring.domain.word.domain.Word;
 import com.jgji.spring.domain.word.domain.WordDTO;
+import com.jgji.spring.domain.word.dto.WordRequest.AddWord;
 import com.jgji.spring.domain.word.service.WordSaveService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,25 +15,21 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.MapBindingResult;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
@@ -82,17 +78,17 @@ class WordControllerTest {
 
 //    @Test
 //    void findToDayTestWordList() throws Exception {
-//        WordDTO.ResponseWord given = new WordDTO.ResponseWord();
+//        ResponseWord given = new ResponseWord();
 //        given.setId(1);
 //        given.setWord("test");
 //        given.setWord("테스트");
-//        WordDTO.ResponseWord given1 = new WordDTO.ResponseWord();
+//        ResponseWord given1 = new ResponseWord();
 //        given1.setId(2);
 //        given1.setWord("love");
 //        given1.setWord("사랑");
 //
 //        //given
-//        List<WordDTO.ResponseWord> givenList = Arrays.asList(
+//        List<ResponseWord> givenList = Arrays.asList(
 //            given,
 //            given1
 //        );
@@ -118,7 +114,7 @@ class WordControllerTest {
         BindingResult bindingResult = new MapBindingResult(new HashMap(), "");
         bindingResult.rejectValue("test", "test", "haha");
 
-        given(this.service.getCreateWordBindingResult(any(WordDTO.AddWord.class), any(BindingResult.class))).willReturn(bindingResult);
+        given(this.service.getCreateWordBindingResult(any(AddWord.class), any(BindingResult.class))).willReturn(bindingResult);
 
         String addWordToJson = getAddWordToJson();
 
@@ -140,7 +136,7 @@ class WordControllerTest {
         // gvien
         BindingResult bindingResult = new MapBindingResult(new HashMap(), "");
 
-        given(this.service.getCreateWordBindingResult(any(WordDTO.AddWord.class), any(BindingResult.class))).willReturn(bindingResult);
+        given(this.service.getCreateWordBindingResult(any(AddWord.class), any(BindingResult.class))).willReturn(bindingResult);
 
         String addWordToJson = getAddWordToJson();
 
@@ -158,7 +154,7 @@ class WordControllerTest {
     }
 
     private String getAddWordToJson() throws JsonProcessingException {
-        WordDTO.AddWord addWord = WordDTO.AddWord
+        AddWord addWord = AddWord
                 .builder()
                 .word("haha")
                 .meaning("하하")
