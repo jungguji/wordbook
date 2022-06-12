@@ -194,28 +194,6 @@
                     }
                 });
             }
-            
-            function answersUpdateForRandom() {
-                const answer = {
-                			 pass : passList
-                			 , fail : failList
-                			}
-                let data = JSON.stringify(answer);
-                
-                $.ajax({
-                    type:"POST"
-                    , contentType: "application/json"
-                    , url: "/word/answers/random"
-                    , data: data
-                    , dataType : 'json'
-                    , cache: false
-                    , success: function(data) {
-                        alert("테스트가 종료되었습니다.");
-                        
-                        document.location.href = "/";
-                    }
-                });
-            }
         </script>
     </th:block>
 </html>

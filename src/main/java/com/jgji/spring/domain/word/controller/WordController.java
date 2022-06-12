@@ -53,16 +53,8 @@ public class WordController {
     @ResponseBody
     public List<String> updateNextDateAndInsert(@CurrentUser User user
             , @RequestBody WordRequest.TestWord testWord) {
-        this.wordSaveService.updatePassWord(testWord.getPass());
-        return this.wordSaveService.insertFailWord(user, testWord.getFail());
-    }
-
-    @PostMapping(path="/word/answers/random", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @ResponseBody
-    public void insertRandomFailWord(@CurrentUser User user
-            , @RequestBody String[] answerIds) {
-        this.wordSaveService.insertRandomFailWord(user, answerIds);
+        this.wordSaveService.levelUpWord(testWord.getPass());
+        return this.wordSaveService.addFailWord(user, testWord.getFail());
     }
 
     @GetMapping(value="/word/add")
@@ -114,7 +106,7 @@ public class WordController {
             return "thymeleaf/word/createWordForm";
         }
 
-        this.wordSaveService.insertWord(user, word);
+        this.wordSaveService.addWord(user, word);
         return "thymeleaf/index";
     }
 

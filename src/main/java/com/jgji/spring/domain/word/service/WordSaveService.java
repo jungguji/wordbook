@@ -18,23 +18,19 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Transactional(rollbackFor = Exception.class)
 @RequiredArgsConstructor
 @Service
 public class WordSaveService {
-    private final static String PASS_LIST = "pass";
-    private final static String FAIL_LIST = "fail";
     private final static String WORD_FIELD = "words";
     private final static String MEANING_FIELD = "meanings";
 
     private final WordRepository wordRepository;
 
-    public void updatePassWord(List<Integer> passIds) {
+    public void levelUpWord(List<Integer> passIds) {
         List<Word> passWords = this.wordRepository.findByIdIn(passIds);
 
         for (Word passWord : passWords) {
@@ -42,7 +38,7 @@ public class WordSaveService {
         }
     }
 
-    public List<String> insertFailWord(User user, List<Integer> failIds) {
+    public List<String> addFailWord(User user, List<Integer> failIds) {
         List<Word> failWords = this.wordRepository.findByIdIn(failIds);
 
         final int PLUS_DAY = 1;
@@ -66,35 +62,6 @@ public class WordSaveService {
                 .stream()
                 .map(Word::getWord)
                 .collect(Collectors.toList());
-    }
-
-    public void insertRandomFailWord(User user, String[] answerIds) {
-        Map<String, List<Integer>> passAndFail = getPassAndFailWordList(answerIds);
-        List<Integer> failIds = passAndFail.get(FAIL_LIST);
-        insertFailWord(user, failIds);
-    }
-
-    private Map<String, List<Integer>> getPassAndFailWordList(String[] answerIds) {
-        List<Integer> passWordList = new ArrayList<>();
-        List<Integer> failWordList = new ArrayList<>();
-
-        for (String answerId : answerIds) {
-            if (answerId.endsWith("_1")) {
-                passWordList.add(Integer.parseInt(answerId.split("_")[0]));
-            } else {
-                int id = Integer.parseInt(answerId.split("_")[0]);
-
-                if (!failWordList.contains(id)) {
-                    failWordList.add(id);
-                }
-            }
-        }
-
-        Map<String, List<Integer>> map = new HashMap<>();
-        map.put(PASS_LIST, passWordList);
-        map.put(FAIL_LIST, failWordList);
-
-        return map;
     }
 
     public List<String> insertWordByFileUpload(User user, MultipartFile file) {
@@ -137,7 +104,7 @@ public class WordSaveService {
         return wordAndMeanings;
     }
 
-    public void insertWord(User user, WordRequest.AddWord word) {
+    public void addWord(User user, WordRequest.AddWord word) {
         List<Word> newWordList = new ArrayList<>();
 
         int wordCount = word.getWords().size();
