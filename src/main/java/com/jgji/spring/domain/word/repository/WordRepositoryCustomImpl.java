@@ -1,85 +1,13 @@
 package com.jgji.spring.domain.word.repository;
 
-import com.jgji.spring.domain.user.domain.User;
-import com.jgji.spring.domain.word.domain.Word;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class WordRepositoryCustomImpl implements WordRepositoryCustom {
+
     @PersistenceContext
     private EntityManager em;
-    
-    public void updateSuccessWord(List<Word> list, int userId) {
-        LocalDate nextDate = LocalDate.now();
-        
-        for (Word word : list) {
-            int currentLevel = word.getLevel();
-            
-            word.updateDate(nextDate.plusDays(addDate(currentLevel)));
-            word.updateLevel(++currentLevel);
-            
-            em.merge(word);
-        }
-        em.flush();
-    }
-    
-    public List<String> insertFailWord(List<Word> list, User user) {
-        final int PLUS_DAY = 1;
-        LocalDate nextDate = LocalDate.now().plusDays(PLUS_DAY);
-
-        List<String> failWordList = new ArrayList<>();
-        for (Word word : list) {
-            Word insertNewWord = Word.builder()
-                    .word(word.getWord())
-                    .meaning(word.getMeaning())
-                    .nextDate(nextDate)
-                    .user(user)
-                    .build();
-
-            failWordList.add(insertNewWord.getWord());
-
-            em.persist(insertNewWord);
-        }
-        
-        em.flush();
-
-        return failWordList;
-    }
-    
-    private int addDate(int level) {
-        int addDate = 0;
-        
-        switch (level) {
-        case 0:
-        case 1:
-            addDate = 1;
-            break;
-        case 2:
-            addDate = 3;
-            break;
-        case 3:
-            addDate = 7;
-            break;
-        case 4:
-            addDate = 15;
-            break;
-        case 5:
-            addDate = 30;
-            break;
-        default:
-            addDate = 60;
-            break;
-        }
-        
-        return addDate;
-    }
 
     @SuppressWarnings("unchecked")
     public List<Map<String, Object>> findFrequentFailWord(int userId) {

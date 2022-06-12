@@ -1,14 +1,12 @@
 package com.jgji.spring.domain.word.service;
 
 import com.jgji.spring.domain.user.domain.User;
-import com.jgji.spring.domain.user.service.UserService;
 import com.jgji.spring.domain.word.domain.Row;
 import com.jgji.spring.domain.word.domain.Word;
-import com.jgji.spring.domain.word.domain.WordDTO;
-import com.jgji.spring.domain.word.domain.WordDTO.AddWord;
+import com.jgji.spring.domain.word.dto.WordRequest;
 import com.jgji.spring.domain.word.repository.WordRepository;
+import com.jgji.spring.global.util.FileUtils;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -20,153 +18,106 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
+@Transactional(rollbackFor = Exception.class)
 @RequiredArgsConstructor
 @Service
 public class WordSaveService {
-    private final static String PASS_LIST = "pass";
-    private final static String FAIL_LIST = "fail";
     private final static String WORD_FIELD = "words";
     private final static String MEANING_FIELD = "meanings";
-    private final static String ENCODE_UTF8 = "UTF-8";
-    private final static String ENCODE_EUCKR = "EUC-KR";
 
     private final WordRepository wordRepository;
-    private final UserService userService;
 
-    @Transactional
-    public void updatePassWord(User user, int[] passIds) {
-        List<Word> passList = wordRepository.findByIdIn(Arrays.stream(passIds).boxed().collect(Collectors.toList()));
+    public void levelUpWord(List<Integer> passIds) {
+        List<Word> passWords = this.wordRepository.findByIdIn(passIds);
 
-        wordRepository.updateSuccessWord(passList, user.getId());
+        for (Word passWord : passWords) {
+            passWord.levelUp();
+        }
     }
 
-    @Transactional
-    public List<String> insertFailWord(User user, int[] failIds) {
-        List<Word> failList = wordRepository.findByIdIn(Arrays.stream(failIds).boxed().collect(Collectors.toList()));
+    public List<String> addFailWord(User user, List<Integer> failIds) {
+        List<Word> failWords = this.wordRepository.findByIdIn(failIds);
 
-        return wordRepository.insertFailWord(failList, user);
-    }
+        final int PLUS_DAY = 1;
 
-    @Transactional
-    public boolean insertRandomFailWord(User user, String[] answerIds) {
-        Map<String, List<Integer>> passAndFail = getPassAndFailWordList(answerIds);
-        List<Integer> failWordList = passAndFail.get(FAIL_LIST);
+        List<Word> newWords = new ArrayList<>();
 
-        List<Word> wordList = wordRepository.findByIdIn(failWordList);
+        for (Word word : failWords) {
+            Word newWord = Word.builder()
+                    .word(word.getWord())
+                    .meaning(word.getMeaning())
+                    .nextDate(LocalDate.now().plusDays(PLUS_DAY))
+                    .user(user)
+                    .build();
 
-        wordRepository.insertFailWord(wordList, user);
-
-        return true;
-    }
-
-    private Map<String, List<Integer>> getPassAndFailWordList(String[] answerIds) {
-        List<Integer> passWordList = new ArrayList<>();
-        List<Integer> failWordList = new ArrayList<>();
-
-        for (String answerId : answerIds) {
-            if (answerId.endsWith("_1")) {
-                passWordList.add(Integer.parseInt(answerId.split("_")[0]));
-            } else {
-                int id = Integer.parseInt(answerId.split("_")[0]);
-
-                if (!failWordList.contains(id)) {
-                    failWordList.add(id);
-                }
-            }
+            newWords.add(newWord);
         }
 
-        Map<String, List<Integer>> map = new HashMap<>();
-        map.put(PASS_LIST, passWordList);
-        map.put(FAIL_LIST, failWordList);
+        List<Word> words = this.wordRepository.saveAll(newWords);
 
-        return map;
+        return words
+                .stream()
+                .map(Word::getWord)
+                .collect(Collectors.toList());
     }
 
-    @Transactional
-    public String insertWordByFileUpload(User user, MultipartFile file) {
-        StringBuilder result = new StringBuilder();
-        InputStreamReader isr = null;
-        BufferedReader br = null;
+    public List<String> insertWordByFileUpload(User user, MultipartFile file) {
 
-        String encode = getFileEncodeUTF8OREUCKR(file);
+        final String encode = FileUtils.getFileEncodeUTF8orEucKr(file);
 
-        try {
-            isr = new InputStreamReader(file.getInputStream(), encode);
-            br = new BufferedReader(isr);
+        List<Word> newWordList = new ArrayList<>();
+        try (InputStreamReader isr = new InputStreamReader(file.getInputStream(), encode);
+            BufferedReader br = new BufferedReader(isr)) {
 
-            List<Word> newWordList = new ArrayList<>();
-            int i = 0;
-            String content;
+            List<String[]> wordAndMeanings = getWordAndMeanings(br);
 
-            while ((content = br.readLine()) != null) {
-                String[] wordAndMeaning = content.split("/");
-
-                if (i != 0) {
-                    result.append(", ");
-                }
-
-                result.append(wordAndMeaning[0]);
-                ++i;
-
-                Word insertNewWord = setWordAttribute(user, wordAndMeaning[0], wordAndMeaning[1]);
+            for (String[] wordAndMeaning : wordAndMeanings) {
+                Word insertNewWord = createWord(user, wordAndMeaning[0], wordAndMeaning[1]);
                 newWordList.add(insertNewWord);
             }
 
-            wordRepository.saveAll(newWordList);
+            this.wordRepository.saveAll(newWordList);
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            closeBufferReaderAndInputStreamReader(br, isr);
         }
 
-        return result.toString();
+        return newWordList
+                .stream()
+                .map(Word::getWord)
+                .collect(Collectors.toList());
     }
 
-    @Transactional
-    public String insertWord(User user, AddWord word) {
+    private List<String[]> getWordAndMeanings(BufferedReader br) throws IOException {
+
+        List<String[]> wordAndMeanings = new ArrayList<>();
+
+        String content;
+        while ((content = br.readLine()) != null) {
+            String[] wordAndMeaning = content.split("/");
+
+            wordAndMeanings.add(wordAndMeaning);
+        }
+
+        return wordAndMeanings;
+    }
+
+    public void addWord(User user, WordRequest.AddWord word) {
         List<Word> newWordList = new ArrayList<>();
 
         int wordCount = word.getWords().size();
         for (int i = 0; i < wordCount; i++) {
-            Word insertNewWord = setWordAttribute(user, word.getWords().get(i).getText(), word.getMeanings().get(i).getText());
+            Word insertNewWord = createWord(user, word.getWords().get(i).getText(), word.getMeanings().get(i).getText());
+
             newWordList.add(insertNewWord);
         }
 
         this.wordRepository.saveAll(newWordList);
-
-        return "good";
     }
 
-    private String getFileEncodeUTF8OREUCKR(MultipartFile file) {
-        String encode = ENCODE_UTF8;
-
-        InputStreamReader isr = null;
-        BufferedReader br = null;
-
-        try {
-            isr = new InputStreamReader(file.getInputStream(), encode);
-            br = new BufferedReader(isr);
-
-            if (!br.readLine().matches(".*[ㄱ-힣]+.*")) {
-                encode = ENCODE_EUCKR;
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            closeBufferReaderAndInputStreamReader(br, isr);
-        }
-
-        return encode;
-    }
-
-    private Word setWordAttribute(User user, String word, String meaning) {
+    private Word createWord(User user, String word, String meaning) {
 
         return Word.builder()
                 .word(word)
@@ -176,40 +127,20 @@ public class WordSaveService {
                 .build();
     }
 
-    private void closeBufferReaderAndInputStreamReader(BufferedReader br, InputStreamReader isr) {
-        try {
-            if (br != null) {
-                br.close();
-            }
-
-            if (isr != null) {
-                isr.close();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public boolean updateMeaning(Word word) {
+    public void updateMeaning(Word word) {
         this.wordRepository.save(word);
-        return true;
     }
 
-    @Transactional
     public void delete(String[] rowIds) {
         List<Integer> list = new ArrayList<>();
         for (String rowId : rowIds) {
             list.add(Integer.parseInt(rowId));
         }
 
-        wordRepository.deleteByIdIn(list);
+        this.wordRepository.deleteByIdIn(list);
     }
 
-    public List<Map<String, Object>> getFrequentFailWord(int userId) {
-        return wordRepository.findFrequentFailWord(userId);
-    }
-
-    public BindingResult getCreateWordBindingResult(AddWord word, BindingResult bindingResult) {
+    public BindingResult getCreateWordBindingResult(WordRequest.AddWord word, BindingResult bindingResult) {
 
         String wordRowErrorNumber = getErrorRowNumber(word.getWords());
         String meaningRowErrorNumber = getErrorRowNumber(word.getMeanings());

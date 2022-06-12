@@ -23,7 +23,7 @@
         </div>
 
         <script th:inline="javascript">
-            const wordList = [[${wordList}]];
+            const wordList = [[${testWords}]];
             const answerList = [];
             const passList = [];
             const failList = [];
@@ -183,34 +183,12 @@
                 $.ajax({
                     type:"POST"
                     , url: "/word/answers"
-                    , traditional: true
-                    , data: answer
+                    , data: JSON.stringify(answer)
                     , cache: false
-                    , contentType: "application/x-www-form-urlencoded"
+                    , contentType: "application/json"
+                    , dataType : 'json'
                     , success: function(data) {
                         alert("테스트가 종료되었습니다. \n 틀린 단어는 내일 시험에 추가됩니다. \n 틀린 단어 : " + data);
-                        
-                        document.location.href = "/";
-                    }
-                });
-            }
-            
-            function answersUpdateForRandom() {
-                const answer = {
-                			 pass : passList
-                			 , fail : failList
-                			}
-                let data = JSON.stringify(answer);
-                
-                $.ajax({
-                    type:"POST"
-                    , contentType: "application/json"
-                    , url: "/word/answers/random"
-                    , data: data
-                    , dataType : 'json'
-                    , cache: false
-                    , success: function(data) {
-                        alert("테스트가 종료되었습니다.");
                         
                         document.location.href = "/";
                     }

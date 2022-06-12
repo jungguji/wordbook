@@ -39,7 +39,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
            "                  ) AS maxfrom              " + 
            "             )                              "
            , nativeQuery = true)
-
     @Transactional(readOnly = true)
     List<Object[]> findMostWrongWord(@Param("userId") int userId);
 }
