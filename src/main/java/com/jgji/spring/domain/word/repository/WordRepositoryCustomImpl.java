@@ -1,11 +1,7 @@
 package com.jgji.spring.domain.word.repository;
 
-import com.jgji.spring.domain.user.domain.User;
-import com.jgji.spring.domain.word.domain.Word;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.time.LocalDate;
 import java.util.*;
 
 public class WordRepositoryCustomImpl implements WordRepositoryCustom {

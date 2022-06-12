@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jgji.spring.domain.user.service.UserService;
 import com.jgji.spring.domain.word.domain.Word;
-import com.jgji.spring.domain.word.domain.WordDTO;
 import com.jgji.spring.domain.word.dto.WordRequest.AddWord;
 import com.jgji.spring.domain.word.service.WordSaveService;
 import org.junit.jupiter.api.BeforeEach;
