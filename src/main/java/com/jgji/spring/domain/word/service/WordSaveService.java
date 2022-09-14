@@ -41,20 +41,8 @@ public class WordSaveService {
     public List<String> addFailWord(User user, List<Integer> failIds) {
         List<Word> failWords = this.wordRepository.findByIdIn(failIds);
 
-        final int PLUS_DAY = 1;
+        List<Word> newWords = getNewWords(user, failWords);
 
-        List<Word> newWords = new ArrayList<>();
-
-        for (Word word : failWords) {
-            Word newWord = Word.builder()
-                    .word(word.getWord())
-                    .meaning(word.getMeaning())
-                    .nextDate(LocalDate.now().plusDays(PLUS_DAY))
-                    .user(user)
-                    .build();
-
-            newWords.add(newWord);
-        }
 
         List<Word> words = this.wordRepository.saveAll(newWords);
 
@@ -62,6 +50,29 @@ public class WordSaveService {
                 .stream()
                 .map(Word::getWord)
                 .collect(Collectors.toList());
+    }
+
+    private List<Word> getNewWords(User user, List<Word> failWords) {
+        final int PLUS_DAY = 1;
+
+        return failWords
+                .stream()
+                .map(word -> createWord(user, word.getWord(), word.getMeaning(), LocalDate.now().plusDays(PLUS_DAY)))
+                .collect(Collectors.toList());
+    }
+
+    private Word createWord(User user, String word, String meaning, LocalDate localDate) {
+        return Word.builder()
+                .word(word)
+                .meaning(meaning)
+                .nextDate(localDate)
+                .user(user)
+                .build();
+    }
+
+    private Word createWord(User user, String word, String meaning) {
+
+        return createWord(user, word, meaning, LocalDate.now());
     }
 
     public List<String> insertWordByFileUpload(User user, MultipartFile file) {
@@ -115,16 +126,6 @@ public class WordSaveService {
         }
 
         this.wordRepository.saveAll(newWordList);
-    }
-
-    private Word createWord(User user, String word, String meaning) {
-
-        return Word.builder()
-                .word(word)
-                .meaning(meaning)
-                .nextDate(LocalDate.now())
-                .user(user)
-                .build();
     }
 
     public void updateMeaning(Word word) {

@@ -21,10 +21,6 @@ public class WordFindService {
         return wordRepository.findByUserId(userId);
     }
 
-    public List<Word> findToDayWordList(int userId) {
-        return wordRepository.findByUserIdAndNextDateLessThanEqual(userId, LocalDate.now());
-    }
-
     public List<WordResponse.TodayWord> findToDayTestWordList(int userId) {
 
         List<Word> todayWords = Optional.ofNullable(wordRepository.findByUserIdAndNextDateLessThanEqual(userId, LocalDate.now()))
@@ -32,10 +28,6 @@ public class WordFindService {
                         .orElseGet(() -> wordRepository.findOrderByRandom()));
 
         return WordResponse.TodayWord.ofList(todayWords);
-    }
-
-    public List<Word> findRandomWordList(int userId) {
-        return this.wordRepository.findByUserIdOrderByRandom(userId);
     }
 
     public List<Map<String, Object>> findFrequentFailWord(int userId) {
